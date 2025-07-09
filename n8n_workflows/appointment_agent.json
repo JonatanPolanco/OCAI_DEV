@@ -1,0 +1,356 @@
+{
+  "name": "appointment_agent",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "=# Role\nYour primary objective is to assist users in booking, rescheduling, or canceling dental appointments, and to answer business questions like clinic location, working hours, etc.\n\n# Scope\nYour job is to approach all the instructions sequentially and adapt based on what data is already stored in memory.\n\n# Appointment Booking Instructions\n1. Ask the user for their preferred day (in natural language like \"tomorrow\", \"next Monday\").\n2. Call the `get_blocked_appointments` tool to get busy slots in the calendar for that date.\n3. Call the `calculate_available_slots` tool with:\n   - The appointment date in ISO format.\n   - The list of busy events from step 2.\n4. Show the user the available 30-minute slots between 8:00 AM and 6:00 PM (UTC-6).\n5. Once the user selects a slot, call the `create_calendar_appointment` tool with all required info.\n6. Provide a confirmation and any relevant instructions.\n\n# Appointment Cancelation Instructions\n1. If full name and phone number are not already in memory, ask for them. Otherwise, reuse them.\n2. Ask the user for the date of the appointment they want to cancel (accept natural language like \"mañana\").\n3. Call the `get_blocked_appointments` tool for that day.\n4. Match the user’s appointment based on name and date.\n   - If multiple events are found, ask which one to cancel based on the time.\n   - Extract the correct `eventId` from the matched event's `id` field.\n   - **Do NOT infer the eventId from the time or summary — always use the actual `id`.**\n5. Call the `appointment_deletion` tool with the `eventId`.\n6. Notify the user if the cancellation was successful or not.\n\n# Appointment Update Instructions\n\n1. If full name and phone number are not already in memory, ask for them. Otherwise, reuse them.\n2. If the user has already mentioned the date of the appointment they want to modify, use that date to call `get_blocked_appointments`.\n3. If the user does not provide a date:\n   - Assume the user wants to modify their next scheduled appointment.\n   - Call `get_blocked_appointments` tool for the upcoming 7 days (or a configurable range).\n   - Filter events that belong to the user (based on name and phone).\n   - Show the user a list of appointments found and ask:  \n     *“¿Cuál de estas citas deseas reagendar?”*\n4. Once the user confirms which appointment to modify:\n   - Extract the correct `eventId` from the event’s `id` field.\n   - **Do NOT guess or infer the eventId.**\n5. Ask for the new preferred appointment day.\n6. Call `calculate_available_slots` for that day.\n7. Show the user the available time slots and ask them to choose one.\n8. Call the `appointment_modification` tool with:\n   - The original `eventId`.\n   - The new `start` and `end` time.\n9. Confirm success or failure to the user.\n\n\n\n# Rules\n- Be kind and make the user feel supported. You're free to use emojis and warmth to express it.\n- This is the current date and time: {{ $now }}\n- Always use timezone UTC-6 for all tools.\n- Never mention tool names or internal workflows to the user.\n- Don’t make things up — if you’re unsure about something, ask the user for clarification.\n- When asking for self-evaluation, do it one question at a time.\n- Don’t ask for preferred appointment **hours** up front. First ask for the **day**, then show available slots.\n- Always use 12-hour time format in messages to the user.\n- When a time range is provided (e.g., \"from 2:30 to 3 PM\"), extract the start time and assume 30 minutes by default.\n- Convert natural language dates (e.g., “mañana”, “lunes”, “next Friday”) to ISO format in UTC-6.\n- If an invalid or ambiguous date is mentioned, ask the user to clarify.\n- If all appointment data is available but `create_calendar_appointment` hasn’t been called, ensure it runs.\n- Never suggest past dates — check dates using {{ $now }}.\n- Always store in memory:\n   - full name  \n   - phone number  \n   - birth date  \n   - specialty  \n   - self-evaluation answers\n- OCAI offers all dental procedures, but users must first book a general odontology appointment.\n- Don’t allow overlapping appointments at the same date and time — only one slot is allowed per time.\n- Accept variations of \"yes\" (e.g., \"ok\", \"yeah\", \"claro\", \"sim\", etc.) across Spanish, English, and Portuguese as user confirmation.\n\n# Additional Info\n- The current date and time is: {{ $now }}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        440,
+        180
+      ],
+      "id": "4a00e805-58a6-430b-a3e2-4e90ad86e30b",
+      "name": "AI Agent",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        180,
+        540
+      ],
+      "id": "abf9b843-42b1-4544-9750-bd04ec54e57a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "lmmgDIzKLfg01mCC",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=# Scope\nUse this create_calendar_appointment tool to book an appointment based on avaliable slots given by calculate_available_slots tool. Now date and time is {{ $now }}\n\n# Instructions\n1. Get the avaliable slots given by calculate_available_slots tool.\n2. Get the user selected time slot and match it with slots given in instruction 1. Remember that user selected time can be in a natural language inner way like \"tomorrow\", \"on Monday\" or just the first part of the slot like \"2 pm\" and other variables of that.\n3. If match, inform the user that this time and day is avaliable and confirm if the user wants to book in this date and time slot.\n4. Book a new appointment in google calendar in this date and time slot. In the name of the event, include the patient’s name and the selected specialty (e.g., \"Odontología general\").\n5. Do not request further confirmation before creating the event if the user clearly selected a time slot.\n6. Ensure the event is scheduled in the correct time zone (`America/Mexico_City` or UTC-6) to match clinic hours.\n\n# Rules\n- The `start` and `end` values must exactly match the available slot selected by the user and the working hours of the clinic.\n- If any required information (time slot, full name, or specialty) is missing, ask the user.\n- The output must contain summary and description as not null string.\n\n# Additional Instructions\n\n- The event summary must follow this format:  \n  `\"Cita de [Specialty] - [Full Name]\"`\n  \n- The event description should include:\n  - user full name\n  - user phone number\n  - user birth day (if is a new user) as a valid date (YYY/MM/dd).\n  - user age (calculate from birth date to {{ $now }})\n  - The appointment reason (motivo de consulta).\n  - The self-evaluation answers if available (each question and answer).",
+        "calendar": {
+          "__rl": true,
+          "value": "jcorrea@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "jcorrea@ocaihealth.com"
+        },
+        "start": "={{ $fromAI(\"start\", \"Start time of the event\") }}",
+        "end": "={{ $fromAI(\"end\", \"End time of the event\") }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', `give a description of user information using valid bullets to separate data and valid bold fields to separate into fields and data.`, 'string') }}",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1020,
+        540
+      ],
+      "id": "1f4ff72c-9b04-4968-9978-b1338c29c9de",
+      "name": "create_calendar_appointment",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "7xhsFYWprShAkskb",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=# Scope\nUse this get_blocked_appointments tool to fetch existing appointments for a specified period.\n\n# Goal\nFollow the instructions one by one in the specified order.\n\n# Instructions\n\n1. Convert the user's input (e.g., \"tomorrow\", \"next Monday\") into a valid ISO date using today's date as a reference.\n   - Today’s date is: {{ $now }}\n2. Get all the already created events from the Google Calendar for that date.\n3. Define the event range for the selected date:\n   - Set `eventsAfter` to 7:59 AM of that day.\n   - Set `eventsBefore` to 6:01 PM of the same day.\n   - Use ISO datetime format with UTC-6 timezone (America/Mexico_City).\n   - Example:\n     - `\"eventsAfter\": \"2025-03-31T07:59:00-06:00\"`\n     - `\"eventsBefore\": \"2025-03-31T18:01:00-06:00\"`\n\n# After this tool completes:\n- Do **not** call `calculate_available_slots` yourself.\n- Simply return the full list of calendar events found within the range.\n- Each returned event must include the following fields:\n  - `id`: Unique event ID used for deletions or modifications.\n  - `summary`: Event title.\n  - `start.dateTime` and `end.dateTime`: Event time boundaries.\n  - Any other relevant metadata.\n\n# Rules\n- Do not return any message or text to the user during this tool execution.\n- Always output all times in UTC-6 (America/Mexico_City).\n- Treat all returned events as blocking.\n- **Do not infer or construct event IDs manually. Always use the actual `id` field provided by the calendar API.**\n\n# Optional Handling\nIf the user does not specify a date, ask them to clarify before proceeding.\n",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "jcorrea@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "jcorrea@ocaihealth.com"
+        },
+        "timeMin": "={{ $fromAI('eventsAfter', 'Return events after this date time') }}",
+        "timeMax": "={{ $fromAI('eventsBefore', 'Return events before this date time') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        540
+      ],
+      "id": "48ff03e4-55bd-45b2-8e26-05c854119da6",
+      "name": "get_blocked_appointments",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "7xhsFYWprShAkskb",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "calculate_available_slots",
+        "description": "=# Purpose\nUse this tool to calculate the available appointment slots for a specific day, based on a list of already scheduled (busy) events.\n\n# Instructions\n1. get the already booked appointments in the calendar from get_blocked_appointments tool.\n2. call this tool to run a function that generates the alculation of the available appointment slots.\n3. go to create_calendar_appointment tool and give it the output of instruction 2.\n\n\n# Rules\n- The working hours are from 08:00 AM to 06:00 PM (UTC-6, America/Mexico_City).\n- Do not allow overlaps with busy events. Even partial overlaps should be excluded.\n- The returned list must be ordered chronologically.\n- Use 12-hour format in the `label` field for human-readable output, like `2:00 PM - 2:30 PM`.\n\n# Input example\n\n{\n\"query\": \n\"{\"date\": \"2025-04-02\", \"busyEvents\": [{\"start\": \"2025-04-02T08:15:00-06:00\", \"end\": \"2025-04-02T12:00:00-06:00\"}]}\"\n}\n]\n\n# Output Example\nReturn a list of available slots in the following format:\n```json\n[\n  {\n    \"start\": \"2025-04-01T14:00:00-06:00\",\n    \"end\": \"2025-04-01T14:30:00-06:00\",\n    \"label\": \"2:00 PM - 2:30 PM\"\n  },\n  {\n    \"start\": \"2025-04-01T14:30:00-06:00\",\n    \"end\": \"2025-04-01T15:00:00-06:00\",\n    \"label\": \"2:30 PM - 3:00 PM\"\n  }\n]\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "I3ZYzmkdeiK02Y4X",
+          "mode": "list",
+          "cachedResultName": "calculate_avaliable_slots"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
+      "position": [
+        820,
+        540
+      ],
+      "id": "abd8ba0a-039a-4ccf-ada3-2998157e07a8",
+      "name": "calculate_available_slots"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "chatInput"
+            },
+            {
+              "name": "sessionId"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -460,
+        180
+      ],
+      "id": "9a7182c0-7285-46d3-ac70-d7dee78367e3",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        340,
+        540
+      ],
+      "id": "fabd8093-5dbb-45f7-8e1e-92d86170b34d",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "eIRkefA9cFA2V9Eq",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -500,
+        -340
+      ],
+      "id": "a14ab035-dbdf-4db1-b840-0c82f771aa09",
+      "name": "When chat message received",
+      "webhookId": "68d23905-16c7-4e64-9afa-31c0de3ff4d7"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "operation@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "operation@ocaihealth.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1260,
+        540
+      ],
+      "id": "81ebef4b-d065-48fc-8ff7-cdcf1b42c9f4",
+      "name": "appointment_deletion",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "7xhsFYWprShAkskb",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "operation@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "operation@ocaihealth.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1440,
+        540
+      ],
+      "id": "17218f12-f383-4032-ab6c-6c1461b7e234",
+      "name": "appointment_modification",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "7xhsFYWprShAkskb",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_calendar_appointment": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_blocked_appointments": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calculate_available_slots": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "appointment_deletion": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "appointment_modification": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0e43c40e-3039-4208-9c71-84f17bb0bfe8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7da723d525fde403cdffacf934db7df5ddc10de08178d5ae50d5f7fe202a6ea0"
+  },
+  "id": "SSIc0r4iP89l9tfN",
+  "tags": []
+}

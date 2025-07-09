@@ -1,0 +1,155 @@
+{
+  "name": "data_storage_master",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "[\n  {\n    \"full_name\": \"Mariana Pulido\",\n    \"birth_date\": \"1998-08-10\",\n    \"phone\": \"3009998877\",\n    \"new_user\": \"yes\",\n    \"self_evaluation\": \"No\",\n    \"appointment_reason\": \"Revisión general\",\n    \"appointment_time\": \"15:00\",\n    \"appointment_date\": \"2025-04-16\",\n    \"language\": \"es\",\n    \"sessionId\": \"5213009998877\"\n  }\n]"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0c0d8672-8c47-48f2-935a-487503c4ac24",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "users_entity",
+          "mode": "list",
+          "cachedResultName": "users_entity"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {
+            "full_name": "{{ $fromAI('user_full_name', user full name') }}",
+            "phone_number": "={{ $fromAI('user_phone_number', 'user phone number') }}",
+            "birth_date": "={{ $fromAI('user_birth_date', 'user birth date') }}",
+            "created_at": "={{ $fromAI('user_creation_date', 'user creation date. using $now time and date') }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "full_name",
+              "displayName": "full_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "birth_date",
+              "displayName": "birth_date",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "replaceEmptyStrings": false
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        360,
+        -220
+      ],
+      "id": "dc10600f-9c9c-48c2-8847-403da9ad383f",
+      "name": "upsert_postgres",
+      "credentials": {
+        "postgres": {
+          "id": "eIRkefA9cFA2V9Eq",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "full_name": "Mariana Pulido",
+          "birth_date": "1998-08-10",
+          "phone": "3009998877",
+          "new_user": "yes",
+          "self_evaluation": "No",
+          "appointment_reason": "Revisión general",
+          "appointment_time": "15:00",
+          "appointment_date": "2025-04-16",
+          "language": "es",
+          "sessionId": "5213009998877"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "upsert_postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "64ed46e5-06b1-43ae-bb2c-51ad149ee875",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7da723d525fde403cdffacf934db7df5ddc10de08178d5ae50d5f7fe202a6ea0"
+  },
+  "id": "QWQ87jIV18N8JVMx",
+  "tags": []
+}

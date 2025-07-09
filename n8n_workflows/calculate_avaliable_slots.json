@@ -1,0 +1,88 @@
+{
+  "name": "calculate_avaliable_slots",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a638e2e1-02da-4d3b-ab27-ef020ddaca1f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Paso 1: Validar entrada directamente\nconst input = items[0].json;\n\nif (!input || typeof input !== \"object\" || !input.date || !Array.isArray(input.busyEvents)) {\n  return [{ json: { error: \"Missing or invalid 'date' or 'busyEvents' in input\" } }];\n}\n\n// Paso 2: Preparar eventos ocupados\nconst events = input.busyEvents;\nconst seen = new Set();\nconst filtered = events.filter(ev => {\n  const key = ev.start + ev.end;\n  if (seen.has(key)) return false;\n  seen.add(key);\n  return true;\n});\n\nfiltered.sort((a, b) => new Date(a.start) - new Date(b.start));\n\n// Paso 3: Configurar rango de horario (8 AM a 6 PM en UTC-6)\nconst slotDuration = 30 * 60 * 1000; // 30 minutos\nconst timeZone = 'America/Mexico_City';\n\nconst opening = new Date(`${input.date}T08:00:00-06:00`);\nconst closing = new Date(`${input.date}T18:00:00-06:00`);\n\nconst slots = [];\nlet cursor = new Date(opening);\n\n// Paso 4: Generar slots disponibles antes de eventos\nfor (const ev of filtered) {\n  const start = new Date(ev.start);\n  const end = new Date(ev.end);\n\n  while (cursor.getTime() + slotDuration <= start.getTime()) {\n    const slotEnd = new Date(cursor.getTime() + slotDuration);\n\n    slots.push({\n      start: cursor.toLocaleString('sv-SE', { timeZone }),\n      end: slotEnd.toLocaleString('sv-SE', { timeZone }),\n      label: `${cursor.toLocaleTimeString('en-US', { timeZone, hour: 'numeric', minute: '2-digit', hour12: true })} - ${slotEnd.toLocaleTimeString('en-US', { timeZone, hour: 'numeric', minute: '2-digit', hour12: true })}`\n    });\n\n    cursor = slotEnd;\n  }\n\n  if (cursor < end) cursor = new Date(end);\n}\n\n// Paso 5: Generar slots después del último evento\nwhile (cursor.getTime() + slotDuration <= closing.getTime()) {\n  const slotEnd = new Date(cursor.getTime() + slotDuration);\n\n  slots.push({\n    start: cursor.toLocaleString('sv-SE', { timeZone }),\n    end: slotEnd.toLocaleString('sv-SE', { timeZone }),\n    label: `${cursor.toLocaleTimeString('en-US', { timeZone, hour: 'numeric', minute: '2-digit', hour12: true })} - ${slotEnd.toLocaleTimeString('en-US', { timeZone, hour: 'numeric', minute: '2-digit', hour12: true })}`\n  });\n\n  cursor = slotEnd;\n}\n\n// Paso 6: Devolver resultado\nreturn slots.map(s => ({ json: s }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        0
+      ],
+      "id": "48ba1427-fded-492f-847e-5dfa2bfa19fb",
+      "name": "Generate Available Slots",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw = items[0].json.query;\nlet parsed;\nlet busyEvents = [];\nlet appointmentDate = \"\";\n\n// Paso 1: Intentar parsear el string\ntry {\n  parsed = JSON.parse(raw);\n} catch (e) {\n  return [{ json: { error: \"Invalid JSON in 'query'\" } }];\n}\n\n// Paso 2: Si parsed es un array (caso: solo lista de eventos)\nif (Array.isArray(parsed)) {\n  busyEvents = parsed;\n  if (busyEvents.length > 0 && busyEvents[0].start) {\n    appointmentDate = busyEvents[0].start.split(\"T\")[0];\n  } else {\n    // fallback si no hay eventos\n    appointmentDate = new Date().toISOString().split(\"T\")[0];\n  }\n}\n// Paso 3: Si parsed es un objeto con busyEvents\nelse if (typeof parsed === \"object\" && parsed !== null && Array.isArray(parsed.busyEvents)) {\n  busyEvents = parsed.busyEvents;\n  appointmentDate = parsed.date || (\n    busyEvents.length > 0 && busyEvents[0].start\n      ? busyEvents[0].start.split(\"T\")[0]\n      : new Date().toISOString().split(\"T\")[0]\n  );\n} else {\n  return [{ json: { error: \"Missing or invalid 'busyEvents'\" } }];\n}\n\n// Paso 4: Retornar el objeto correcto\nreturn [\n  {\n    json: {\n      date: appointmentDate,\n      busyEvents: busyEvents\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        0
+      ],
+      "id": "43100a37-9838-41d9-a6cd-da35fc6d43d6",
+      "name": "prepare_input_for_calculate_slots"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "{\"date\": \"2025-04-02\", \"busyEvents\": [{\"start\": \"2025-04-02T08:15:00-06:00\", \"end\": \"2025-04-02T12:00:00-06:00\"}]}"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "prepare_input_for_calculate_slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prepare_input_for_calculate_slots": {
+      "main": [
+        [
+          {
+            "node": "Generate Available Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2d6e198c-ad88-49a9-b768-fba09798e209",
+  "meta": {
+    "instanceId": "7da723d525fde403cdffacf934db7df5ddc10de08178d5ae50d5f7fe202a6ea0"
+  },
+  "id": "I3ZYzmkdeiK02Y4X",
+  "tags": []
+}

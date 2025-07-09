@@ -1,0 +1,49 @@
+wpp_system_user_business_id = EAA30fEDMDqIBO3m0oZA12ZA9JpYuS13ZCzftb5A4PXlkFzagJxewA4h96pEyZCahNJ8cihYICjs2XLMz2WuoWlawjprvCOcqSdFOI7BIjCLQ9I6P2vgJuLwbKVI0dKpVP8Q1PTJJPrgGGVvN8dxeKObloV2uvgmBbEiBNZApySdZC6DevgiZCHjC1cYhQH5oWCaMwZDZD
+
+vm_pw = Cay3tano@ocai
+pg_user_id = n8n-user
+pg_user_pw = ocaipgdb
+
+
+sudo docker run -d \
+  --name n8n \
+  -p 5678:5678 \
+  -e DB_TYPE=postgresdb \
+  -e DB_POSTGRESDB_DATABASE=n8n-db\
+  -e DB_POSTGRESDB_HOST=34.134.104.51 \
+  -e DB_POSTGRESDB_PORT=5432 \
+  -e DB_POSTGRESDB_USER=n8n-user \
+  -e DB_POSTGRESDB_PASSWORD=ocaipgdb \
+  -e N8N_BASIC_AUTH_ACTIVE=true \
+  -e N8N_BASIC_AUTH_USER=jcorrea@ocaihealth.com \
+  -e N8N_BASIC_AUTH_PASSWORD=Samueli2828* \
+  -e N8N_SECURE_COOKIE=false \
+  n8nio/n8n
+
+
+sudo docker volume create n8n_data
+
+sudo docker run -d \
+--name n8n \
+-p 127.0.0.1:5678:5678  \
+-e DB_TYPE=postgresdb \
+-e DB_POSTGRESDB_DATABASE=n8n-db \
+-e DB_POSTGRESDB_HOST=34.170.89.1 \
+-e DB_POSTGRESDB_PORT=5432 \
+-e DB_POSTGRESDB_USER=n8n \
+-e DB_POSTGRESDB_PASSWORD=ocaipgdb \
+-e N8N_HOST=n8n.ocaihealth.com \
+-e N8N_PROTOCOL=https \
+-e N8N_BASIC_AUTH_ACTIVE=true \
+-e N8N_BASIC_AUTH_USER=jcorrea@ocaihealth.com \
+-e WEBHOOK_TUNNEL_URL=https://n8n.ocaihealth.com \
+-e WEBHOOK_URL=https://n8n.ocaihealth.com \
+-e N8N_BASIC_AUTH_PASSWORD=Samueli2828* \
+-v ~/.n8n:/root.n8n \
+n8nio/n8n
+
+
+
+
+
+domain.com recovery key: 467fe76e-4490-3f7d-a9b4-b40520a82eba
