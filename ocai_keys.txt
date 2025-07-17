@@ -1,5 +1,15 @@
 wpp_system_user_business_id = EAA30fEDMDqIBO3m0oZA12ZA9JpYuS13ZCzftb5A4PXlkFzagJxewA4h96pEyZCahNJ8cihYICjs2XLMz2WuoWlawjprvCOcqSdFOI7BIjCLQ9I6P2vgJuLwbKVI0dKpVP8Q1PTJJPrgGGVvN8dxeKObloV2uvgmBbEiBNZApySdZC6DevgiZCHjC1cYhQH5oWCaMwZDZD
 
+
+snowflake
+https://hadawvn-za67415.snowflakecomputing.com
+user: jpolanco
+pwd: znuitEBwnPUyR7S
+
+dbt code
+S746B4DXZKVWY3RAPCNYU6RH
+75LXHN1GHH348VTC8EFK9NFS
+
 vm_pw = Cay3tano@ocai
 pg_user_id = n8n-user
 pg_user_pw = ocaipgdb
@@ -43,7 +53,83 @@ sudo docker run -d \
 n8nio/n8n
 
 
+n8n agent credentials:
+
+n8n.ocaihealth.com
+Client ID:3927989197475490
+Client Secret:9750b9bfebe057eaed3d47a0772ebaf2
+Business Account Id:1307942006949551
+Access Token: EAA30fEDMDqIBO3m0oZA12ZA9JpYuS13ZCzftb5A4PXlkFzagJxewA4h96pEyZCahNJ8cihYICjs2XLMz2WuoWlawjprvCOcqSdFOI7BIjCLQ9I6P2vgJuLwbKVI0dKpVP8Q1PTJJPrgGGVvN8dxeKObloV2uvgmBbEiBNZApySdZC6DevgiZCHjC1cYhQH5oWCaMwZDZD
+GCP Client ID:601761127350-v7sv12hogvv6o52vtg4tmnth8h4lmar2.apps.googleusercontent.com
+GCP Client Secret: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
+Gemini API Key:AIzaSyBsE9DIYqEnkJsss43ltEfLKnmgfplirRI
+
+Cloud sql:
+
+db: n8n-db
+user: n8n-user
+pwd: 9Np(C||AJDfK?S{7
+
+postgresql supabase:
+host: aws-0-us-east-1.pooler.supabase.com
+database: postgres
+user: postgres.ehemujaouvskkpkagsky
+password:Cay3tano@ocai
+Port: 6543
+
+
+elevenlabs key: sk_33258aac8caf3d872ed91d56573c8e9235851fe8ae8935ab
+
+openai apy key: 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
 
 
 
 domain.com recovery key: 467fe76e-4490-3f7d-a9b4-b40520a82eba
+
+
+
+
+
+
+<!-- Sección de Estadísticas -->
+<section style="padding: 6rem 0; background: white;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+        <div style="text-align: center; margin-bottom: 5rem;">
+            <h2 style="font-size: 3rem; font-weight: 800; color: #1a202c; margin-bottom: 1.5rem; position: relative;">
+                Resultados que Transforman
+                <span style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(135deg, #8F94E3 0%, #9094e3 100%); border-radius: 2px; content: ''; display: block;"></span>
+            </h2>
+            <p style="font-size: 1.3rem; color: #4a5568; max-width: 700px; margin: 0 auto; font-weight: 500;">No solo automatizas procesos, obtienes una plataforma inteligente que aprende y optimiza continuamente</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; text-align: center;">
+            <div style="padding: 2rem;">
+                <span style="font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #8F94E3 0%, #9094e3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 0.5rem;">300%</span>
+                <div style="font-size: 1.1rem; color: #4a5568; font-weight: 600;">Más Citas Agendadas</div>
+                <div style="font-size: 0.9rem; color: #718096; margin-top: 0.5rem;">Fuera del horario de oficina</div>
+            </div>
+
+            <div style="padding: 2rem;">
+                <span style="font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #8F94E3 0%, #9094e3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 0.5rem;">24/7</span>
+                <div style="font-size: 1.1rem; color: #4a5568; font-weight: 600;">Disponibilidad</div>
+                <div style="font-size: 0.9rem; color: #718096; margin-top: 0.5rem;">Atención ininterrumpida</div>
+            </div>
+
+            <div style="padding: 2rem;">
+                <span style="font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #8F94E3 0%, #9094e3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 0.5rem;">85%</span>
+                <div style="font-size: 1.1rem; color: #4a5568; font-weight: 600;">Menos Cancelaciones</div>
+                <div style="font-size: 0.9rem; color: #718096; margin-top: 0.5rem;">Gracias a recordatorios inteligentes</div>
+            </div>
+
+            <div style="padding: 2rem;">
+                <span style="font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #8F94E3 0%, #9094e3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 0.5rem;">400%</span>
+                <div style="font-size: 1.1rem; color: #4a5568; font-weight: 600;">ROI</div>
+                <div style="font-size: 0.9rem; color: #718096; margin-top: 0.5rem;">En los primeros 6 meses</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+

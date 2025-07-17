@@ -1,0 +1,282 @@
+{
+  "name": "calendar_mcp",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "operation@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "operation@ocaihealth.com"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "id": "abb7a33e-c818-4702-8222-8b0b9393a205",
+      "name": "SearchEvent",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "position": [
+        0,
+        208
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "0LejGO69O7NuHea4",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "operation@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "operation@ocaihealth.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "description": "={{ $fromAI(\"event_description\", \"The event description with all user collected information as list: is new user?, age (calculated from birth date), phone number,specialty, self evaluation responses(if given)\", \"string\") }}",
+          "summary": "={{ $fromAI(\"event_title\", \"The event title (cita de specialty - user_name\", \"string\") }}"
+        }
+      },
+      "id": "628333ed-5f8e-4a64-b500-f232a3b52288",
+      "name": "CreateEvent",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "position": [
+        128,
+        208
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "0LejGO69O7NuHea4",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "operation@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "operation@ocaihealth.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {
+          "description": "={{ $fromAI(\"event_description\", \"The event description\", \"string\") }}",
+          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+          "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+          "summary": "={{ $fromAI(\"event_title\", \"The event title\", \"string\") }}"
+        }
+      },
+      "id": "e0c8082e-17e7-4bf4-b9f2-b73185a850ac",
+      "name": "UpdateEvent",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "position": [
+        240,
+        208
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "0LejGO69O7NuHea4",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "operation@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "operation@ocaihealth.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "id": "5bdc8a15-4e5d-479c-aced-8731b0994b79",
+      "name": "DeleteEvent",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "position": [
+        368,
+        208
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "0LejGO69O7NuHea4",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "my-calendar"
+      },
+      "id": "af618d3b-1800-49b3-9de4-a4b4a1c41012",
+      "name": "Google Calendar MCP",
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "f9d9d5ea-6f83-42c8-ae50-ee6c71789bca",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "name": "calculate_avaliable_slots",
+        "description": "=# Purpose\nUse this tool to calculate the available appointment slots for a specific day, based on a list of already scheduled (busy) events.\nnow date and time: {{ $now.setZone(\"America/Mexico_City\") }}\n\n# Instructions\n1. get the already booked appointments in the calendar from '@GetEvent' tool.\n2. call this tool to run a function that generates the calculation of the available appointment slots.\n\n# Rules\n- The working hours are from 08:00 AM to 06:00 PM.\n- Do not allow overlaps with busy events. Even partial overlaps should be excluded.\n- The returned list must be ordered chronologically.\n- Use 12-hour format in the `label` field for human-readable output, like `2:00 PM - 2:30 PM`.\n\n# Input example\n\n{\n\"query\": \n\"{\"date\": \"2025-04-02\", \"busyEvents\": [{\"start\": \"2025-04-02T08:15:00-06:00\", \"end\": \"2025-04-02T12:00:00-06:00\"}]}\"\n}\n]\n\n# Output Example\nReturn a list of available slots in the following format:\n```json\n[\n  {\n    \"start\": \"2025-04-01T14:00:00-06:00\",\n    \"end\": \"2025-04-01T14:30:00-06:00\",\n    \"label\": \"2:00 PM - 2:30 PM\"\n  },\n  {\n    \"start\": \"2025-04-01T14:30:00-06:00\",\n    \"end\": \"2025-04-01T15:00:00-06:00\",\n    \"label\": \"2:30 PM - 3:00 PM\"\n  }\n]\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "kezDoUyI1tph4ZwE",
+          "mode": "list",
+          "cachedResultName": "calculate_avaliable_slots"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        208
+      ],
+      "id": "cb4356d4-f544-4103-9a1e-f22e38c3e488",
+      "name": "calculate_avaliable_slots"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=# Scope\nUse this GetEvent tool to fetch existing appointments for a specified period.\n\n# Goal\nFollow the instructions one by one in the specified order.\n\n# Instructions\n\n1. Convert the user's input (e.g., \"tomorrow\", \"next Monday\") into a valid ISO date using today's date as a reference.\n   - Today’s date is: {{ $now.setZone(\"America/Mexico_City\") }}\n2. Get all the already created events from the Google Calendar for that date.\n3. Define the event range for the selected date:\n   - Set `eventsAfter` to 7:59 AM of that day.\n   - Set `eventsBefore` to 6:01 PM of the same day.\n   - Use ISO datetime format with UTC-6 timezone (America/Mexico_City).\n   - Example:\n     - `\"eventsAfter\": \"2025-03-31T07:59:00-06:00\"`\n     - `\"eventsBefore\": \"2025-03-31T18:01:00-06:00\"`\n4. store in memory every `id` field from the json output.\n\n# After this tool completes:\n- Call `@calculate_available_slots`.\n- Simply return the full list of calendar events found within the range.\n- Each returned event must include the following fields:\n  - `id`: returned calendar event ID used for deletions or modifications.\n  - `summary`: Event title.\n  - `start.dateTime` and `end.dateTime`: Event time boundaries.\n  - Any other relevant metadata.\n\n# Rules\n- Do not return any message or text to the user during this tool execution.\n- Always output all times in UTC-6 (America/Mexico_City).\n- Treat all returned events as blocking.\n- Do **not** attempt to filter by user identity here.\n- Simply return the full list of calendar events found in the specified range with their info.\n- The agent will be responsible for filtering based on the user's name and phone number.00\n\n# Optional Handling\nIf the user does not specify a date, ask them to clarify before proceeding.\n",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "jcorrea@ocaihealth.com",
+          "mode": "list",
+          "cachedResultName": "jcorrea@ocaihealth.com"
+        },
+        "timeMin": "={{ $fromAI('eventsAfter', 'Return events after this date time') }}",
+        "timeMax": "={{ $fromAI('eventsBefore', 'Return events before this date time') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        512,
+        208
+      ],
+      "id": "c32f66ec-9b0b-403a-87d3-c935560a33be",
+      "name": "GetEvent",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "0LejGO69O7NuHea4",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "SearchEvent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Google Calendar MCP",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateEvent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Google Calendar MCP",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UpdateEvent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Google Calendar MCP",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeleteEvent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Google Calendar MCP",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calculate_avaliable_slots": {
+      "ai_tool": [
+        [
+          {
+            "node": "Google Calendar MCP",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetEvent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Google Calendar MCP",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8a76ce8d-9235-4218-8478-3396ec4b2686",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"
+  },
+  "id": "uMA9xkB2LvwLtW6B",
+  "tags": [
+    {
+      "name": "Prod",
+      "id": "dqhiDfQfSdEEfQ5f",
+      "createdAt": "2025-07-15T22:57:11.231Z",
+      "updatedAt": "2025-07-15T22:57:11.231Z"
+    }
+  ]
+}
