@@ -568,7 +568,7 @@
         "messages": {
           "messageValues": [
             {
-              "message": "=Eres un clasificador que determina si un mensaje del cliente requiere intervención humana.\n\nEste clasificador solo debe activarse si el cliente **sigue necesitando ayuda** o está atascado, frustrado o confuso **y no fue resuelto su caso**.\n\nanaliza la intencion del usuario : {{ $json.data[2].text }}\n\n✅ Activa este clasificador si:\n- la intencion del usuario indica intervencion humana\n- El cliente pide hablar con alguien\n- Dice que no fue ayudado\n- Muestra confusión, bloqueo o insatisfacción abierta\n- Hace una consulta fuera del alcance del asistente\n\n❌ No actives este clasificador si:\n- la intención del usuario indica conversacion, gestion de cita o otros, pero no intervención humana\n- El cliente pide hablar con alguien\n- El problema ya fue resuelto\n- El mensaje es solo feedback o crítica\n- Es un fallo técnico específico (eso lo maneja otro clasificador)\n- Es una expresión de malestar físico o síntomas médicos\n\n\nSi el cliente requiere intervención humana responde `intervencion_humana`\n"
+              "message": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntención del usuario: {{ $json.data[2].text }}\n\n¿El usuario necesita intervención humana?\n\nResponde solo:\n- `intervencion_humana` si claramente lo solicita o está atascado.\n- `no_intervencion` si no hay señales claras.\n\nNo respondas nada más.\n"
             }
           ]
         },
@@ -656,7 +656,7 @@
         "sendTo": "operation@ocaihealth.com",
         "subject": "Alerta: requerimiento de intervencion humana",
         "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA:\nSe requiere intervencion humana urgente para el cliente: {{ $('text & session_id').item.json.sessionId }}\n\nINFORMACION DEL CLIENTE:\n* Nombre del cliente: no recuperado\n* Número de Whatsapp: {{ $('text & session_id').item.json.sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('buffer_output').item.json.buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "message": "=MOTIVO DE LA ALERTA:\nSe requiere intervencion humana urgente para el cliente: {{ $('text & session_id').item.json.sessionId }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('text & session_id').item.json.sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('buffer_output').item.json.buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
@@ -680,7 +680,7 @@
         "sendTo": "operation@ocaihealth.com",
         "subject": "ALERTA: se reporta incidencia técnica",
         "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA: Se reporta incidencia técnica para el cliente: Jonatan Polanco \n\nINFORMACION DEL CLIENTE:\n* Nombre del cliente: Jonatan Polanco\n* Número de Whatsapp: +543166379380\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisión técnica del caso\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "message": "=MOTIVO DE LA ALERTA: Se reporta incidencia técnica para el cliente: Jonatan Polanco \n\nINFORMACION DEL CLIENTE:\n* Nombre del cliente: {{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: +543166379380\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisión técnica del caso\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
@@ -704,7 +704,7 @@
         "sendTo": "operation@ocaihealth.com",
         "subject": "ALERTA: cliente enfadado",
         "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA: Se reporta enfado o inconformidad sobre cliente: {{ $('chat').item.json.sessionId }}\n\nINFORMACION DEL CLIENTE:\n* Nombre del cliente: No recuperado\n* Número de Whatsapp: {{ $('chat').item.json.sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "message": "=MOTIVO DE LA ALERTA: Se reporta enfado o inconformidad sobre cliente: {{ $('Aggregate').item.json.data[4].phone_number }}\n\nINFORMACION DEL CLIENTE:\n* Nombre del cliente: {{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[4].phone_number }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
@@ -898,7 +898,7 @@
     },
     {
       "parameters": {
-        "numberInputs": 4
+        "numberInputs": 5
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
@@ -1863,7 +1863,7 @@
               "id": "wamid.HBgMNTczMTY2Mzc5MzgwFQIAEhggNDkyNkJDRDBBOUI1NEI0Rjk1RUE3QzM0QUEzNjgzMUMA",
               "timestamp": "1752866631",
               "text": {
-                "body": "Hola"
+                "body": "creo que necesito ayuda"
               },
               "type": "text"
             }
@@ -2525,6 +2525,11 @@
             "node": "Merge1",
             "type": "main",
             "index": 5
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
           }
         ]
       ]
@@ -2556,7 +2561,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "40a1a7fc-5a04-4170-afbb-245e69034fcb",
+  "versionId": "6d32cdf9-f813-4132-9d9e-864dec13f86e",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"
