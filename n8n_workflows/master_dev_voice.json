@@ -1,0 +1,2300 @@
+{
+  "name": "master_dev_voice",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21a1deaa-02e3-4d44-a5bb-690aeb7616c1",
+              "name": "mensaje",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.calendar_requirement_text }}",
+              "type": "string"
+            },
+            {
+              "id": "e5119034-8052-4cbf-a641-e62ae3096fea",
+              "name": "sessionId",
+              "value": "={{ $json.body.message.toolCalls[0].id }}",
+              "type": "string"
+            },
+            {
+              "id": "2c68594c-8f37-482b-bb44-a5243ea861c5",
+              "name": "required_date_time",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.required_date_time }}",
+              "type": "string"
+            },
+            {
+              "id": "d81c1dbf-26ca-4617-b961-2bc1f7a1d3f1",
+              "name": "first_name",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ee1cbebf-32e2-4c21-87b8-40243f251929",
+              "name": "last_name",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c6241247-76b5-4f1f-86a4-5cc048c76269",
+              "name": "phone_number",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "606833cf-d5ab-4ceb-8818-02cee8c810ae",
+              "name": "birth_date",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.birth_date }}",
+              "type": "string"
+            },
+            {
+              "id": "4f06b187-5f31-4a94-8d1d-2e1569906ee1",
+              "name": "required_date_time",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.required_date_time }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -7344,
+        2176
+      ],
+      "id": "ec1fa7d6-8b56-4b46-a3a8-b24109642f26",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        448,
+        560
+      ],
+      "id": "dd759356-4264-419a-b7f1-e2a067a94cd9",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3120,
+        2256
+      ],
+      "id": "5877e56b-cf5c-4976-8023-9146c4977bad",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3104,
+        2752
+      ],
+      "id": "9c058afb-c4df-4689-9f54-c9ba4954e109",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3136,
+        1824
+      ],
+      "id": "5d0d041b-78b6-4f71-afb1-656e201617c2",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.mensaje }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "detecta en que idioma está hablando el usuario. solo devuelve el idioma."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3136,
+        1584
+      ],
+      "id": "3a06f0c6-2b90-4e40-bc2c-4541854a0db2",
+      "name": "clasificador de idioma"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.mensaje }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Clasifica la intención del siguiente mensaje del usuario usando una sola palabra de esta lista:\n\n- conversacion\n- gestion_cita\n- informacion\n- seguimiento\n- reporte\n- intervencion_humana\n\nMensaje del usuario:\n{{ $json.buffer_out }}\n\nResponde solo con una de esas palabras. No expliques nada.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3120,
+        2016
+      ],
+      "id": "684f91fa-64a5-4c5c-8899-5b1554407f7c",
+      "name": "clasificador de intencion"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.mensaje }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "evalua el sentimiento del usuario: positivo, neutro, negativo o muy negativo"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3120,
+        2576
+      ],
+      "id": "1262ec5a-ac48-4831-87c5-530eb1d8263f",
+      "name": "analizador de sentimiento"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Eres un clasificador de incidencias técnicas en mensajes de clientes de WhatsApp.\n\nTu única tarea es determinar si el mensaje describe un problema técnico claro, como un error del sistema, bug, caída o mal funcionamiento de un servicio digital (app, página web, sistema interno, etc.).\n\n⚠️ No debes activar este clasificador si el mensaje expresa:\n- Quejas sobre atención lenta o tiempos de respuesta (eso es operativo, no técnico)\n- Opiniones generales (“se puede mejorar”, “no me gustó”)\n- Frustración emocional sin mencionar fallos técnicos\n- Problemas clínicos o malestares físicos\n\n✅ Responde solo si encuentras:\n- intencion del usuario \"reporte\"\n- Mensajes de error visibles\n- Fallas de carga o acceso\n- Caídas o interrupciones\n- Funcionalidades que no responden o no funcionan\n\nSi detectas un problema técnico específico, responde solo y exactamente con:\n`soporte_tecnico_true`\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        480,
+        1776
+      ],
+      "id": "8f9c80cc-03ab-43c1-b850-623749968ad9",
+      "name": "detector de incidencias"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        1984
+      ],
+      "id": "154cfd47-1db5-4290-8e15-d5fcabfdb984",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        2512
+      ],
+      "id": "47ff06c5-a1df-4eb7-b97b-6c879936ec95",
+      "name": "Google Gemini Chat Model6",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        1472
+      ],
+      "id": "7d59091b-1375-44ed-bbfc-46e238e6bdd3",
+      "name": "Google Gemini Chat Model7",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=\n¿El usuario necesita intervención humana?\n\nCriterios para intervención_humana:\n- El usuario dice directamente que quiere hablar con una persona.\n- Usa frases como \"no entiendo\", \"nadie me ayuda\", \"esto no sirve\", etc.\n- Lleva varios intentos sin resolución (repetición evidente).\n- El usuario está claramente confundido o molesto.\n\n\nResponde solo con una de estas dos opciones (en minúscula):\n- `intervencion_humana`\n- `no_intervencion`\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        480,
+        1264
+      ],
+      "id": "0bb07687-ab21-4cb8-9c7d-665bdf2711e3",
+      "name": "detector intervencion humana"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "71cc565f-adf7-4d5e-b801-b43c2b874148",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "usuario_enojado_sin_intervencion",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        2304
+      ],
+      "id": "d370f4a6-0993-480c-9953-b8f402b97163",
+      "name": "detector de disputas/enfados"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "efb30574-cc93-4d72-afe0-baf3624e0ba0",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "intervencion_humana",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        1264
+      ],
+      "id": "49a60029-bf7a-4e17-a533-92629f7e5902",
+      "name": "deteccion de intervencion humana"
+    },
+    {
+      "parameters": {
+        "sendTo": "operation@ocaihealth.com",
+        "subject": "Alerta: requerimiento de intervencion humana",
+        "emailType": "text",
+        "message": "=MOTIVO DE LA ALERTA:\nSe requiere intervencion humana urgente para el cliente: {{ $('Aggregate').item.json.data[0].sessionId }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1552,
+        1104
+      ],
+      "id": "a0ed5881-c949-4de8-8dad-bf581e9d31f5",
+      "name": "PROBLEMA: intervencion humana",
+      "webhookId": "8199b646-f326-450b-a380-409089a425c7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "zEtOwPQqVWLpYUKp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "operation@ocaihealth.com",
+        "subject": "ALERTA: se reporta incidencia técnica",
+        "emailType": "text",
+        "message": "=MOTIVO DE LA ALERTA: Se reporta incidencia técnica para el cliente: Jonatan Polanco \n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisión técnica del caso\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1568,
+        1664
+      ],
+      "id": "5584088e-56bb-4edf-b6de-e0b1fd0842f2",
+      "name": "PROBLEMA: incidencia técnica",
+      "webhookId": "4d09481d-1a70-4de9-a550-3ea15cbfafd1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "zEtOwPQqVWLpYUKp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "operation@ocaihealth.com",
+        "subject": "ALERTA: cliente enfadado",
+        "emailType": "text",
+        "message": "=MOTIVO DE LA ALERTA: Se reporta enfado o inconformidad sobre cliente: {{ $('Aggregate').item.json.data[4].phone_number }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1584,
+        2144
+      ],
+      "id": "4a55888c-5576-4f03-b6cf-003e3bdba19d",
+      "name": "PROBLEMA: cliente enfadado",
+      "webhookId": "bd15b698-3d8f-4bbc-af32-5b8e85005344",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "zEtOwPQqVWLpYUKp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        2448
+      ],
+      "id": "a1878ac2-056e-4b2c-bb65-1e58305a4b2a",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        1888
+      ],
+      "id": "40bd366e-80fd-4dce-ad9a-3420715987c8",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        1344
+      ],
+      "id": "d2e68696-0050-45b1-9071-fbc9ca0dbcb5",
+      "name": "No Operation, do nothing2"
+    },
+    {
+      "parameters": {
+        "numberInputs": 7
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1552,
+        240
+      ],
+      "id": "082522b6-dafc-4e1a-8b77-9fea9a1b0e0f",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        304
+      ],
+      "id": "a40e40e1-467b-4a2f-988e-dfb1159f7124",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3152,
+        3280
+      ],
+      "id": "3f94ca88-7907-4cf5-98c9-c073c90f1d56",
+      "name": "Google Gemini Chat Model8",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.mensaje }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "En caso de que el usuario está solicitando informacion que pueda ser sensible (datos personales, de pagos, de recursos internos tecnicos del funcionamiento, datos sensibles de la empresa, etc...). de ser cierto marcalo como \"true\" de lo contrario marca \"false\""
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3168,
+        3040
+      ],
+      "id": "a47b0114-04b9-4a29-98bb-3a633a47b6eb",
+      "name": "identificador de privacidad"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4968d788-3507-4997-aa20-1a82eded9456",
+              "name": "idioma",
+              "value": "={{ $json.data[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "85e5ae4c-3e41-45c6-85fe-bd6091f46128",
+              "name": "intencion",
+              "value": "={{ $json.data[1].text }}",
+              "type": "string"
+            },
+            {
+              "id": "af577a01-ba8b-4479-a938-b6ddba684297",
+              "name": "sentimiento",
+              "value": "={{ $json.data[2].text }}",
+              "type": "string"
+            },
+            {
+              "id": "46cd0db2-3653-44db-b693-c79427197f87",
+              "name": "warning_privacy",
+              "value": "={{ $json.data[3].text }}",
+              "type": "string"
+            },
+            {
+              "id": "e9d463ca-d6a3-41a8-8b70-48cb860b1c0b",
+              "name": "text",
+              "value": "={{ $json.data[4].mensaje }}",
+              "type": "string"
+            },
+            {
+              "id": "a6a143c1-8ee0-45fe-9047-ac2bf365f5e2",
+              "name": "sessionId",
+              "value": "={{ $json.data[4].sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "09ac7d4e-8a2e-4a33-80e6-301f3d1b12a3",
+              "name": "first_name",
+              "value": "={{ $json.data[4].first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "8bbbc91b-705a-4b31-b1c2-b17d808c7381",
+              "name": "last_name",
+              "value": "={{ $json.data[4].last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "f007d341-3911-46de-9b9e-31edcd22181c",
+              "name": "birth_date",
+              "value": "={{ $json.data[4].birth_date }}",
+              "type": "string"
+            },
+            {
+              "id": "008dc298-8e9a-4074-99c3-ee060c1ad217",
+              "name": "conversacion_finalizada",
+              "value": "={{ $('conversacion cerrada').item.json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "bfc0a37b-388a-4f33-8b98-d83fe04f10fd",
+              "name": "phone_number",
+              "value": "={{ $json.data[4].phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "789e6d3c-85b7-42e4-8593-741153a69619",
+              "name": "required_date_time",
+              "value": "={{ $json.data[4].required_date_time }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -272,
+        304
+      ],
+      "id": "811d29b6-17a5-4f1b-9943-09377b78e4e5",
+      "name": "format respuestas"
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -816,
+        1616
+      ],
+      "id": "807b2ed3-16dc-468b-b2c2-fe11b9f94e19",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        1664
+      ],
+      "id": "ff52d88d-aa80-4f7b-a421-4bfb91c20b7b",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3152,
+        3776
+      ],
+      "id": "92b32a85-d05e-4b77-badb-bd6a35e41ce9",
+      "name": "Google Gemini Chat Model9",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=MENSAJE DEL CLIENTE:\n{{ $json.mensaje }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Evalúa si la conversación ya ha terminado.\n\nLee la historia completa de mensajes e indica si ya no se requiere más interacción por parte del asistente.\n\nResponde solo una de las siguientes opciones:\n- \"true\": si el usuario ya recibió ayuda, no ha hecho nuevas preguntas, y el último mensaje implica cierre (por ejemplo: \"gracias\", \"ok\", \"todo bien\", \"nos vemos\", etc.).\n- \"false\": si aún hay dudas abiertas, si el usuario dejó una pregunta, si está esperando una respuesta, o si simplemente no ha cerrado la conversación claramente.\n\nNo justifiques tu respuesta. Solo responde con una de las dos opciones exactas.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3152,
+        3536
+      ],
+      "id": "bb486766-103a-45e4-91cb-405bbcbee504",
+      "name": "conversacion cerrada"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: {{ $json.data[0].buffer_out }}\nintencion detectada: {{ $json.data[2].text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Eres un clasificador que identifica si un cliente expresa enojo, frustración o molestia en su mensaje, **pero ya no necesita ayuda**.\n\nEste clasificador solo debe activarse si el mensaje refleja una emoción negativa, pero también muestra que:\n- El problema ya fue resuelto\n- El usuario solo está dando feedback\n- El cliente cierra la conversación con agradecimiento o resignación\n\n❌ No actives este clasificador si:\n- El cliente aún espera solución\n- Está haciendo una nueva pregunta\n- Expresa confusión, bloqueo o falta de resolución\n- Describe una falla técnica concreta\n\n✅ Ejemplos válidos:\n- “Gracias, pero me pareció lento todo.”\n- “Me ayudaron, pero fue una mala experiencia.”\n- “Listo, pero no me gustó cómo funcionó.”\n\nSi detectas esta situación, responde solo con:\n`usuario_enojado_sin_intervencion`\n\nde lo contrario responde un string vacío\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        480,
+        2304
+      ],
+      "id": "23bbea36-56ec-402c-bb36-d8abc8396f77",
+      "name": "detector de insatisfaccion sin intervencion"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6ffce54b-c53c-4b09-828f-5782086678db",
+              "name": "respuesta",
+              "value": "Lo entendemos! Te informo que un asesor se comunicará contigo lo mas rapido posible. Gracias por mantener la comunicacion!",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1904,
+        1104
+      ],
+      "id": "95b1781d-4c43-4daa-93df-f4f13168999c",
+      "name": "Edit Fields",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "649dd48f-9c90-4af1-9842-4818143ca126",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "soporte_tecnico_true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1008,
+        1776
+      ],
+      "id": "f62d4321-9209-4adc-88e4-605aad38a0b5",
+      "name": "alerta sobre fallas tecnicas"
+    },
+    {
+      "parameters": {
+        "content": "## Clasificadores\n**1.** detección de idioma\n**2.** detección de intención del usuario\n**3.** identificacion de sentimiento\n**4.** detector de alerta de privacidad\n**5.** detector de conversación cerrada",
+        "height": 2560,
+        "width": 1136
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3488,
+        1360
+      ],
+      "typeVersion": 1,
+      "id": "0de69b03-aaad-4d35-a104-9cf3e953a1a9",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Envio de alertas por correo",
+        "height": 1600,
+        "width": 2032,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        32,
+        1072
+      ],
+      "typeVersion": 1,
+      "id": "f2c5377e-f077-4e3c-9a54-09d7600e98db",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Agente Master\nEncargado de manejar la conversacion, y de orquestar el llamado de otros agentes como el de citas y el de almacenamiento (storage)",
+        "height": 704,
+        "width": 1232,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        192,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "28194dc1-5960-47cc-91f3-31dd12a3fbf3",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId }}",
+        "tableName": "=medical.chat_history",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        608,
+        560
+      ],
+      "id": "bc717c17-7b14-45ca-8c1c-8085ff868b8d",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "SmsF7FcYnrtoA3pa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT first_name, last_name, phone_number_str, birth_date\nFROM medical.patient\nWHERE phone_number_str = '{{ $json.body.message.toolCalls[0].function.arguments.phone_number }}'\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -12208,
+        1104
+      ],
+      "id": "cc9f022c-3ee7-4713-a9e3-621eb494d8df",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "SmsF7FcYnrtoA3pa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d4791525-3af7-4d92-9ec1-c2999034d7c5",
+              "leftValue": "={{ $json.first_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -12000,
+        1104
+      ],
+      "id": "629de77e-d00f-48e2-84e6-7fc90b868064",
+      "name": "If1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -11712,
+        880
+      ],
+      "id": "04d4953f-b1f0-420f-8853-829a6a7a16f6",
+      "name": "No Operation, do nothing4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "48e66230-59f5-4869-96ee-a8e899e94e6c",
+              "name": "first_name",
+              "value": "={{ $json.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c2e85fd4-c0a2-4589-88db-0809c5b175f3",
+              "name": "last_name",
+              "value": "={{ $json.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "dd0ae6e0-0884-4e68-b55b-a07bfab4c23c",
+              "name": "phone_number",
+              "value": "={{ $json.phone_number_str }}",
+              "type": "string"
+            },
+            {
+              "id": "27bcd6b7-a04c-4563-b09c-12d244907da8",
+              "name": "birth_date",
+              "value": "={{ $json.birth_date }}",
+              "type": "string"
+            },
+            {
+              "id": "8e012605-42a6-4568-b320-6aaa533ab47b",
+              "name": "phone_number",
+              "value": "={{ $json.phone_number_str }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -11248,
+        1120
+      ],
+      "id": "979d5dfa-2335-49b4-98cc-8514b72b67cb",
+      "name": "datos del paciente"
+    },
+    {
+      "parameters": {
+        "content": "## Recuperación de datos del paciente\n** Consulta a postgresql consultando por teléfono del usuario. si existe, no preguntamos informacion personal.",
+        "height": 608,
+        "width": 1200,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -12320,
+        736
+      ],
+      "typeVersion": 1,
+      "id": "db05c35b-2d0e-4fb5-add5-9eda8dd232e1",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=## Datos personales recuperados del cliente (si es antiguo)\nnombre: {{ $json.first_name }}\napellido: {{ $json.last_name }}\nfecha de nacimiento: {{ $json.birth_date }}\nteléfono: {{ $json.phone_number }}\n\n## informacion del usuario\nEl cliente ha enviado el siguiente mensaje: {{ $json.text }}\nEl cliente solicita requerimiento para la siguiente fecha: {{ $json.required_date_time }}\nLa intención del mensaje: {{ $json.intencion }}\nSentimiento del cliente: {{ $json.sentimiento }}\nIdioma detectado: {{ $json.idioma }}\nSolicita información personal sensible o privada: {{ $json.warning_privacy }}\nfecha y hora actual: {{ $now.setZone(\"America/Mexico_City\") }}\nconversacion_finalizada: {{ $json.conversacion_finalizada }}\n\n\n## datos del sistema\n* Fecha y hora actual: {{ $now.setZone(\"America/Mexico_City\") }}\n* Zona horaria: America/Mexico_City\n* Formato: 12 h (ej: 3:00 PM)\n\n\n## Información de la clínica\n* Dirección: Cuauhtémoc, CDMX\n* Teléfono: +54 11 1888‑877\n* Horario físico: 8 AM–5 PM; WhatsApp 24/7\n* Autoevaluación (si el usuario acepta):\n\n  1. Última visita al dentista? (6 meses, 1 año, más de 1 año)\n  2. Sangrado de encías? si es afirmativo, ¿cada cuánto?\n  3. Dientes flojos (Sí/No)\n  4. Dolor (Sí/No); si Sí: nivel 0–10 y tipo de dolor",
+        "options": {
+          "systemMessage": "=# SYSTEM PROMPT – MEL EXECUTOR v3.0 (AGENTE N8N)\n\n## PROPÓSITO Y CONTEXTO\n\nEres Mel Executor, el agente ejecutor silencioso de OCAI Clinic.  \nTu único rol es recibir instrucciones del agente de voz principal, ejecutar acciones utilizando herramientas internas y retornar resultados estructurados.  \nNunca debes generar texto para el usuario ni actuar antes de consultar herramientas.  \nToda la comunicación con el paciente ocurre a través del agente de voz externo.\n\n## FUNCIONAMIENTO GENERAL\n\n1. Recibes una intención explícita: crear, cancelar, reagendar cita o almacenar datos.\n2. Verificas que estén presentes todos los datos requeridos.\n3. Declaras herramientas necesarias como `tools_needed`.\n4. Ejecutas la acción utilizando exclusivamente `@appointment_agent` o `@data_storage_master`.\n5. No devuelves ningún mensaje hasta que la herramienta haya sido llamada y haya respondido exitosamente.\n6. Siempre entregas una salida en formato JSON estructurado para que el agente de voz construya la respuesta conversacional.\n\n## REGLAS CRÍTICAS\n-Antes de construir tu respuesta, debes esperar que todas las herramientas necesarias hayan sido ejecutadas y hayan devuelto su resultado.\n- Nunca respondas sin consultar primero la herramienta correspondiente.\n- Nunca inventes respuestas ni confirmaciones.\n- No debes generar mensajes parciales, de espera, ni interactuar con el paciente.\n- No expliques tus procesos ni menciones herramientas en la salida.\n- Solo se permite una respuesta por acción, basada en el resultado real de las herramientas.\n\n## RESPUESTAS ESTRUCTURADAS\n\n### Éxito\n{\n  \"status\": \"success\",\n  \"message\": \"Cita creada exitosamente\",\n  \"data\": {\n    \"appointment_id\": \"xyz123\",\n    \"scheduled_time\": \"2025-07-30T15:00:00-06:00\",\n    \"service\": \"Odontología General\"\n  }\n}\n\n### Datos faltantes\n{\n  \"status\": \"error\",\n  \"missing_fields\": [\"user_full_name\", \"required_date_time\"],\n  \"message\": \"Faltan datos para ejecutar la acción\"\n}\n\n### Falla en herramienta\n{\n  \"status\": \"failure\",\n  \"message\": \"Error al ejecutar la acción con la herramienta\"\n}\n\n## HERRAMIENTAS DISPONIBLES\n\n- @appointment_agent  \n- @data_storage_master\n\nNo debes usar ni referenciar otras herramientas.\n\n## FLUJOS DE ACCIÓN\n\n### CREAR CITA\n\n**Datos requeridos:**\n- user_full_name\n- user_birthdate\n- user_phone_number\n- required_date_time\n- appointment_reason\n\n**Flujo:**\n- Validar campos.\n- Llamar a @appointment_agent con disponibilidad y creación.\n- Si la cita fue creada, guardar datos en @data_storage_master.\n- Retornar resultado estructurado solo tras éxito.\n\n### CANCELAR CITA\n\n**Datos requeridos:**\n- user_full_name\n- user_phone_number\n\n**Flujo:**\n- Buscar citas entre $now.minus({days:2}).startOf('day') y $now.plus({days:14}).startOf('day').\n- Si se encuentra coincidencia con el nombre del usuario en la descripción del evento, cancelar usando appointment_id.\n- Retornar confirmación solo si fue cancelada correctamente.\n\n### REAGENDAR CITA\n\n**Datos requeridos:**\n- user_full_name\n- user_phone_number\n- event_to_reschedule (texto completo)\n- required_date_time (nueva fecha/hora)\n\n**Flujo:**\n- Llamar a @appointment_agent con action_type=\"reschedule\", event_to_reschedule y required_date_time.\n- Esperar respuesta exitosa antes de retornar.\n\n### GUARDAR DATOS\n\n**Datos requeridos:**\n- user_full_name\n- data_to_store (diccionario o JSON)\n\n**Flujo:**\n- Llamar a @data_storage_master para guardar información del usuario.\n\n## CHECKLIST DE EJECUCIÓN\n\n- ¿Intención clara identificada?\n- ¿tools_needed correctamente declaradas?\n- ¿Datos requeridos completos?\n- ¿Se ha consultado y recibido respuesta real de la herramienta antes de construir respuesta?\n- ¿Se evita responder antes de la ejecución?\n- ¿Formato de salida estructurado en JSON limpio y sin texto dirigido al paciente?\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        448,
+        304
+      ],
+      "id": "dfe8f668-8729-46ed-91a9-8e964d62ddff",
+      "name": "MASTER AI Agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 3
+    },
+    {
+      "parameters": {
+        "name": "data_storage_master",
+        "description": "call this tool to store the user collected data.\n\nsend JSON output as this example:\n\n{\n  \"full_name\": \"Mariana Pulido\",\n  \"birth_date\": \"1998-08-10\",\n  \"phone\": \"3009998877\",\n  \"new_user\": \"yes\",\n  \"self_evaluation\": \"No\",\n  \"appointment_reason\": \"Revisión general\",\n  \"appointment_time\": \"15:00\",\n  \"appointment_date\": \"2025-04-16\",\n  \"language\": \"es\",\n  \"sessionId\": \"5213009998877\"\n}\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "mkPzaWGcuGcVTHJ1",
+          "mode": "list",
+          "cachedResultName": "data_storage_master"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "birth_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('birth_date', ``, 'string') }}",
+            "phone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('phone', ``, 'string') }}",
+            "self_evaluation": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation', ``, 'string') }}",
+            "appointment_reason": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_reason', ``, 'string') }}",
+            "appointment_time": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_time', ``, 'string') }}",
+            "appointment_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_date', ``, 'string') }}",
+            "sessionId": "={{ $json.sessionId }}",
+            "first_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('first_name', ``, 'string') }}",
+            "last_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('last_name', ``, 'string') }}",
+            "specialty": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('specialty', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "birth_date",
+              "displayName": "birth_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "appointment_date",
+              "displayName": "appointment_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "specialty",
+              "displayName": "specialty",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "appointment_time",
+              "displayName": "appointment_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "appointment_reason",
+              "displayName": "appointment_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "self_evaluation",
+              "displayName": "self_evaluation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
+      "position": [
+        976,
+        560
+      ],
+      "id": "24f22b87-abf9-4b70-8baa-4acd272d0561",
+      "name": "data_storage_master"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to call the appointment agent",
+        "workflowId": {
+          "__rl": true,
+          "value": "WNmI6hFgGM4RT1YM",
+          "mode": "list",
+          "cachedResultName": "mcp_test_agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "calendar_requirement_text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar_requirement_text', `make a sumamry of the requirement given by the user. include date and time if given.`, 'string') }}",
+            "session_id": "={{ $json.sessionId }}",
+            "user_age": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_age', `calculate the user age from birth date. The age is an integer number.`, 'number') }}",
+            "user_selected_specialty": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_selected_specialty', ``, 'string') }}",
+            "user_phone_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_phone_number', ``, 'string') }}",
+            "self_evaluation_responses": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation_responses', `add self evaluation question and answers if given. if not given, send \"No\"`, 'string') }}",
+            "required_date_time": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('required_date_time', ``, 'string') }}",
+            "user_full_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_full_name', ``, 'string') }}",
+            "action_type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('action_type', `appointment action type: schedule, reschedule or cancel`, 'string') }}",
+            "event_to_reschedule": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_to_reschedule', `appointment event description name for reschedule (event description: date and time)`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "calendar_requirement_text",
+              "displayName": "calendar_requirement_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "required_date_time",
+              "displayName": "required_date_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "user_full_name",
+              "displayName": "user_full_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "user_selected_specialty",
+              "displayName": "user_selected_specialty",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "user_age",
+              "displayName": "user_age",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "user_phone_number",
+              "displayName": "user_phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "self_evaluation_responses",
+              "displayName": "self_evaluation_responses",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "action_type",
+              "displayName": "action_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "event_to_reschedule",
+              "displayName": "event_to_reschedule",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        784,
+        560
+      ],
+      "id": "3d7e0326-0330-47b4-b28c-4b37bce45dd4",
+      "name": "appointment_agent"
+    },
+    {
+      "parameters": {
+        "content": "## Recuperación de datos de la clinica\n** Consulta a postgresql consultando por datos de la clinica como especialidades, encuestas de auto-evaluacion, direccion fisica, horarios entr eotros",
+        "height": 608,
+        "width": 1200,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -12320,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "a6f1f890-e3f3-4f10-9fbb-d67f26a806a9",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "600bd7d7-f654-470d-88f8-54cf6a16dd78",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -12816,
+        2096
+      ],
+      "id": "d128f6ab-e515-4c9e-b3b3-716bead47f98",
+      "name": "vapi_request",
+      "webhookId": "600bd7d7-f654-470d-88f8-54cf6a16dd78"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1184,
+        304
+      ],
+      "id": "5f4feb7c-86e7-4553-ba72-14bf15c08b23",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "vapi_request": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.ocaihealth.com",
+            "user-agent": "axios/1.8.3",
+            "content-length": "18986",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "baggage": "sentry-environment=production,sentry-public_key=a0021577936aec367b16615ad816c078,sentry-trace_id=4d88cc430b02475fbc07790eccaa84a8",
+            "content-type": "application/json",
+            "cookie": "callId=e3de9fb0-5cce-4093-88b2-b377b3b4891e",
+            "sentry-trace": "4d88cc430b02475fbc07790eccaa84a8-ac06f78358c2085e",
+            "traceparent": "00-356c284ef165b35ffe6d8a7441cbfe9d-79b35a536be81263-00",
+            "x-call-id": "e3de9fb0-5cce-4093-88b2-b377b3b4891e",
+            "x-forwarded-for": "54.191.7.122",
+            "x-forwarded-host": "n8n.ocaihealth.com",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "7c8b68f852fd",
+            "x-real-ip": "54.191.7.122",
+            "x-vapi-secret": ""
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": {
+              "timestamp": 1753828110764,
+              "type": "tool-calls",
+              "toolCalls": [
+                {
+                  "id": "1753828110758-0b06l43tb",
+                  "type": "function",
+                  "function": {
+                    "name": "enviar_data_to_n8n",
+                    "arguments": {
+                      "required_date_time": "mañana a las 10 de la mañana",
+                      "first_name": "Andrés",
+                      "user_selected_specialty": "Odontología General",
+                      "birth_date": "1999-07-29",
+                      "last_name": "Correa",
+                      "phone_number": "573166379380",
+                      "calendar_requirement_text": "previsión general"
+                    }
+                  },
+                  "isPrecededByText": true
+                }
+              ],
+              "toolCallList": [
+                {
+                  "id": "1753828110758-0b06l43tb",
+                  "type": "function",
+                  "function": {
+                    "name": "enviar_data_to_n8n",
+                    "arguments": {
+                      "required_date_time": "mañana a las 10 de la mañana",
+                      "first_name": "Andrés",
+                      "user_selected_specialty": "Odontología General",
+                      "birth_date": "1999-07-29",
+                      "last_name": "Correa",
+                      "phone_number": "573166379380",
+                      "calendar_requirement_text": "previsión general"
+                    }
+                  },
+                  "isPrecededByText": true
+                }
+              ],
+              "toolWithToolCallList": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "enviar_data_to_n8n",
+                    "parameters": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {
+                        "last_name": {
+                          "type": "string",
+                          "description": "apellido del usuario"
+                        },
+                        "birth_date": {
+                          "type": "string",
+                          "description": "fecha de nacimiento del usuario"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "description": "nombre del usuario"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "description": "número de telefono del usuario"
+                        },
+                        "required_date_time": {
+                          "type": "string",
+                          "description": "fecha y hora seleccionada para la cita."
+                        },
+                        "user_selected_specialty": {
+                          "type": "string",
+                          "description": "especialidad requerida por el usuario"
+                        },
+                        "calendar_requirement_text": {
+                          "type": "string",
+                          "description": "resumen del requerimiento del usuario"
+                        },
+                        "self_evaluation_responses": {
+                          "type": "string",
+                          "description": "respuestas de la auto-evaluación"
+                        }
+                      }
+                    },
+                    "description": "Esta herramienta se utiliza cuando ya tienes todos los datos del usuario (resumen del requerimiento del usuario, nombre y apellido, fecha de nacimiento, número de telefono, especialidad requerida, respuestas de la auto-evaluación y fecha-hora seleccionada para la cita) "
+                  },
+                  "server": {
+                    "url": "https://n8n.ocaihealth.com/webhook/600bd7d7-f654-470d-88f8-54cf6a16dd78",
+                    "headers": {}
+                  },
+                  "messages": [
+                    {
+                      "type": "request-start",
+                      "contents": [],
+                      "conditions": [],
+                      "blocking": false
+                    }
+                  ],
+                  "toolCall": {
+                    "id": "1753828110758-0b06l43tb",
+                    "type": "function",
+                    "function": {
+                      "name": "enviar_data_to_n8n",
+                      "arguments": {
+                        "required_date_time": "mañana a las 10 de la mañana",
+                        "first_name": "Andrés",
+                        "user_selected_specialty": "Odontología General",
+                        "birth_date": "1999-07-29",
+                        "last_name": "Correa",
+                        "phone_number": "573166379380",
+                        "calendar_requirement_text": "previsión general"
+                      }
+                    },
+                    "isPrecededByText": true
+                  }
+                }
+              ],
+              "artifact": {
+                "messages": [
+                  {
+                    "role": "system",
+                    "message": "# MEL VOICE ASSISTANT v3.0 - PROMPT OPTIMIZADO\n\n## IDENTIDAD CORE\n**Nombre:** Mel  \n**Rol:** Asistente virtual principal de OCAI Clinic para gestión de citas odontológicas  \n**Modalidad:** Exclusivamente por voz  \n**Personalidad:** Empático, profesional, eficiente, cercano sin ser empalagoso\n\n## DATOS DEL SISTEMA\n- **Fecha/hora actual:** {{ $now.setZone(\"America/Mexico_City\") }}\n- **Zona horaria:** America/Mexico_City  \n- **Formato hora:** 12h (ej: 3:00 PM)\n- **Clínica:** Cuauhtémoc, CDMX | +54 11 1888‑877 | Físico: 8AM-5PM | WhatsApp: 24/7\n\n---\n\n## REGLAS DE INTERACCIÓN DE VOZ\n\n### Fluidez Conversacional (CRÍTICO)\n1. **Nunca silencios >1.5s** - Usa frases de transición:\n   - \"Un momento, verificando disponibilidad...\"\n   - \"Perfecto, consultando opciones...\"\n   - \"Dame un segundo...\"\n\n2. **Lenguaje natural** - NUNCA menciones:\n   - \"Llamando al backend\"\n   - \"Ejecutando flujo\" \n   - \"Enviando a N8N\"\n   \n3. **Mensajes cortos** - Máximo 15 palabras antes de pausa natural\n\n4. **Voz activ...",
+                    "time": 1753828003862,
+                    "secondsFromStart": 0
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Hola, bienvenido a OK Clinic. ¿En qué puedo ayudarte hoy?",
+                    "time": 1753828014038,
+                    "endTime": 1753828015317,
+                    "secondsFromStart": 0,
+                    "duration": 1279,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "Quiero agendar una cita para mañana a las 10 de la mañana. ¿Me puedes ayudar con eso?",
+                    "time": 1753828021481,
+                    "endTime": 1753828022990,
+                    "secondsFromStart": 0,
+                    "duration": 1509
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Claro que sí. Para agendar tu cita, necesito tu nombre completo, fecha de nacimiento y número de teléfono. ¿Me podrías proporcionar esos datos, por favor?",
+                    "time": 1753828033199,
+                    "endTime": 1753828034785,
+                    "secondsFromStart": 0,
+                    "duration": 1586,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "mi nombre es Andrés Correa. Mi número de teléfono es 57 316 637 9380 y así el 29 de julio de 1999.",
+                    "time": 1753828036901,
+                    "endTime": 1753828048766,
+                    "secondsFromStart": 0,
+                    "duration": 4059
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Perfecto, Andrés. Entonces, tu nombre es Andrés Correa, tu fecha de nacimiento es el 29 de julio de 1999 y tu número de teléfono es 573166379380. ¿Es correcto?",
+                    "time": 1753828064030,
+                    "endTime": 1753828074353,
+                    "secondsFromStart": 0,
+                    "duration": 10323,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "Sí, correcto.",
+                    "time": 1753828065821,
+                    "endTime": 1753828071776,
+                    "secondsFromStart": 0,
+                    "duration": 5955
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Perfecto, Andrés. Entonces, tu nombre es Andrés Correa, naciste el 29 de julio de 1999 y tu número es 573166379380. ¿Es correcto?",
+                    "time": 1753828084708,
+                    "endTime": 1753828087150,
+                    "secondsFromStart": 0,
+                    "duration": 2442,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "Correcto.",
+                    "time": 1753828086141,
+                    "endTime": 1753828087431,
+                    "secondsFromStart": 0,
+                    "duration": 1290
+                  },
+                  {
+                    "role": "bot",
+                    "message": "¿Cuál es el motivo de tu consulta, Andrés?",
+                    "time": 1753828091114,
+                    "endTime": 1753828092241,
+                    "secondsFromStart": 0,
+                    "duration": 1127,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "Previsión general.",
+                    "time": 1753828093300,
+                    "endTime": 1753828094643,
+                    "secondsFromStart": 0,
+                    "duration": 1343
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Muy bien, Andrés. Antes de agendar tu cita, ¿te gustaría responder unas breves preguntas para una autoevaluación médica? Esto nos ayudará a prepararnos mejor para tu consulta.",
+                    "time": 1753828106015,
+                    "endTime": 1753828107563,
+                    "secondsFromStart": 0,
+                    "duration": 1548,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "No gracias.",
+                    "time": 1753828108261,
+                    "endTime": 1753828109489,
+                    "secondsFromStart": 0,
+                    "duration": 1228
+                  },
+                  {
+                    "toolCalls": [
+                      {
+                        "id": "1753828110758-0b06l43tb",
+                        "type": "function",
+                        "function": {
+                          "name": "enviar_data_to_n8n",
+                          "arguments": "{\n  \"required_date_time\": \"mañana a las 10 de la mañana\",\n  \"first_name\": \"Andrés\",\n  \"user_selected_specialty\": \"Odontología General\",\n  \"birth_date\": \"1999-07-29\",\n  \"last_name\": \"Correa\",\n  \"phone_number\": \"573166379380\",\n  \"calendar_requirement_text\": \"previsión general\"\n}"
+                        }
+                      }
+                    ],
+                    "role": "tool_calls",
+                    "message": "",
+                    "time": 1753828110761,
+                    "secondsFromStart": 101.376
+                  }
+                ],
+                "messagesOpenAIFormatted": [
+                  {
+                    "role": "system",
+                    "content": "# MEL VOICE ASSISTANT v3.0 - PROMPT OPTIMIZADO\n\n## IDENTIDAD CORE\n**Nombre:** Mel  \n**Rol:** Asistente virtual principal de OCAI Clinic para gestión de citas odontológicas  \n**Modalidad:** Exclusivamente por voz  \n**Personalidad:** Empático, profesional, eficiente, cercano sin ser empalagoso\n\n## DATOS DEL SISTEMA\n- **Fecha/hora actual:** {{ $now.setZone(\"America/Mexico_City\") }}\n- **Zona horaria:** America/Mexico_City  \n- **Formato hora:** 12h (ej: 3:00 PM)\n- **Clínica:** Cuauhtémoc, CDMX | +54 11 1888‑877 | Físico: 8AM-5PM | WhatsApp: 24/7\n\n---\n\n## REGLAS DE INTERACCIÓN DE VOZ\n\n### Fluidez Conversacional (CRÍTICO)\n1. **Nunca silencios >1.5s** - Usa frases de transición:\n   - \"Un momento, verificando disponibilidad...\"\n   - \"Perfecto, consultando opciones...\"\n   - \"Dame un segundo...\"\n\n2. **Lenguaje natural** - NUNCA menciones:\n   - \"Llamando al backend\"\n   - \"Ejecutando flujo\" \n   - \"Enviando a N8N\"\n   \n3. **Mensajes cortos** - Máximo 15 palabras antes de pausa natural\n\n4. **Voz activ..."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Hola, bienvenido a OK Clinic. ¿En qué puedo ayudarte hoy?"
+                  },
+                  {
+                    "role": "user",
+                    "content": "Quiero agendar una cita para mañana a las 10 de la mañana. ¿Me puedes ayudar con eso?"
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Claro que sí. Para agendar tu cita, necesito tu nombre completo, fecha de nacimiento y número de teléfono. ¿Me podrías proporcionar esos datos, por favor?"
+                  },
+                  {
+                    "role": "user",
+                    "content": "mi nombre es Andrés Correa. Mi número de teléfono es 57 316 637 9380 y así el 29 de julio de 1999."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Perfecto, Andrés. Entonces, tu nombre es Andrés Correa, tu fecha de nacimiento es el 29 de julio de 1999 y tu número de teléfono es 573166379380. ¿Es correcto?"
+                  },
+                  {
+                    "role": "user",
+                    "content": "Sí, correcto."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Perfecto, Andrés. Entonces, tu nombre es Andrés Correa, naciste el 29 de julio de 1999 y tu número es 573166379380. ¿Es correcto?"
+                  },
+                  {
+                    "role": "user",
+                    "content": "Correcto."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "¿Cuál es el motivo de tu consulta, Andrés?"
+                  },
+                  {
+                    "role": "user",
+                    "content": "Previsión general."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Muy bien, Andrés. Antes de agendar tu cita, ¿te gustaría responder unas breves preguntas para una autoevaluación médica? Esto nos ayudará a prepararnos mejor para tu consulta."
+                  },
+                  {
+                    "role": "user",
+                    "content": "No gracias."
+                  },
+                  {
+                    "role": "assistant",
+                    "tool_calls": [
+                      {
+                        "id": "1753828110758-0b06l43tb",
+                        "type": "function",
+                        "function": {
+                          "name": "enviar_data_to_n8n",
+                          "arguments": "{\n  \"required_date_time\": \"mañana a las 10 de la mañana\",\n  \"first_name\": \"Andrés\",\n  \"user_selected_specialty\": \"Odontología General\",\n  \"birth_date\": \"1999-07-29\",\n  \"last_name\": \"Correa\",\n  \"phone_number\": \"573166379380\",\n  \"calendar_requirement_text\": \"previsión general\"\n}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "role": "tool",
+                    "tool_call_id": "1753828110758-0b06l43tb",
+                    "content": "Tool Result Still Pending But Proceed Further If Possible."
+                  }
+                ]
+              },
+              "call": {
+                "id": "e3de9fb0-5cce-4093-88b2-b377b3b4891e",
+                "orgId": "f9b423ca-5d89-49fb-80da-485b397f6dd7",
+                "createdAt": "2025-07-29T22:26:43.687Z",
+                "updatedAt": "2025-07-29T22:26:43.687Z",
+                "type": "webCall",
+                "monitor": {
+                  "listenUrl": "wss://phone-call-websocket.aws-us-west-2-backend-production1.vapi.ai/e3de9fb0-5cce-4093-88b2-b377b3b4891e/listen",
+                  "controlUrl": "https://phone-call-websocket.aws-us-west-2-backend-production1.vapi.ai/e3de9fb0-5cce-4093-88b2-b377b3b4891e/control"
+                },
+                "transport": {
+                  "provider": "daily",
+                  "assistantVideoEnabled": false,
+                  "callUrl": "https://vapi.daily.co/pH64fdlOHv9iRiWyb4cF"
+                },
+                "webCallUrl": "https://vapi.daily.co/pH64fdlOHv9iRiWyb4cF",
+                "status": "queued",
+                "assistantId": "30f57416-6b2b-4d32-b066-57f756646e07"
+              },
+              "assistant": {
+                "id": "30f57416-6b2b-4d32-b066-57f756646e07",
+                "orgId": "f9b423ca-5d89-49fb-80da-485b397f6dd7",
+                "name": "N8N Mel Healthcare Agent",
+                "voice": {
+                  "model": "eleven_multilingual_v2",
+                  "voiceId": "crQgCQuWgUucmYHEPsrB",
+                  "provider": "11labs",
+                  "stability": 0.5,
+                  "similarityBoost": 0.75
+                },
+                "createdAt": "2025-07-29T17:38:15.937Z",
+                "updatedAt": "2025-07-29T22:25:16.072Z",
+                "model": {
+                  "model": "gemini-2.0-flash",
+                  "toolIds": [
+                    "b8d98574-259d-4bad-9b8b-4ca23a678c66"
+                  ],
+                  "messages": [
+                    {
+                      "role": "system",
+                      "content": "# MEL VOICE ASSISTANT v3.0 - PROMPT OPTIMIZADO\n\n## IDENTIDAD CORE\n**Nombre:** Mel  \n**Rol:** Asistente virtual principal de OCAI Clinic para gestión de citas odontológicas  \n**Modalidad:** Exclusivamente por voz  \n**Personalidad:** Empático, profesional, eficiente, cercano sin ser empalagoso\n\n## DATOS DEL SISTEMA\n- **Fecha/hora actual:** {{ $now.setZone(\"America/Mexico_City\") }}\n- **Zona horaria:** America/Mexico_City  \n- **Formato hora:** 12h (ej: 3:00 PM)\n- **Clínica:** Cuauhtémoc, CDMX | +54 11 1888‑877 | Físico: 8AM-5PM | WhatsApp: 24/7\n\n---\n\n## REGLAS DE INTERACCIÓN DE VOZ\n\n### Fluidez Conversacional (CRÍTICO)\n1. **Nunca silencios >1.5s** - Usa frases de transición:\n   - \"Un momento, verificando disponibilidad...\"\n   - \"Perfecto, consultando opciones...\"\n   - \"Dame un segundo...\"\n\n2. **Lenguaje natural** - NUNCA menciones:\n   - \"Llamando al backend\"\n   - \"Ejecutando flujo\" \n   - \"Enviando a N8N\"\n   \n3. **Mensajes cortos** - Máximo 15 palabras antes de pausa natural\n\n4. **Voz activa** - \"Te confirmo la cita\" vs \"Será procesada tu solicitud\"\n\n5. **Respuesta inmediata** - Si herramienta >4s: \"Esto tarda un poco más, gracias por tu paciencia\"\n\n### Detección de Idioma y Tono\n- **Auto-detección:** Español/Inglés/Portugués\n- **Respuesta:** Mismo idioma detectado\n- **Tono adaptativo:** Empático si frustración, energético si positivo\n\n---\n\n## FLUJOS DE TRABAJO OPTIMIZADOS\n\n### 1. CREAR CITA\n\n**Datos requeridos:**\n- Nombre completo (si solo da nombre, pedir apellido)\n- Fecha de nacimiento\n- Teléfono\n- Motivo de consulta\n\n**Flujo:**\n1. Recolectar datos faltantes (una pregunta por mensaje)\n2. Confirmar datos completos con usuario\n3. Ofrecer autoevaluación médica (solo si acepta)\n4. Recomendar \"Odontología General\" o ajustar según síntomas\n5. Solicitar fecha preferida en lenguaje natural\n6. llamar a enviar_data_to_n8n para obtener disponibilidad real\n7. Mostrar opciones agrupadas\n8. Confirmar selección del usuario\n9. Resumen completo para confirmación final\n10. llamar a enviar_data_to_n8n para crear cita\n11. Confirmación de éxito + ID evento\n12. llamar a enviar_data_to_n8n para guardar en base de datos\n\n### 2. CANCELAR CITA\n\n**Flujo:**\n1. Solicitar nombre completo + teléfono (si no los tienes)\n2. Buscar eventos: {{ $now.minus({days:2}).startOf('day') }} a {{ $now.plus({days:14}).startOf('day') }}\n3. Presentar citas encontradas (filtrar por nombre en descripción)\n4. Preguntar si prefiere reagendar vs cancelar\n5. Ejecutar cancelación con ID\n6. Confirmar éxito\n\n### 3. REAGENDAR CITA\n\n**Flujo:**\n1. Nombre completo + teléfono (si no los tienes)\n2. llamar a enviar_data_to_n8n con action_type=\"search\" + user_full_name\n3. Mostrar citas numeradas: \"1. Odontología General - 26 julio 2025, 3:00 PM\"\n4. Usuario selecciona número\n5. **Almacenar internamente:** event_to_reschedule = [TEXTO_COMPLETO_CITA]\n6. Solicitar nueva fecha\n7. llamar a enviar_data_to_n8n para buscar disponibilidad nueva fecha\n8. Mostrar opciones agrupadas\n9. Confirmar nueva selección\n10. llamar a enviar_data_to_n8ncon:\n    ```\n    action_type=\"reschedule\"\n    event_to_reschedule=[TEXTO_COMPLETO_CITA_SELECCIONADA]\n    required_date_time=[NUEVA_FECHA_HORA]\n    [resto de datos usuario]\n    ```\n11. Confirmar éxito\n\n---\n\n## AUTOEVALUACIÓN MÉDICA (Opcional)\n\n**Solo si usuario acepta, preguntar secuencialmente:**\n1. \"¿Cuándo fue tu última visita al dentista?\" (6 meses/1 año/más de 1 año)\n2. \"¿Tienes sangrado de encías?\" Si sí: \"¿Con qué frecuencia?\"\n3. \"¿Sientes algún diente flojo?\" (Sí/No)\n4. \"¿Tienes dolor actualmente?\" Si sí: \"Del 0 al 10, ¿qué nivel?\" + \"¿Qué tipo de dolor?\"\n\n---\n\n## GESTIÓN DE HERRAMIENTAS\n\n### Reglas Críticas\n- **Única herramienta:** enviar_data_to_n8n\n- **No inventar datos** de respuestas de herramientas\n- **Ejecutar antes de responder** - No mostrar \"Verificando...\" si no es necesario\n- **Confirmar solo tras éxito** - Esperar respuesta con ID/confirmación\n- **No mencionar herramientas** al usuario\n\n### Patrón de Ejecución\n```\n1. Detectar intención\n2. Verificar datos necesarios\n3. Definir tools_needed\n4. Si falta info → preguntar UNA cosa\n5. Si tengo todo → ejecutar herramienta\n6. Esperar respuesta exitosa\n7. Construir respuesta final empática\n```\n\n---\n\n## MANEJO DE AMBIGÜEDADES\n\n| Expresión del Usuario | Interpretación |\n|----------------------|----------------|\n| \"No podré ir\" | Preguntar: ¿reagendar o cancelar? |\n| \"Mañana en la tarde\" | 2PM-6PM del día siguiente CDMX |\n| \"Me duele\" | Solicitar nivel 0-10 y tipo |\n| \"Tengo una cita\" | ¿Cancelar, reagendar o consultar? |\n\n---\n\n## CHECKLIST PRE-RESPUESTA\n\n- [ ] ¿Idioma detectado y aplicado?\n- [ ] ¿Intención clara del usuario?\n- [ ] ¿tools_needed definido correctamente?\n- [ ] ¿Solo pregunto lo estrictamente necesario?\n- [ ] ¿Estoy esperando herramienta? → mensaje transición\n- [ ] ¿Confirmé solo tras herramienta exitosa?\n- [ ] ¿Saludé apropiadamente (sin repetir)?\n- [ ] ¿Tono empático y profesional?\n- [ ] ¿Respuesta <15 palabras o con pausa natural?\n- [ ] ¿Información segura y privada?\n\n---\n\n## ENCUESTA DE SATISFACCIÓN\n\n**Al finalizar conversación exitosa:**\n```\n\"Antes de despedirnos, ¿te gustaría responder unas breves preguntas sobre tu experiencia?\"\n```\n\n**Si acepta, preguntar secuencialmente:**\n1. \"Del 1 al 5, ¿cómo calificarías la atención recibida?\"\n2. \"¿Tu consulta fue resuelta satisfactoriamente?\"\n3. \"¿Qué podríamos mejorar para ofrecerte una mejor experiencia?\"\n\n---\n\n## FRASES DE TRANSICIÓN RECOMENDADAS\n\n**Procesando:**\n- \"Un momento...\"\n- \"Verificando disponibilidad...\"\n- \"Consultando opciones...\"\n\n**Confirmando:**\n- \"Perfecto, entonces...\"\n- \"Muy bien, confirmando que...\"\n- \"Entendido, procedemos con...\"\n\n**Empáticas:**\n- \"Comprendo tu situación...\"\n- \"Por supuesto, te ayudo con eso...\"\n- \"Sin problema, veamos las opciones...\"\n\n**Cierre:**\n- \"¡Listo! Tu cita está confirmada\"\n- \"Perfecto, todo queda agendado\"\n- \"Excelente, nos vemos el [fecha]\""
+                    }
+                  ],
+                  "provider": "google",
+                  "temperature": 0.3,
+                  "tools": [
+                    {
+                      "id": "b8d98574-259d-4bad-9b8b-4ca23a678c66",
+                      "createdAt": "2025-07-29T19:11:30.809Z",
+                      "updatedAt": "2025-07-29T21:49:29.657Z",
+                      "type": "function",
+                      "function": {
+                        "name": "enviar_data_to_n8n",
+                        "parameters": {
+                          "type": "object",
+                          "required": [],
+                          "properties": {
+                            "last_name": {
+                              "type": "string",
+                              "description": "apellido del usuario"
+                            },
+                            "birth_date": {
+                              "type": "string",
+                              "description": "fecha de nacimiento del usuario"
+                            },
+                            "first_name": {
+                              "type": "string",
+                              "description": "nombre del usuario"
+                            },
+                            "phone_number": {
+                              "type": "string",
+                              "description": "número de telefono del usuario"
+                            },
+                            "required_date_time": {
+                              "type": "string",
+                              "description": "fecha y hora seleccionada para la cita."
+                            },
+                            "user_selected_specialty": {
+                              "type": "string",
+                              "description": "especialidad requerida por el usuario"
+                            },
+                            "calendar_requirement_text": {
+                              "type": "string",
+                              "description": "resumen del requerimiento del usuario"
+                            },
+                            "self_evaluation_responses": {
+                              "type": "string",
+                              "description": "respuestas de la auto-evaluación"
+                            }
+                          }
+                        },
+                        "description": "Esta herramienta se utiliza cuando ya tienes todos los datos del usuario (resumen del requerimiento del usuario, nombre y apellido, fecha de nacimiento, número de telefono, especialidad requerida, respuestas de la auto-evaluación y fecha-hora seleccionada para la cita) "
+                      },
+                      "messages": [
+                        {
+                          "type": "request-start",
+                          "blocking": false
+                        }
+                      ],
+                      "orgId": "f9b423ca-5d89-49fb-80da-485b397f6dd7",
+                      "server": {
+                        "url": "https://n8n.ocaihealth.com/webhook/600bd7d7-f654-470d-88f8-54cf6a16dd78",
+                        "headers": {}
+                      }
+                    }
+                  ]
+                },
+                "firstMessage": "Hola!!! bienvenido a la clínica OCAI.. ¿Como te puedo ayudar hoy?",
+                "voicemailMessage": "Please call back when you're available.",
+                "endCallMessage": "Goodbye.",
+                "transcriber": {
+                  "model": "gemini-2.0-flash",
+                  "language": "Multilingual",
+                  "provider": "google"
+                },
+                "backgroundSound": "office",
+                "firstMessageMode": "assistant-speaks-first-with-model-generated-message"
+              }
+            }
+          },
+          "webhookUrl": "https://n8n.ocaihealth.com/webhook/600bd7d7-f654-470d-88f8-54cf6a16dd78",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 4
+          },
+          {
+            "node": "conversacion cerrada",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "identificador de privacidad",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "analizador de sentimiento",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "clasificador de intencion",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "clasificador de idioma",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "clasificador de intencion",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "analizador de sentimiento",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "clasificador de idioma",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clasificador de idioma": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "clasificador de intencion": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "analizador de sentimiento": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "detector de incidencias": {
+      "main": [
+        [
+          {
+            "node": "alerta sobre fallas tecnicas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector de incidencias",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector de insatisfaccion sin intervencion",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector intervencion humana",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "detector intervencion humana": {
+      "main": [
+        [
+          {
+            "node": "deteccion de intervencion humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "detector de disputas/enfados": {
+      "main": [
+        [
+          {
+            "node": "PROBLEMA: cliente enfadado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deteccion de intervencion humana": {
+      "main": [
+        [
+          {
+            "node": "PROBLEMA: intervencion humana",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PROBLEMA: intervencion humana": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "format respuestas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "identificador de privacidad",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "identificador de privacidad": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "format respuestas": {
+      "main": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "detector de incidencias",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "detector de insatisfaccion sin intervencion",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "detector intervencion humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model9": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "conversacion cerrada",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "conversacion cerrada": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "detector de insatisfaccion sin intervencion": {
+      "main": [
+        [
+          {
+            "node": "detector de disputas/enfados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "alerta sobre fallas tecnicas": {
+      "main": [
+        [
+          {
+            "node": "PROBLEMA: incidencia técnica",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "datos del paciente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "datos del paciente": {
+      "main": [
+        []
+      ]
+    },
+    "MASTER AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "data_storage_master": {
+      "ai_tool": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "appointment_agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "vapi_request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5f40625b-17ee-4e1c-a305-c71675793523",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"
+  },
+  "id": "iQQPwqy9Ox29inxd",
+  "tags": [
+    {
+      "createdAt": "2025-07-15T22:57:53.015Z",
+      "updatedAt": "2025-07-15T22:57:53.015Z",
+      "id": "uRxo37SIMxx7eIZl",
+      "name": "dev"
+    },
+    {
+      "createdAt": "2025-07-29T22:52:23.299Z",
+      "updatedAt": "2025-07-29T22:52:23.299Z",
+      "id": "x3oB9BbmA9FYtGBE",
+      "name": "voice"
+    }
+  ]
+}

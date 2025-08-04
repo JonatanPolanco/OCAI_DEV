@@ -3,6 +3,828 @@
   "nodes": [
     {
       "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21a1deaa-02e3-4d44-a5bb-690aeb7616c1",
+              "name": "buffer_out",
+              "value": "={{ $json.message.map(m=> JSON.parse(m).message).join('|||') }}",
+              "type": "string"
+            },
+            {
+              "id": "e5119034-8052-4cbf-a641-e62ae3096fea",
+              "name": "sessionId",
+              "value": "={{ $('text & session_id').item.json.sessionId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -7344,
+        2176
+      ],
+      "id": "edc2ccac-8b7c-4504-8b61-0385f678f19b",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        448,
+        560
+      ],
+      "id": "a6423dbc-9a3e-45b3-95b1-101adb09842d",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3120,
+        2256
+      ],
+      "id": "c79c7cef-d36d-4f77-8c67-f51ad6a8ac90",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3104,
+        2752
+      ],
+      "id": "ee0eb2af-b6e4-4ecf-aa33-4bf12267fccc",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3136,
+        1824
+      ],
+      "id": "f0a6c512-9cab-48ab-be80-1d360416cc51",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.buffer_out }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "detecta en que idioma está hablando el usuario. solo devuelve el idioma."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3136,
+        1584
+      ],
+      "id": "d09695b6-68d4-4246-bc76-5957b3d6598b",
+      "name": "clasificador de idioma"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.buffer_out }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Clasifica la intención del siguiente mensaje del usuario usando una sola palabra de esta lista:\n\n- conversacion\n- gestion_cita\n- informacion\n- seguimiento\n- reporte\n- intervencion_humana\n\nMensaje del usuario:\n{{ $json.buffer_out }}\n\nResponde solo con una de esas palabras. No expliques nada.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3120,
+        2016
+      ],
+      "id": "c539dda1-39f4-40d9-81a6-8367fe916d30",
+      "name": "clasificador de intencion"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.buffer_out }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "evalua el sentimiento del usuario: positivo, neutro, negativo o muy negativo"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3120,
+        2576
+      ],
+      "id": "2dbdd236-d60c-4f72-8c76-f10daa1ff940",
+      "name": "analizador de sentimiento"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Eres un clasificador de incidencias técnicas en mensajes de clientes de WhatsApp.\n\nTu única tarea es determinar si el mensaje describe un problema técnico claro, como un error del sistema, bug, caída o mal funcionamiento de un servicio digital (app, página web, sistema interno, etc.).\n\nNo debes activar este clasificador si el mensaje expresa:\n- Quejas sobre atención lenta o tiempos de respuesta (eso es operativo, no técnico)\n- Opiniones generales (“se puede mejorar”, “no me gustó”)\n- Frustración emocional sin mencionar fallos técnicos\n- Problemas clínicos o malestares físicos\n\nResponde solo si encuentras:\n- intencion del usuario \"reporte\"\n- Mensajes de error visibles\n- Fallas de carga o acceso\n- Caídas o interrupciones\n- Funcionalidades que no responden o no funcionan\n\nSi detectas un problema técnico específico, responde solo y exactamente con:\n`soporte_tecnico_true`\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        480,
+        1776
+      ],
+      "id": "97523821-a3ea-48e9-9117-c031ec13f9b2",
+      "name": "detector de incidencias"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        1984
+      ],
+      "id": "5ddd025b-4839-4d0f-bc96-f07a5bb9063c",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        2512
+      ],
+      "id": "a5f7a5fb-eb1c-4713-b089-9e060e186fdf",
+      "name": "Google Gemini Chat Model6",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        1472
+      ],
+      "id": "9c0c4ea4-f37e-481c-8224-72f708edf485",
+      "name": "Google Gemini Chat Model7",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=\n¿El usuario necesita intervención humana?\n\nCriterios para intervención_humana:\n- El usuario dice directamente que quiere hablar con una persona.\n- Usa frases como \"no entiendo\", \"nadie me ayuda\", \"esto no sirve\", etc.\n- Lleva varios intentos sin resolución (repetición evidente).\n- El usuario está claramente confundido o molesto.\n\n\nResponde solo con una de estas dos opciones (en minúscula):\n- `intervencion_humana`\n- `no_intervencion`\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        480,
+        1264
+      ],
+      "id": "ac1478d8-7733-4f87-a640-389db9b80d61",
+      "name": "detector intervencion humana"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "71cc565f-adf7-4d5e-b801-b43c2b874148",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "usuario_enojado_sin_intervencion",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        2304
+      ],
+      "id": "4df3bf43-fdea-4028-983e-2d86838f9a7c",
+      "name": "detector de disputas/enfados"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "efb30574-cc93-4d72-afe0-baf3624e0ba0",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "intervencion_humana",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        1264
+      ],
+      "id": "e4541e4d-433b-4770-9561-8be6cac87823",
+      "name": "deteccion de intervencion humana"
+    },
+    {
+      "parameters": {
+        "sendTo": "operation@ocaihealth.com",
+        "subject": "Alerta: requerimiento de intervencion humana",
+        "emailType": "text",
+        "message": "=MOTIVO DE LA ALERTA:\nSe requiere intervencion humana urgente para el cliente: {{ $('Aggregate').item.json.data[0].sessionId }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1552,
+        1104
+      ],
+      "id": "d796806e-418c-4a93-b01a-32abe14561d1",
+      "name": "PROBLEMA: intervencion humana",
+      "webhookId": "ead7a322-58b8-4f0d-b83c-426db61f6857",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "zEtOwPQqVWLpYUKp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "operation@ocaihealth.com",
+        "subject": "ALERTA: se reporta incidencia técnica",
+        "emailType": "text",
+        "message": "=MOTIVO DE LA ALERTA: Se reporta incidencia técnica para el cliente: Jonatan Polanco \n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisión técnica del caso\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1568,
+        1664
+      ],
+      "id": "ad571709-ea01-4a77-b2af-63557ca6289f",
+      "name": "PROBLEMA: incidencia técnica",
+      "webhookId": "99c33f4f-0010-4d8b-95c0-450d41ccb839",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "zEtOwPQqVWLpYUKp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "operation@ocaihealth.com",
+        "subject": "ALERTA: cliente enfadado",
+        "emailType": "text",
+        "message": "=MOTIVO DE LA ALERTA: Se reporta enfado o inconformidad sobre cliente: {{ $('Aggregate').item.json.data[4].phone_number }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1584,
+        2144
+      ],
+      "id": "cf4ffd00-4e8e-4011-9977-ef9d2b24e99a",
+      "name": "PROBLEMA: cliente enfadado",
+      "webhookId": "884e1648-5b74-436d-bb26-8ffc36d11547",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "zEtOwPQqVWLpYUKp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        2448
+      ],
+      "id": "4d31569d-3f72-4e12-85f9-98c7d6e84832",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        1888
+      ],
+      "id": "a671c652-7730-4fd9-8e91-060d20063a70",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        1344
+      ],
+      "id": "a97a64d7-216c-489e-97c4-a1aa92d85d10",
+      "name": "No Operation, do nothing2"
+    },
+    {
+      "parameters": {
+        "numberInputs": 7
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1552,
+        240
+      ],
+      "id": "5773c243-e4e8-42a5-99d2-36060608b6d3",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        304
+      ],
+      "id": "0723803d-40ae-43f9-854b-632f1aa65ef1",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3152,
+        3280
+      ],
+      "id": "fec2e230-2512-4f78-9df8-fd6afcc40e3d",
+      "name": "Google Gemini Chat Model8",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.buffer_out }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "En caso de que el usuario está solicitando informacion que pueda ser sensible (datos personales, de pagos, de recursos internos tecnicos del funcionamiento, datos sensibles de la empresa, etc...). de ser cierto marcalo como \"true\" de lo contrario marca \"false\""
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3168,
+        3040
+      ],
+      "id": "0de229d4-d225-4b92-8b7f-c70f7799b2b4",
+      "name": "identificador de privacidad"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4968d788-3507-4997-aa20-1a82eded9456",
+              "name": "idioma",
+              "value": "={{ $json.data[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "85e5ae4c-3e41-45c6-85fe-bd6091f46128",
+              "name": "intencion",
+              "value": "={{ $json.data[1].text }}",
+              "type": "string"
+            },
+            {
+              "id": "af577a01-ba8b-4479-a938-b6ddba684297",
+              "name": "sentimiento",
+              "value": "={{ $json.data[2].text }}",
+              "type": "string"
+            },
+            {
+              "id": "46cd0db2-3653-44db-b693-c79427197f87",
+              "name": "warning_privacy",
+              "value": "={{ $json.data[3].text }}",
+              "type": "string"
+            },
+            {
+              "id": "e9d463ca-d6a3-41a8-8b70-48cb860b1c0b",
+              "name": "text",
+              "value": "={{ $json.data[4].buffer_out }}",
+              "type": "string"
+            },
+            {
+              "id": "a6a143c1-8ee0-45fe-9047-ac2bf365f5e2",
+              "name": "sessionId",
+              "value": "={{ $json.data[4].sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "09ac7d4e-8a2e-4a33-80e6-301f3d1b12a3",
+              "name": "first_name",
+              "value": "={{ $json.data[5].first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "8bbbc91b-705a-4b31-b1c2-b17d808c7381",
+              "name": "last_name",
+              "value": "={{ $json.data[5].last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "f007d341-3911-46de-9b9e-31edcd22181c",
+              "name": "birth_date",
+              "value": "={{ $json.data[5].birth_date }}",
+              "type": "string"
+            },
+            {
+              "id": "d08dfe32-216e-4b83-9e65-57fc52eebcc1",
+              "name": "phone_number",
+              "value": "={{ $json.data[5].phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "008dc298-8e9a-4074-99c3-ee060c1ad217",
+              "name": "conversacion_finalizada",
+              "value": "={{ $json.data[6].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -272,
+        304
+      ],
+      "id": "40ffb49e-94dd-4501-bf08-7beef0472ccc",
+      "name": "format respuestas"
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -816,
+        1616
+      ],
+      "id": "4b3d633c-8436-47fc-ae08-37d3779338a0",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        1664
+      ],
+      "id": "9e306d25-2d64-4b29-88ce-6ce626cad28f",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -3152,
+        3776
+      ],
+      "id": "5207d126-d3ad-4726-90aa-1b4c28328bc0",
+      "name": "Google Gemini Chat Model9",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "drUK7k42KutXIYHa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=MENSAJE DEL CLIENTE:\n{{ $json.buffer_out }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Evalúa si la conversación ya ha terminado.\n\nLee la historia completa de mensajes e indica si ya no se requiere más interacción por parte del asistente.\n\nResponde solo una de las siguientes opciones:\n- \"true\": si el usuario ya recibió ayuda, no ha hecho nuevas preguntas, y el último mensaje implica cierre (por ejemplo: \"gracias\", \"ok\", \"todo bien\", \"nos vemos\", etc.).\n- \"false\": si aún hay dudas abiertas, si el usuario dejó una pregunta, si está esperando una respuesta, o si simplemente no ha cerrado la conversación claramente.\n\nNo justifiques tu respuesta. Solo responde con una de las dos opciones exactas.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -3152,
+        3536
+      ],
+      "id": "a9b00b88-2c2c-48db-a94b-7ec44a9a463a",
+      "name": "conversacion cerrada"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: {{ $json.data[0].buffer_out }}\nintencion detectada: {{ $json.data[2].text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Eres un clasificador que identifica si un cliente expresa enojo, frustración o molestia en su mensaje, **pero ya no necesita ayuda**.\n\nEste clasificador solo debe activarse si el mensaje refleja una emoción negativa, pero también muestra que:\n- El problema ya fue resuelto\n- El usuario solo está dando feedback\n- El cliente cierra la conversación con agradecimiento o resignación\n\n❌ No actives este clasificador si:\n- El cliente aún espera solución\n- Está haciendo una nueva pregunta\n- Expresa confusión, bloqueo o falta de resolución\n- Describe una falla técnica concreta\n\n✅ Ejemplos válidos:\n- “Gracias, pero me pareció lento todo.”\n- “Me ayudaron, pero fue una mala experiencia.”\n- “Listo, pero no me gustó cómo funcionó.”\n\nSi detectas esta situación, responde solo con:\n`usuario_enojado_sin_intervencion`\n\nde lo contrario responde un string vacío\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        480,
+        2304
+      ],
+      "id": "854fb4d0-1bb3-4648-8d6e-24100b4a6240",
+      "name": "detector de insatisfaccion sin intervencion"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6ffce54b-c53c-4b09-828f-5782086678db",
+              "name": "respuesta",
+              "value": "Lo entendemos! Te informo que un asesor se comunicará contigo lo mas rapido posible. Gracias por mantener la comunicacion!",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1904,
+        1104
+      ],
+      "id": "970ff6c3-f219-4885-a9d4-4085d4ea93a9",
+      "name": "Edit Fields",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "649dd48f-9c90-4af1-9842-4818143ca126",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "soporte_tecnico_true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1008,
+        1776
+      ],
+      "id": "0ec8a496-46ec-4d04-b1da-8f24f04c83b7",
+      "name": "alerta sobre fallas tecnicas"
+    },
+    {
+      "parameters": {
+        "content": "## Clasificadores\n**1.** detección de idioma\n**2.** detección de intención del usuario\n**3.** identificacion de sentimiento\n**4.** detector de alerta de privacidad\n**5.** detector de conversación cerrada",
+        "height": 2560,
+        "width": 1136
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3488,
+        1360
+      ],
+      "typeVersion": 1,
+      "id": "6b99ea13-f2f8-4ecc-9f7f-54de63b79aea",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Envio de alertas por correo",
+        "height": 1600,
+        "width": 2032,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        32,
+        1072
+      ],
+      "typeVersion": 1,
+      "id": "a9c62b83-d0d0-4a2a-b586-bc5481e57477",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Agente Master\nEncargado de manejar la conversacion, y de orquestar el llamado de otros agentes como el de citas y el de almacenamiento (storage)",
+        "height": 704,
+        "width": 1232,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        192,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "dfcbdc8a-438c-4e98-b430-6a71a283411a",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId }}",
+        "tableName": "=medical.chat_history",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        608,
+        560
+      ],
+      "id": "970d8070-f557-475d-977b-23c436b483cf",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "SmsF7FcYnrtoA3pa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
         "method": "POST",
         "url": "https://speech.googleapis.com/v1/speech:recognize?key=AIzaSyBsE9DIYqEnkJsss43ltEfLKnmgfplirRI",
         "authentication": "predefinedCredentialType",
@@ -25,10 +847,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -720,
-        -4560
+        -11152,
+        2000
       ],
-      "id": "5588ccb8-a016-4952-a690-826c4f240b5b",
+      "id": "365f9b8b-f313-4419-b947-ae02e525b672",
       "name": "HTTP Request2",
       "retryOnFail": false,
       "maxTries": 2,
@@ -42,41 +864,6 @@
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "a38f0497-a1ca-4a93-8161-be057f9b1e31",
-              "name": "voice_to_text",
-              "value": "={{ $json.results[0].alternatives[0].transcript }}",
-              "type": "array"
-            },
-            {
-              "id": "21a1deaa-02e3-4d44-a5bb-690aeb7616c1",
-              "name": "text",
-              "value": "={{ $json.chatInput }}",
-              "type": "string"
-            },
-            {
-              "id": "e5119034-8052-4cbf-a641-e62ae3096fea",
-              "name": "sessionId",
-              "value": "={{ $('WhatsApp Trigger1').item.json.contacts[0].wa_id }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        224,
-        -4384
-      ],
-      "id": "f0369bd0-086a-4f9d-b140-152eeef7236d",
-      "name": "Edit Fields2"
-    },
-    {
-      "parameters": {
         "updates": [
           "messages"
         ],
@@ -85,10 +872,10 @@
       "type": "n8n-nodes-base.whatsAppTrigger",
       "typeVersion": 1,
       "position": [
-        -2432,
-        -4464
+        -12864,
+        2096
       ],
-      "id": "d4fb6c12-3593-4ae7-b143-3707ef8b5946",
+      "id": "f6a25895-52ae-4a14-81b9-0fdcba15a038",
       "name": "WhatsApp Trigger1",
       "webhookId": "6ad09c77-974e-46af-986f-3d26426fd500",
       "credentials": {
@@ -106,10 +893,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -912,
-        -4560
+        -11344,
+        2000
       ],
-      "id": "f3797e27-3c5e-4799-85c3-b675b91d2b61",
+      "id": "b4c62185-fba9-4807-9bba-5ad0af09201c",
       "name": "Extract from File1"
     },
     {
@@ -131,10 +918,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1120,
-        -4560
+        -11552,
+        2000
       ],
-      "id": "c67b6de2-2bd0-4aca-8578-00619fa65a3b",
+      "id": "7f713cc3-ac0f-4fe4-9128-52e6f1b14d19",
       "name": "HTTP Request3",
       "alwaysOutputData": false,
       "credentials": {
@@ -153,10 +940,10 @@
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1,
       "position": [
-        -1312,
-        -4560
+        -11744,
+        2000
       ],
-      "id": "b7e7802d-bca1-45ee-b5ae-310dc9a3e461",
+      "id": "fbde0fc3-f18c-41d4-9849-b618d53f765e",
       "name": "WhatsApp Business Cloud2",
       "webhookId": "70f82b65-51ae-4390-aa33-add73c8eadda",
       "credentials": {
@@ -228,10 +1015,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -1664,
-        -4464
+        -12096,
+        2096
       ],
-      "id": "687f794a-49ed-4241-9621-ebf15cc9b1f9",
+      "id": "cb2e0fc3-32f4-4623-9c62-c9cbdbcc5c4a",
       "name": "Switch1",
       "alwaysOutputData": false
     },
@@ -243,10 +1030,10 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -1840,
-        -4464
+        -12272,
+        2096
       ],
-      "id": "f6e6a8e2-cf8e-464b-b15d-c99b8cd14a59",
+      "id": "ffce2e8d-5923-4556-b13c-49f40d23cf89",
       "name": "Split Out1"
     },
     {
@@ -272,10 +1059,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -576,
-        -3936
+        -11008,
+        2624
       ],
-      "id": "813908cc-ea2f-411d-bef0-8708844eb9cc",
+      "id": "158c609a-94c8-47a6-94f4-1078e92c8ca7",
       "name": "Edit Fields3"
     },
     {
@@ -295,11 +1082,215 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -464,
-        -4560
+        -10896,
+        2000
       ],
-      "id": "9aa59269-85b2-4836-861c-42686afdefa0",
+      "id": "0ece4790-b96a-46b2-bfa8-3aedbb68c421",
       "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "content": "## audio a texto\nSi se detecta que es un mensaje de voz, se convierte a texto usando la API de vertex AI",
+        "height": 1008,
+        "width": 1952,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -12352,
+        1808
+      ],
+      "typeVersion": 1,
+      "id": "380e18b3-3d17-4231-90c9-3b578417b19c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT first_name, last_name, phone_number_str, birth_date\nFROM medical.patient\nWHERE phone_number_str = '{{ $('WhatsApp Trigger1').item.json.contacts[0].wa_id }}'\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -12208,
+        1104
+      ],
+      "id": "83ad6117-f2a7-44e7-b1b3-2897a540d3c1",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "SmsF7FcYnrtoA3pa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d4791525-3af7-4d92-9ec1-c2999034d7c5",
+              "leftValue": "={{ $json.first_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -12000,
+        1104
+      ],
+      "id": "977c0d35-8429-4ee6-8a75-d572bb6b00d2",
+      "name": "If1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -11712,
+        880
+      ],
+      "id": "b5aaf0ed-7074-4dd9-90b9-13ae9e13b16e",
+      "name": "No Operation, do nothing4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "48e66230-59f5-4869-96ee-a8e899e94e6c",
+              "name": "first_name",
+              "value": "={{ $json.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c2e85fd4-c0a2-4589-88db-0809c5b175f3",
+              "name": "last_name",
+              "value": "={{ $json.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "dd0ae6e0-0884-4e68-b55b-a07bfab4c23c",
+              "name": "phone_number",
+              "value": "={{ $json.phone_number_str }}",
+              "type": "string"
+            },
+            {
+              "id": "27bcd6b7-a04c-4563-b09c-12d244907da8",
+              "name": "birth_date",
+              "value": "={{ $json.birth_date }}",
+              "type": "string"
+            },
+            {
+              "id": "8e012605-42a6-4568-b320-6aaa533ab47b",
+              "name": "phone_number",
+              "value": "={{ $json.phone_number_str }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -11248,
+        1120
+      ],
+      "id": "a86c55df-9bf5-450a-a4f8-f168a401503e",
+      "name": "datos del paciente"
+    },
+    {
+      "parameters": {
+        "content": "## Recuperación de datos del paciente\n** Consulta a postgresql consultando por teléfono del usuario. si existe, no preguntamos informacion personal.",
+        "height": 608,
+        "width": 1200,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -12320,
+        736
+      ],
+      "typeVersion": 1,
+      "id": "ed6b00fb-a6ce-4fa9-8f87-d6ae75ad2088",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a38f0497-a1ca-4a93-8161-be057f9b1e31",
+              "name": "voice_to_text",
+              "value": "={{ $json.results[0].alternatives[0].transcript }}",
+              "type": "array"
+            },
+            {
+              "id": "21a1deaa-02e3-4d44-a5bb-690aeb7616c1",
+              "name": "text",
+              "value": "={{ $json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "e5119034-8052-4cbf-a641-e62ae3096fea",
+              "name": "sessionId",
+              "value": "={{ $('WhatsApp Trigger1').item.json.contacts[0].wa_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -10208,
+        2176
+      ],
+      "id": "fd5e72ce-d810-4dc3-bd8f-33eacce0aeab",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "639319332599159",
+        "recipientPhoneNumber": "={{ $('WhatsApp Trigger1').item.json.messages[0].from.startsWith(\"521\") ? \"+52\" + $('WhatsApp Trigger1').item.json.messages[0].from.slice(3) : \"+\" + $('WhatsApp Trigger1').item.json.messages[0].from }}\n",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        304
+      ],
+      "id": "22190aa6-2124-4800-8ba5-bbff63383eae",
+      "name": "WhatsApp Business Cloud",
+      "webhookId": "83c09c98-8f2e-4d18-a64d-1d7a187103aa",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LoJ5ALntOAq7lzvg",
+          "name": "WhatsApp account"
+        }
+      }
     },
     {
       "parameters": {
@@ -330,776 +1321,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        720,
-        -4384
+        -9584,
+        2176
       ],
-      "id": "58550991-69c3-494d-aae3-a62be28394c5",
+      "id": "c4793540-93ff-417b-83d4-9383dbecda63",
       "name": "text & session_id"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash-001",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        7632,
-        -6000
-      ],
-      "id": "8ac23ce0-adfc-4064-8106-b1589de7eae2",
-      "name": "Google Gemini Chat Model1",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-1.5-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        5104,
-        -4304
-      ],
-      "id": "2d740635-a578-41e9-9e48-88675340a084",
-      "name": "Google Gemini Chat Model2",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-1.5-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        5104,
-        -3824
-      ],
-      "id": "90379dcd-7c81-4a91-96b4-eb295c414aa0",
-      "name": "Google Gemini Chat Model3",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-1.5-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        5104,
-        -4768
-      ],
-      "id": "6e2558aa-c5df-4c98-8e2d-f868d9a33e0b",
-      "name": "Google Gemini Chat Model4",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "detecta en que idioma está hablando el usuario. solo devuelve el idioma."
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        5104,
-        -4976
-      ],
-      "id": "ae8f6396-274d-4ec4-bc88-dc509084e607",
-      "name": "clasificador de idioma"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "=clasifica la intencion del usuario (responde conversacion, gestion de cita, informacion, seguimiento, reporte o intervencion humana): \n\nconversacion: el usuario quiere conversar\n\ngestion de cita: si está gestionando una cita dental o hablando sobre su salud.\n\ninformacion: está consultando sobre la empresa, horarios laborales, ubicacion de sedes, doctores entre otros tipos de informacion\n\nseguimiento: si el usuario consulta sobre alguna cita ya programada para el o para algun familiar, o sobre algun procedimiento ya agendado.\n\nreporte: el usuario quiere reportar un problema sobre algun servicio técnico, o está demostrando incoformidad sobre el servicio de la clinica.\n\nintervencion humana: el usuario está teniendo un problema repetido y/o está solicitando hablar con una persona real."
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        5104,
-        -4512
-      ],
-      "id": "c5c1933d-475f-465a-b04e-58b96af42ca2",
-      "name": "clasificador de intencion"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "evalua el sentimiento del usuario: positivo, neutro, negativo o muy negativo"
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        5104,
-        -4032
-      ],
-      "id": "215ce6cc-6e2c-4125-8d57-934fd5768ac2",
-      "name": "analizador de sentimiento"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "=Eres un clasificador de incidencias técnicas en mensajes de clientes de WhatsApp.\n\nTu única tarea es determinar si el mensaje describe un problema técnico claro, como un error del sistema, bug, caída o mal funcionamiento de un servicio digital (app, página web, sistema interno, etc.).\n\n⚠️ No debes activar este clasificador si el mensaje expresa:\n- Quejas sobre atención lenta o tiempos de respuesta (eso es operativo, no técnico)\n- Opiniones generales (“se puede mejorar”, “no me gustó”)\n- Frustración emocional sin mencionar fallos técnicos\n- Problemas clínicos o malestares físicos\n\n✅ Responde solo si encuentras:\n- intencion del usuario \"reporte\"\n- Mensajes de error visibles\n- Fallas de carga o acceso\n- Caídas o interrupciones\n- Funcionalidades que no responden o no funcionan\n\nSi detectas un problema técnico específico, responde solo y exactamente con:\n`soporte_tecnico_true`\n"
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        8048,
-        -4784
-      ],
-      "id": "4d9f2aba-4b02-4af7-85ef-bf24160120c9",
-      "name": "detector de incidencias"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        8048,
-        -4576
-      ],
-      "id": "8192a36e-09e7-4aff-a10a-33ee51b90b56",
-      "name": "Google Gemini Chat Model5",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        8048,
-        -4048
-      ],
-      "id": "20a73442-f9a4-41a9-9f71-7fd00e2821a9",
-      "name": "Google Gemini Chat Model6",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        8048,
-        -5088
-      ],
-      "id": "d04c70c8-dbfe-4607-81dd-8fd2058aecde",
-      "name": "Google Gemini Chat Model7",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntención del usuario: {{ $json.data[2].text }}\n\n¿El usuario necesita intervención humana?\n\nResponde solo:\n- `intervencion_humana` si claramente lo solicita o está atascado.\n- `no_intervencion` si no hay señales claras.\n\nNo respondas nada más.\n"
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        8048,
-        -5296
-      ],
-      "id": "69b9e15f-b318-4106-8a5a-6c8466766f43",
-      "name": "detector intervencion humana"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "71cc565f-adf7-4d5e-b801-b43c2b874148",
-              "leftValue": "={{ $json.text }}",
-              "rightValue": "usuario_enojado_sin_intervencion",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        8576,
-        -4256
-      ],
-      "id": "d435ee32-9a20-4249-8b6a-4a590cd2a506",
-      "name": "detector de disputas/enfados"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "efb30574-cc93-4d72-afe0-baf3624e0ba0",
-              "leftValue": "={{ $json.text }}",
-              "rightValue": "intervencion_humana",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        8544,
-        -5296
-      ],
-      "id": "473875d1-e644-4a94-9e20-e959812ed4dd",
-      "name": "deteccion de intervencion humana"
-    },
-    {
-      "parameters": {
-        "sendTo": "operation@ocaihealth.com",
-        "subject": "Alerta: requerimiento de intervencion humana",
-        "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA:\nSe requiere intervencion humana urgente para el cliente: {{ $('text & session_id').item.json.sessionId }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('text & session_id').item.json.sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('buffer_output').item.json.buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        8896,
-        -5456
-      ],
-      "id": "916b29ca-9169-4c5b-acc8-391b99d90964",
-      "name": "PROBLEMA: intervencion humana",
-      "webhookId": "4548f3e6-cd55-4b49-82b9-52ef2f6dffa0",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "zEtOwPQqVWLpYUKp",
-          "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "sendTo": "operation@ocaihealth.com",
-        "subject": "ALERTA: se reporta incidencia técnica",
-        "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA: Se reporta incidencia técnica para el cliente: Jonatan Polanco \n\nINFORMACION DEL CLIENTE:\n* Nombre del cliente: {{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: +543166379380\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisión técnica del caso\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        8912,
-        -4896
-      ],
-      "id": "d373593d-f912-4020-b2a7-377ab267da10",
-      "name": "PROBLEMA: incidencia técnica",
-      "webhookId": "e467982b-30d4-4781-a7ad-1f2958ffcd96",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "zEtOwPQqVWLpYUKp",
-          "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "sendTo": "operation@ocaihealth.com",
-        "subject": "ALERTA: cliente enfadado",
-        "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA: Se reporta enfado o inconformidad sobre cliente: {{ $('Aggregate').item.json.data[4].phone_number }}\n\nINFORMACION DEL CLIENTE:\n* Nombre del cliente: {{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[4].phone_number }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        8928,
-        -4416
-      ],
-      "id": "79aa8ded-7a27-44b3-b518-aa4f02a461c1",
-      "name": "PROBLEMA: cliente enfadado",
-      "webhookId": "065c4b55-0b3a-438d-85e3-e475e71f1b36",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "zEtOwPQqVWLpYUKp",
-          "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        8928,
-        -4112
-      ],
-      "id": "fd312add-0682-4f12-9d25-1cd1fe9d6814",
-      "name": "No Operation, do nothing"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        8928,
-        -4672
-      ],
-      "id": "0089d2d0-f197-4255-83f0-76fe30a5c5a2",
-      "name": "No Operation, do nothing1"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        8912,
-        -5216
-      ],
-      "id": "b3bcd696-64ab-4749-b452-2eb9c3e11a88",
-      "name": "No Operation, do nothing2"
-    },
-    {
-      "parameters": {
-        "numberInputs": 6
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        6000,
-        -6320
-      ],
-      "id": "5b4f602e-4c48-414d-9ed1-fba626f5020e",
-      "name": "Merge1"
-    },
-    {
-      "parameters": {
-        "aggregate": "aggregateAllItemData",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
-      "position": [
-        6416,
-        -6256
-      ],
-      "id": "406b5258-1d9a-4607-88f6-7f59cd989ad1",
-      "name": "Aggregate1"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-1.5-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        5072,
-        -3232
-      ],
-      "id": "1bc9e8d2-7ce8-4349-ad5d-ff0fcb605d43",
-      "name": "Google Gemini Chat Model8",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "En caso de que el usuario está solicitando informacion que pueda ser sensible (datos personales, de pagos, de recursos internos tecnicos del funcionamiento, datos sensibles de la empresa, etc...). de ser cierto marcalo como \"true\" de lo contrario marca \"false\""
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        5072,
-        -3440
-      ],
-      "id": "823ae924-18a1-4bc4-ab3f-5d97b4c55b49",
-      "name": "identificador de privacidad"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "4968d788-3507-4997-aa20-1a82eded9456",
-              "name": "idioma",
-              "value": "={{ $json.data[0].text }}",
-              "type": "string"
-            },
-            {
-              "id": "85e5ae4c-3e41-45c6-85fe-bd6091f46128",
-              "name": "intencion",
-              "value": "={{ $json.data[1].text }}",
-              "type": "string"
-            },
-            {
-              "id": "af577a01-ba8b-4479-a938-b6ddba684297",
-              "name": "sentimiento",
-              "value": "={{ $json.data[2].text }}",
-              "type": "string"
-            },
-            {
-              "id": "46cd0db2-3653-44db-b693-c79427197f87",
-              "name": "warning_privacy",
-              "value": "={{ $json.data[3].text }}",
-              "type": "string"
-            },
-            {
-              "id": "e9d463ca-d6a3-41a8-8b70-48cb860b1c0b",
-              "name": "text",
-              "value": "={{ $json.data[4].buffer_out }}",
-              "type": "string"
-            },
-            {
-              "id": "a6a143c1-8ee0-45fe-9047-ac2bf365f5e2",
-              "name": "sessionId",
-              "value": "={{ $('WhatsApp Trigger1').item.json.contacts[0].wa_id }}",
-              "type": "string"
-            },
-            {
-              "id": "09ac7d4e-8a2e-4a33-80e6-301f3d1b12a3",
-              "name": "first_name",
-              "value": "={{ $json.data[5].first_name }}",
-              "type": "string"
-            },
-            {
-              "id": "8bbbc91b-705a-4b31-b1c2-b17d808c7381",
-              "name": "last_name",
-              "value": "={{ $json.data[5].last_name }}",
-              "type": "string"
-            },
-            {
-              "id": "f007d341-3911-46de-9b9e-31edcd22181c",
-              "name": "birth_date",
-              "value": "={{ $json.data[5].birth_date }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        6944,
-        -6256
-      ],
-      "id": "10cae9ca-5acf-4595-b9ca-24bd59b4e906",
-      "name": "format respuestas"
-    },
-    {
-      "parameters": {
-        "numberInputs": 5
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        6752,
-        -4944
-      ],
-      "id": "ee63cf6b-6acf-47a4-90de-293a8eac32f7",
-      "name": "Merge"
-    },
-    {
-      "parameters": {
-        "aggregate": "aggregateAllItemData",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
-      "position": [
-        7200,
-        -4896
-      ],
-      "id": "b307b629-eeec-43f8-9ff8-5e88d3f1437f",
-      "name": "Aggregate"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        5024,
-        -2720
-      ],
-      "id": "72d60da4-ac82-4c2e-8c53-9c31234603ce",
-      "name": "Google Gemini Chat Model9",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "=Eres un clasificador de cierre de conversaciones.\n\nTu única tarea es analizar el último mensaje enviado por el cliente y determinar si da a entender que la conversación ha terminado.\n\nDebes identificar expresiones claras de cierre como:\n- “No, eso es todo”\n- “Gracias por tu ayuda”\n- “Listo, muchas gracias”\n- “No tengo más dudas”\n- “Todo claro”\n- “Ok, buen día”\n- “No necesito más”\n\nIgnora frases ambiguas o abiertas que puedan implicar continuidad (como “perfecto”, “entiendo”, “ok”).\n\nSi detectas que el cliente ha cerrado la conversación, responde **solo y exactamente** con:\n`conversacion_finalizada_true`\n\n\nMENSAJE DEL CLIENTE:\n{{ $json.buffer_out }}"
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        5024,
-        -2928
-      ],
-      "id": "73e6712d-92ba-4c4d-8dde-1d8a7fd37a8f",
-      "name": "conversacion cerrada"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "70bbcc1b-11d6-483f-838b-5656c7a2db15",
-              "leftValue": "={{ $json.text }}",
-              "rightValue": "conversacion_finalizada_true",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        5776,
-        -2928
-      ],
-      "id": "a0c22348-f8ab-4171-8492-c7000ce75b81",
-      "name": "If"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "8400eb44-6473-4741-93d1-781725f734ce",
-              "name": "output",
-              "value": "Gracias por contactarnos!\n\n¿Cómo calificarías la atención recibida hoy? \nexcelente, buena, regular, mala\n\n¿Tu consulta fue resuelta satisfactoriamente? \nsí, completamente.\nsí, pero tardó más de lo esperado.\nno, quedó pendiente.\nno, no me ayudaron.\n\n¿Qué podríamos mejorar para ofrecerte una mejor experiencia?",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        6160,
-        -3152
-      ],
-      "id": "b3faafb6-2790-45b7-9970-9cb4796c7770",
-      "name": "encuesta"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        6096,
-        -2832
-      ],
-      "id": "b3ebab77-d6dd-4755-8748-613eebfd9283",
-      "name": "No Operation, do nothing3"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "={{ $json.data[0].buffer_out }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "=Eres un clasificador que identifica si un cliente expresa enojo, frustración o molestia en su mensaje, **pero ya no necesita ayuda**.\n\nEste clasificador solo debe activarse si el mensaje refleja una emoción negativa, pero también muestra que:\n- El problema ya fue resuelto\n- El usuario solo está dando feedback\n- El cliente cierra la conversación con agradecimiento o resignación\n\n❌ No actives este clasificador si:\n- El cliente aún espera solución\n- Está haciendo una nueva pregunta\n- Expresa confusión, bloqueo o falta de resolución\n- Describe una falla técnica concreta\n\n✅ Ejemplos válidos:\n- “Gracias, pero me pareció lento todo.”\n- “Me ayudaron, pero fue una mala experiencia.”\n- “Listo, pero no me gustó cómo funcionó.”\n\nSi detectas esta situación, responde solo con:\n`usuario_enojado_sin_intervencion`\n"
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        8048,
-        -4256
-      ],
-      "id": "bc8ea605-588a-41a1-8b03-67e1b7337dc2",
-      "name": "detector de insatisfaccion sin intervencion"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "6ffce54b-c53c-4b09-828f-5782086678db",
-              "name": "respuesta",
-              "value": "Lo entendemos! Te informo que un asesor se comunicará contigo lo mas rapido posible. Gracias por mantener la comunicacion!",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        9248,
-        -5456
-      ],
-      "id": "6bd4a167-eecb-45e3-8e87-7daf2df53ab7",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "operation": "send",
-        "phoneNumberId": "639319332599159",
-        "recipientPhoneNumber": "={{ $('WhatsApp Trigger1').item.json.messages[0].from.startsWith(\"521\") ? \"+52\" + $('WhatsApp Trigger1').item.json.messages[0].from.slice(3) : \"+\" + $('WhatsApp Trigger1').item.json.messages[0].from }}\n",
-        "textBody": "={{ $json.output }}",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.whatsApp",
-      "typeVersion": 1,
-      "position": [
-        8192,
-        -6256
-      ],
-      "id": "936b4160-d4f0-4b89-950d-01660dedfd89",
-      "name": "WhatsApp Business Cloud",
-      "webhookId": "83c09c98-8f2e-4d18-a64d-1d7a187103aa",
-      "credentials": {
-        "whatsAppApi": {
-          "id": "LoJ5ALntOAq7lzvg",
-          "name": "WhatsApp account"
-        }
-      }
     },
     {
       "parameters": {
@@ -1111,10 +1337,10 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        1280,
-        -4384
+        -9024,
+        2176
       ],
-      "id": "ad7dd231-0505-4e32-a16f-675f3891cd2f",
+      "id": "b163b004-794c-4a41-ac87-f62690b824f0",
       "name": "get_buffer_data",
       "credentials": {
         "redis": {
@@ -1132,10 +1358,10 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        1056,
-        -4384
+        -9248,
+        2176
       ],
-      "id": "97e0df94-7726-433d-9b86-81dd02c7b985",
+      "id": "c6b1412e-3d2f-405e-8b1f-5bad17285b70",
       "name": "buffer",
       "credentials": {
         "redis": {
@@ -1206,10 +1432,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        1648,
-        -4400
+        -8656,
+        2160
       ],
-      "id": "cf773889-417f-4b73-9beb-5aa8f1413d67",
+      "id": "65f42ae3-9d9c-4cd9-9011-8d3343c359fb",
       "name": "Switch"
     },
     {
@@ -1219,23 +1445,12 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1648,
-        -4112
+        -8656,
+        2448
       ],
-      "id": "c13a8753-61a1-4add-8614-efbb29c4afb8",
+      "id": "3a8b6997-bbcb-44e6-9f20-e4bd09717d99",
       "name": "Wait",
       "webhookId": "1bb02ea8-dfbf-426a-82ea-503c00de3b12"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        1952,
-        -4624
-      ],
-      "id": "2e7e7df9-c7e0-4503-ab58-7389c6487f98",
-      "name": "No Operation, do nothing5"
     },
     {
       "parameters": {
@@ -1245,10 +1460,10 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        1936,
-        -4384
+        -8368,
+        2176
       ],
-      "id": "28ed247c-bb28-4489-90df-870be815eb03",
+      "id": "57612359-19eb-44f4-b413-124ab2e0343c",
       "name": "delete_buffer",
       "credentials": {
         "redis": {
@@ -1259,63 +1474,6 @@
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "9211e61e-2fbc-455b-bbfa-68bf8ef1d7f6",
-              "name": "buffer_out",
-              "value": "={{ $json.message.map(m=> JSON.parse(m).message).join('|||') }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        2336,
-        -4384
-      ],
-      "id": "9da46bba-b94e-4270-8d25-897369fb63f6",
-      "name": "buffer_output"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "649dd48f-9c90-4af1-9842-4818143ca126",
-              "leftValue": "={{ $json.text }}",
-              "rightValue": "soporte_tecnico_true",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        8560,
-        -4784
-      ],
-      "id": "f8d2f7b0-7fa9-4198-a91b-325d0ef1bd20",
-      "name": "alerta sobre fallas tecnicas"
-    },
-    {
-      "parameters": {
         "content": "## Buffer de mensajes \nEsto nos permite alojar en memoria temporal multiples mensajes para el mismo usuario, para luego concatenarlos y enviarlos como un solo mensaje al agente y a diferentes partes del flujo.",
         "height": 912,
         "width": 1568,
@@ -1323,94 +1481,187 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        896,
-        -4736
+        -9648,
+        1776
       ],
       "typeVersion": 1,
-      "id": "61f7be5e-c556-49ef-8a8f-73b675ed5918",
+      "id": "9d721ad0-97bd-466d-8e6c-dd7a10a8c6d8",
       "name": "Sticky Note"
     },
     {
-      "parameters": {
-        "content": "## Clasificadores\n**1.** detección de idioma\n**2.** detección de intención del usuario\n**3.** identificacion de sentimiento\n**4.** detector de alerta de privacidad\n**5.** detector de conversación cerrada",
-        "height": 2560,
-        "width": 1088
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        4656,
-        -5072
-      ],
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
-      "id": "1f3ae61a-0f41-499d-8f29-64bdbb39747a",
-      "name": "Sticky Note1"
+      "position": [
+        -8352,
+        1936
+      ],
+      "id": "1062bc59-0276-4634-8d0c-533f6c69302d",
+      "name": "No Operation, do nothing9"
     },
     {
       "parameters": {
-        "content": "## audio a texto\nSi se detecta que es un mensaje de voz, se convierte a texto usando la API de vertex AI",
-        "height": 1008,
-        "width": 1952,
-        "color": 7
+        "promptType": "define",
+        "text": "=## Datos personales recuperados del cliente (si es antiguo)\nnombre: {{ $json.first_name }}\napellido: {{ $json.last_name }}\nfecha de nacimiento: {{ $json.birth_date }}\nteléfono: {{ $json.phone_number }}\n\n## informacion del usuario\nEl cliente ha enviado el siguiente mensaje: {{ $json.text }}\nLa intención del mensaje: {{ $json.intencion }}\nSentimiento del cliente: {{ $json.sentimiento }}\nIdioma detectado: {{ $json.idioma }}\nSolicita información personal sensible o privada: {{ $json.warning_privacy }}\nfecha y hora actual: {{ $now.setZone(\"America/Mexico_City\") }}\nconversacion_finalizada: {{ $json.conversacion_finalizada }}\n\n\n## datos del sistema\n* Fecha y hora actual: {{ $now.setZone(\"America/Mexico_City\") }}\n* Zona horaria: America/Mexico_City\n* Formato: 12 h (ej: 3:00 PM)\n\n\n## Información de la clínica\n* Dirección: Cuauhtémoc, CDMX\n* Teléfono: +54 11 1888‑877\n* Horario físico: 8 AM–5 PM; WhatsApp 24/7\n* Autoevaluación (si el usuario acepta):\n\n  1. Última visita al dentista? (6 meses, 1 año, más de 1 año)\n  2. Sangrado de encías? si es afirmativo, ¿cada cuánto?\n  3. Dientes flojos (Sí/No)\n  4. Dolor (Sí/No); si Sí: nivel 0–10 y tipo de dolor",
+        "options": {
+          "systemMessage": "=# SYSTEM PROMPT - MEL ASSISTANT v2.6 (AGENTE MASTER)\n\n## IDENTIDAD Y CONTEXTO\n\nEres Mel, el asistente virtual principal y orquestador de OCAI Clinic. Tu rol es coordinar agentes y herramientas para gestionar citas odontológicas y resolver consultas generales.\n\n* Preséntate apropiadamente para que el usuario sepa que habla con el asistente de OCAI.\n* Sé empático: reconoces el malestar del usuario y aportas cercanía.\n* Si ya conoces el nombre del usuario, salúdalo directamente por su nombre al inicio del mensaje.\n* Tu decides sobre herramientas y agentes y orquestas la conversación de forma autónoma.\n\n\n## REGLAS CRÍTICAS\n\n1. **Idioma y tono:**\n   * Detecta si el usuario escribe en español, inglés o portugués.\n   * Responde siempre en ese mismo idioma.\n   * Mantén el tono, sé positivo y empático, sin ser empalagoso. siempre profesional.\n\n2. **Orquestación de herramientas:**\n   * No inventes datos de herramientas.\n   * Usa exclusivamente `@appointment_agent` y `@data_storage_master`.\n   * Llama a herramientas solo cuando tengas datos necesarios.\n   * Antes de responder al usuario, el sistema debe ejecutar directamente la acción necesaria (por ejemplo, validar disponibilidad y crear cita).\n   * No muestres mensajes como “Estoy verificando” o “Déjame revisar”.\n   * No menciones información sobre herramientas al usuario.\n\n3. **Confirmación controlada:**\n   * Solo cuando la herramienta haya devuelto una respuesta con éxito (por ejemplo, un ID de evento), puedes decir:\n     “¡Tu cita ha sido agendada exitosamente!”\n\n4. **Claridad:**\n   * Haz solo una pregunta por mensaje. Esto incluye en recolección de datos y en la autoevaluación médica.\n   * Usa formato de hora en 12 h.\n\n5. **Nombre completo:**\n   * Si el usuario da solo el primer nombre, solicita exclusivamente el apellido (sin repetir todo lo anterior).\n\n6. No repitas saludos si ya has saludado previamente en la conversación.\n7. No envíes mensajes intermedios ni de espera al usuario. Solo responde cuando tengas una acción concreta, útil o una pregunta necesaria\n\n\n## RAZONAMIENTO INTERNO\n\nAntes de responder:\n\n1. Detecta intención del usuario.\n2. Verifica si tienes los datos necesarios.\n3. Define herramientas requeridas: `tools_needed`.\n4. Si falta información, pregunta solo lo necesario.\n5. No confirmes nada hasta recibir una respuesta exitosa de la herramienta.\n6. Si estás esperando una herramienta, NO respondas aún. Espera a obtener la respuesta para construir una única respuesta útil y empática para el usuario.\n\n\n## FLUJOS DE TRABAJO\n\n### Crear cita\n\n1. **(No preguntar si es paciente nuevo, ya lo sabes tú con la base de datos).**\n2. Recolecta datos necesarios: nombre completo, fecha de nacimiento, teléfono y motivo de la cita si faltan.\n3. Si solo hay primer nombre, pide apellido.\n4. Confirma con el usuario los datos completos.\n5. Ofrece hacer autoevaluación (solo si el usuario acepta).\n6. Recomienda \"Odontología General\" o ajusta según malestar.\n7. Solicita fecha en lenguaje natural.\n8. Llama a `@appointment_agent` para disponibilidad real.\n9. Muestra opciones retornadas agrupadas.\n10. Solicita elección.\n11. Dale un resumen del requerimiento al usuario con el fin de con firmar todos los datos de la cita.\n12. Llama a `@appointment_agent` para crear la cita.\n13. Confirma tras éxito.\n14. Llama a `@data_storage_master` para guardar los datos en nustra base de datos.\n\n### Cancelar cita\n\n1. Solicita nombre completo y teléfono (si no los tienes ya).\n2. Busca eventos entre {{ $now.minus({days:2}).startOf('day') }} y {{ $now.plus({days:14}).startOf('day') }}.\n3. Presenta citas encontradas, las cuales, en la descripcion del evento aparezca el nombre del usuario.\n4. Pregunta si desea reagendar en vez de cancelar.\n5. Cancela con ID; confirma tras éxito.\n\n### Reagendar cita\n\n1. Solicita nombre completo y teléfono (si no los tienes ya).\n2. Llama a `@appointment_agent` con action_type=\"search\" y user_full_name para buscar citas existentes del usuario.\n3. El appointment_agent retorna las citas encontradas del usuario.\n4. Presenta citas encontradas numeradas al usuario (ej: \"1. Cita de Odontología General - 26 julio 2025 a las 3:00 PM\").\n5. Usuario selecciona número de la cita a reagendar.\n6. Master almacena internamente el texto completo de la cita seleccionada como event_to_reschedule.\n7. Solicita nueva fecha al usuario.\n8. Llama a `@appointment_agent` para buscar disponibilidad en la nueva fecha solicitada.\n9. Muestra opciones retornadas agrupadas.\n10. Solicita elección de horario.\n11. Llama a `@appointment_agent` con:\n    ```\n    action_type=\"reschedule\"\n    event_to_reschedule=[TEXTO_COMPLETO_DE_LA_CITA_SELECCIONADA]\n    required_date_time=[NUEVA_FECHA_HORA]\n    user_full_name, user_age, user_phone_number, etc.\n    ```\n12. Confirma tras éxito.\n\n## MANEJO DE AMBIGÜEDADES\n\n* Si dice “no podré ir”: pregunta si desea reagendar o cancelar.\n* Si dice “mañana en la tarde”: interpreta como 2 PM–6 PM del día siguiente (CDMX).\n* Si falta info, solo pide lo que falte.\n* Si herramienta falla, responde con empatía y ofrece reintento.\n\n## EJEMPLOS DE SALUDO HACIA EL USUARIO\nte daré algunos ejemplos sobre como debes saludar al usuario.\n\n* si es nuevo: \n\"¡Hola! 😊 Soy Mel de Clínica OCAI. Te doy la bienvenida.\n  ¿Cómo puedo ayudarte hoy? ¿Necesitas agendar una cita o tienes alguna consulta? \"\n\n* si ya es recurrente y sabes su nombre:\n  \"¡Hola de nuevo Jonatan! 😊\n    ¿En qué puedo ayudarte hoy?\"\n\n\n## CHECKLIST PREVIA A LA RESPUESTA\n\n* ¿Idioma detectado y aplicado?\n* ¿Intención clara?\n* ¿Herramientas declaradas (`tools_needed`)?\n* ¿Pregunté solo lo necesario?\n* ¿Estoy esperando una herramienta? Si sí, ¿respondí con mensaje de espera?\n* ¿Confirmé solo tras herramienta exitosa?\n* ¿Saludé al inicio al usuario por su nombre si lo conocía?\n* ¿Mantengo tono empático y profesional?\n* ¿Estoy enviando un mensaje que compromete la seguridad y privacidad de la informacion?\n\n## ENCUESTA AL FINALIZAR LA CONVERSACION\nsi la conversación con el usuario se ha finalizado, debes preguntarle si le gustaria responder unas preguntas de satisfacción sobre el servicio. de ser positiva la respuesta del usuario, pregunta:\n\n* ¿De 1 a 5, cómo calificarías la atención recibida hoy?\n* ¿Tu consulta fue resuelta satisfactoriamente?\n* ¿Qué podríamos mejorar para ofrecerte una mejor experiencia?"
+        }
       },
-      "type": "n8n-nodes-base.stickyNote",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
       "position": [
-        -1920,
-        -4752
+        448,
+        304
       ],
-      "typeVersion": 1,
-      "id": "4b062b41-40d0-438e-8876-f6103945c0cb",
-      "name": "Sticky Note2"
+      "id": "910b14a1-a17b-4a8d-a1ce-50dd2e744747",
+      "name": "MASTER AI Agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 3
     },
     {
       "parameters": {
-        "content": "## Envio de alertas por correo",
-        "height": 1600,
-        "width": 2032,
-        "color": 3
+        "name": "data_storage_master",
+        "description": "call this tool to store the user collected data.\n\nsend JSON output as this example:\n\n{\n  \"full_name\": \"Mariana Pulido\",\n  \"birth_date\": \"1998-08-10\",\n  \"phone\": \"3009998877\",\n  \"new_user\": \"yes\",\n  \"self_evaluation\": \"No\",\n  \"appointment_reason\": \"Revisión general\",\n  \"appointment_time\": \"15:00\",\n  \"appointment_date\": \"2025-04-16\",\n  \"language\": \"es\",\n  \"sessionId\": \"5213009998877\"\n}\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "mkPzaWGcuGcVTHJ1",
+          "mode": "list",
+          "cachedResultName": "data_storage_master"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "birth_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('birth_date', ``, 'string') }}",
+            "phone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('phone', ``, 'string') }}",
+            "self_evaluation": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation', ``, 'string') }}",
+            "appointment_reason": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_reason', ``, 'string') }}",
+            "appointment_time": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_time', ``, 'string') }}",
+            "appointment_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_date', ``, 'string') }}",
+            "sessionId": "={{ $json.sessionId }}",
+            "first_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('first_name', ``, 'string') }}",
+            "last_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('last_name', ``, 'string') }}",
+            "specialty": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('specialty', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "birth_date",
+              "displayName": "birth_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "appointment_date",
+              "displayName": "appointment_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "specialty",
+              "displayName": "specialty",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "appointment_time",
+              "displayName": "appointment_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "appointment_reason",
+              "displayName": "appointment_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "self_evaluation",
+              "displayName": "self_evaluation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
       },
-      "type": "n8n-nodes-base.stickyNote",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
       "position": [
-        7600,
-        -5488
+        976,
+        560
       ],
-      "typeVersion": 1,
-      "id": "7d5362bd-28c8-4d9a-ab14-f3c2c4ef7020",
-      "name": "Sticky Note3"
+      "id": "004dca97-e654-4098-871c-3c2b27cd9ff8",
+      "name": "data_storage_master"
     },
     {
       "parameters": {
-        "content": "## Agente Master\nEncargado de manejar la conversacion, y de orquestar el llamado de otros agentes como el de citas y el de almacenamiento (storage)",
-        "height": 864,
-        "width": 1136,
-        "color": 6
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        7440,
-        -6496
-      ],
-      "typeVersion": 1,
-      "id": "cfd9bbfa-5ec5-4b89-af96-80e11b1b97f3",
-      "name": "Sticky Note4"
-    },
-    {
-      "parameters": {
-        "content": "## Envio de encuesta al usuario",
-        "height": 688,
-        "width": 720,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        5760,
-        -3216
-      ],
-      "typeVersion": 1,
-      "id": "4753d59a-3feb-4fbb-a518-59ac6871e06d",
-      "name": "Sticky Note5"
-    },
-    {
-      "parameters": {
+        "description": "Use this tool to call the appointment agent",
         "workflowId": {
           "__rl": true,
           "value": "WNmI6hFgGM4RT1YM",
@@ -1420,14 +1671,16 @@
         "workflowInputs": {
           "mappingMode": "defineBelow",
           "value": {
-            "calendar_requirement_text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar_requirement_text', `make a sumamry of the google calendar requirement given by the user. include date and time if given.`, 'string') }}",
+            "calendar_requirement_text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar_requirement_text', `make a sumamry of the requirement given by the user. include date and time if given.`, 'string') }}",
             "session_id": "={{ $json.sessionId }}",
-            "required_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('required_date', `date required for the user to query google calendar tool (dd-mm-YY format)`, 'string') }}",
-            "user_age": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_age', `calculate the user age from birth date`, 'number') }}",
-            "user_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_name', ``, 'string') }}",
+            "user_age": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_age', `calculate the user age from birth date. The age is an integer number.`, 'number') }}",
             "user_selected_specialty": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_selected_specialty', ``, 'string') }}",
             "user_phone_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_phone_number', ``, 'string') }}",
-            "self_evaluation_responses": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation_responses', `add self evaluation question and answers if given`, 'string') }}"
+            "self_evaluation_responses": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation_responses', `add self evaluation question and answers if given. if not given, send \"No\"`, 'string') }}",
+            "required_date_time": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('required_date_time', ``, 'string') }}",
+            "user_full_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_full_name', ``, 'string') }}",
+            "action_type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('action_type', `appointment action type: schedule, reschedule or cancel`, 'string') }}",
+            "event_to_reschedule": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_to_reschedule', `appointment event description name for reschedule (event description: date and time)`, 'string') }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -1452,17 +1705,18 @@
               "removed": false
             },
             {
-              "id": "required_date",
-              "displayName": "required_date",
+              "id": "required_date_time",
+              "displayName": "required_date_time",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "canBeUsedToMatch": true,
+              "type": "string",
               "removed": false
             },
             {
-              "id": "user_name",
-              "displayName": "user_name",
+              "id": "user_full_name",
+              "displayName": "user_full_name",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -1508,6 +1762,26 @@
               "display": true,
               "canBeUsedToMatch": true,
               "removed": false
+            },
+            {
+              "id": "action_type",
+              "displayName": "action_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "event_to_reschedule",
+              "displayName": "event_to_reschedule",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -1517,379 +1791,420 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        8000,
-        -6000
+        784,
+        560
       ],
-      "id": "5ea93880-b31f-4644-8db0-ed5f494abc3f",
+      "id": "795a2e6d-b3f0-41b2-99be-795d0a2ca4c1",
       "name": "appointment_agent"
     },
     {
       "parameters": {
-        "name": "data_storage_master",
-        "description": "call this tool to store the user collected data.\n\nsend JSON output as this example:\n\n{\n  \"full_name\": \"Mariana Pulido\",\n  \"birth_date\": \"1998-08-10\",\n  \"phone\": \"3009998877\",\n  \"new_user\": \"yes\",\n  \"self_evaluation\": \"No\",\n  \"appointment_reason\": \"Revisión general\",\n  \"appointment_time\": \"15:00\",\n  \"appointment_date\": \"2025-04-16\",\n  \"language\": \"es\",\n  \"sessionId\": \"5213009998877\"\n}\n",
-        "workflowId": {
-          "__rl": true,
-          "value": "mkPzaWGcuGcVTHJ1",
-          "mode": "list",
-          "cachedResultName": "data_storage_master"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "birth_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('birth_date', ``, 'string') }}",
-            "phone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('phone', ``, 'string') }}",
-            "new_user": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('new_user', ``, 'string') }}",
-            "self_evaluation": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation', ``, 'string') }}",
-            "appointment_reason": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_reason', ``, 'string') }}",
-            "appointment_time": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_time', ``, 'string') }}",
-            "appointment_date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('appointment_date', ``, 'string') }}",
-            "language": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('language', ``, 'string') }}",
-            "sessionId": "={{ $json.sessionId }}",
-            "first_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('first_name', ``, 'string') }}",
-            "last_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('last_name', ``, 'string') }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "first_name",
-              "displayName": "first_name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "last_name",
-              "displayName": "last_name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "birth_date",
-              "displayName": "birth_date",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "phone",
-              "displayName": "phone",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "new_user",
-              "displayName": "new_user",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "self_evaluation",
-              "displayName": "self_evaluation",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "array",
-              "removed": false
-            },
-            {
-              "id": "appointment_reason",
-              "displayName": "appointment_reason",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "appointment_time",
-              "displayName": "appointment_time",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "appointment_date",
-              "displayName": "appointment_date",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "language",
-              "displayName": "language",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "sessionId",
-              "displayName": "sessionId",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-      "typeVersion": 2.1,
-      "position": [
-        8208,
-        -6000
-      ],
-      "id": "3d2c5cac-9cb1-42b2-8ddd-183a55ccb26f",
-      "name": "data_storage_master"
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "SELECT first_name, last_name, phone_number_str, birth_date\nFROM medical.patient\nWHERE phone_number_str = '{{ $('WhatsApp Trigger1').item.json.contacts[0].wa_id }}'\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -1776,
-        -5456
-      ],
-      "id": "fcff39c8-3423-4627-b2f3-23cca116cbc7",
-      "name": "Execute a SQL query",
-      "credentials": {
-        "postgres": {
-          "id": "SmsF7FcYnrtoA3pa",
-          "name": "Postgres account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "d4791525-3af7-4d92-9ec1-c2999034d7c5",
-              "leftValue": "={{ $json.first_name }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "empty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -1568,
-        -5456
-      ],
-      "id": "b842bb4e-5ad3-4d76-8239-47d3194583cf",
-      "name": "If1"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        -1280,
-        -5680
-      ],
-      "id": "90fcd82f-2430-4bee-a78c-e188161412e0",
-      "name": "No Operation, do nothing4"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "48e66230-59f5-4869-96ee-a8e899e94e6c",
-              "name": "first_name",
-              "value": "={{ $json.first_name }}",
-              "type": "string"
-            },
-            {
-              "id": "c2e85fd4-c0a2-4589-88db-0809c5b175f3",
-              "name": "last_name",
-              "value": "={{ $json.last_name }}",
-              "type": "string"
-            },
-            {
-              "id": "dd0ae6e0-0884-4e68-b55b-a07bfab4c23c",
-              "name": "phone_number",
-              "value": "={{ $json.phone_number_str }}",
-              "type": "string"
-            },
-            {
-              "id": "27bcd6b7-a04c-4563-b09c-12d244907da8",
-              "name": "birth_date",
-              "value": "={{ $json.birth_date }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -816,
-        -5440
-      ],
-      "id": "d5a0e449-c83b-4542-88e6-31e0ba7c1c44",
-      "name": "datos del paciente"
-    },
-    {
-      "parameters": {
-        "sessionIdType": "customKey",
-        "sessionKey": "={{ $json.sessionId}}\n",
-        "tableName": "=medical.chat_history",
-        "contextWindowLength": 20
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
-      "typeVersion": 1.3,
-      "position": [
-        7824,
-        -6000
-      ],
-      "id": "1bfad816-632a-4916-ba44-636a79454df0",
-      "name": "Postgres Chat Memory",
-      "credentials": {
-        "postgres": {
-          "id": "SmsF7FcYnrtoA3pa",
-          "name": "Postgres account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Datos personales recuperados del cliente (si es antiguo):\nnombre: {{ $json.first_name }}\napellido: {{ $json.last_name }}\nfecha de nacimiento: {{ $json.birth_date }}\n\n\nEl cliente ha enviado el siguiente mensaje: {{ $json.text }}\nLa intención del mensaje: {{ $json.intencion }}\nSentimiento del cliente: {{ $json.sentimiento }}\nIdioma detectado: {{ $json.idioma }}\nPrivacidad: {{ $json.warning_privacy }}",
-        "options": {
-          "systemMessage": "=# SYSTEM PROMPT - MEL ASSISTANT v2.6 (AGENTE MASTER)\n\n## 🧠 IDENTIDAD Y CONTEXTO\n\nEres Mel, el asistente virtual principal y orquestador de OCAI Clinic. Tu rol es coordinar agentes y herramientas para gestionar citas odontológicas y resolver consultas generales.\n\n* Preséntate apropiadamente para que el usuario sepa que habla con el asistente de OCAI.\n* Sé empático: reconoces el malestar del usuario y aportas cercanía.\n* Si ya conoces el nombre del usuario, salúdalo directamente por su nombre al inicio del mensaje.\n* Tu decides sobre herramientas y agentes y orquestas la conversación de forma autónoma.\n\n**Estado del sistema:**\n\n* Fecha/hora: {{ $now.setZone(\"America/Mexico_City\") }}\n* Zona horaria: America/Mexico_City\n* Formato: 12 h (ej: 3:00 PM)\n\n**Información clínica:**\n\n* Dirección: Cuauhtémoc, CDMX\n* Teléfono: +54 11 1888‑877\n* Horario físico: 8 AM–5 PM; WhatsApp 24/7\n* Autoevaluación (si el usuario acepta):\n\n  1. Última visita al dentista? (6 meses, 1 año, más de 1 año)\n  2. Sangrado de encías? si es afirmativo, ¿cada cuánto?\n  3. Dientes flojos (Sí/No)\n  4. Dolor (Sí/No); si Sí: nivel 0–10 y tipo de dolor\n\n## 📜 REGLAS CRÍTICAS\n\n1. **Idioma y tono:**\n   * Detecta si el usuario escribe en español, inglés o portugués.\n   * Responde siempre en ese mismo idioma.\n   * Mantén el tono, sé positivo y empático.\n\n2. **Orquestación de herramientas:**\n   * No inventes datos de herramientas.\n   * Usa exclusivamente `@appointment_agent` y `@data_storage_master`.\n   * Llama a herramientas solo cuando tengas datos necesarios.\n   * Antes de responder al usuario, el sistema debe ejecutar directamente la acción necesaria (por ejemplo, validar disponibilidad y crear cita).\n   * No muestres mensajes como “Estoy verificando” o “Déjame revisar”.\n   * No menciones información sobre herramientas al usuario.\n\n3. **Confirmación controlada:**\n   * Si estás esperando una herramienta para agendar una cita, di:\n     “Estoy procesando tu cita. En un momento te confirmo.”\n   * Solo cuando la herramienta haya devuelto una respuesta con éxito (por ejemplo, un ID de evento), puedes decir:\n     “¡Tu cita ha sido agendada exitosamente!”\n\n4. **Claridad:**\n   * Haz solo una pregunta por mensaje. Esto incluye en recolección de datos y en la autoevaluación médica.\n   * Usa formato de hora en 12 h.\n\n5. **Nombre completo:**\n   * Si el usuario da solo el primer nombre, solicita exclusivamente el apellido—sin repetir todo lo anterior.\n\n## 🔁 RAZONAMIENTO INTERNO\n\nAntes de responder:\n\n1. Detecta intención del usuario.\n2. Verifica si tienes los datos necesarios.\n3. Define herramientas requeridas: `tools_needed`.\n4. Si falta información, pregunta solo lo necesario.\n5. No confirmes nada hasta recibir una respuesta exitosa de la herramienta.\n6. Si estás esperando una herramienta, responde con un mensaje de espera, no de cierre.\n\n## 🔂 FLUJOS DE TRABAJO\n\n### Crear cita\n\n1. **(No preguntar si es paciente nuevo, ya lo sabes tú con la base de datos).**\n2. Recolecta datos necesarios: nombre completo, fecha de nacimiento y motivo de la cita si faltan.\n3. Si solo hay primer nombre, pide apellido.\n4. Confirma los datos completos.\n5. Ofrece hacer autoevaluación (solo si el usuario acepta).\n6. Recomienda \"Odontología General\" o ajusta según malestar.\n7. Solicita fecha en lenguaje natural.\n8. Llama a `@appointment_agent` para disponibilidad real.\n9. Muestra opciones retornadas agrupadas.\n10. Solicita elección.\n11. Llama a `@appointment_agent` para crear la cita.\n12. Confirma tras éxito.\n13. Llama a `@data_storage_master` para guardar los datos.\n\n### Cancelar cita\n\n1. Solicita nombre completo y teléfono (si no los tienes ya).\n2. Busca eventos entre {{ $now.minus({days:2}).startOf('day') }} y {{ $now.plus({days:14}).startOf('day') }}.\n3. Presenta citas encontradas.\n4. Pregunta si desea reagendar en vez de cancelar.\n5. Cancela con ID; confirma tras éxito.\n\n### Reagendar cita\n\n1–4 iguales que cancelar.\n5. Solicita nueva fecha.\n6. Busca disponibilidad.\n7. Modifica cita con ID; confirma tras éxito.\n\n## 🧪 MANEJO DE AMBIGÜEDADES\n\n* Si dice “no podré ir”: pregunta si desea reagendar o cancelar.\n* Si dice “mañana en la tarde”: interpreta como 2 PM–6 PM del día siguiente (CDMX).\n* Si falta info, solo pide lo que falte.\n* Si herramienta falla, responde con empatía y ofrece reintento.\n\n## ✅ CHECKLIST PREVIA A LA RESPUESTA\n\n* ¿Idioma detectado y aplicado?\n* ¿Intención clara?\n* ¿Herramientas declaradas (`tools_needed`)?\n* ¿Pregunté solo lo necesario?\n* ¿Estoy esperando una herramienta? Si sí, ¿respondí con mensaje de espera?\n* ¿Confirmé solo tras herramienta exitosa?\n* ¿Saludé al usuario por su nombre si lo conocía?\n* ¿Mantengo tono empático y profesional?\n"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.8,
-      "position": [
-        7664,
-        -6256
-      ],
-      "id": "7260c80e-1cbc-44ae-98c4-1498dfa08c01",
-      "name": "AI Agent",
-      "retryOnFail": true,
-      "waitBetweenTries": 1000,
-      "maxTries": 3
-    },
-    {
-      "parameters": {
-        "content": "## Recuperación de datos del paciente\n** Consulta a postgresql consultando por teléfono del usuario. si existe, no preguntamos informacion personal.",
+        "content": "## Recuperación de datos de la clinica\n** Consulta a postgresql consultando por datos de la clinica como especialidades, encuestas de auto-evaluacion, direccion fisica, horarios entr eotros",
         "height": 608,
         "width": 1200,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1888,
-        -5824
+        -12320,
+        -64
       ],
       "typeVersion": 1,
-      "id": "0e8ce19e-fb9f-4512-939b-2b829ffcb46e",
-      "name": "Sticky Note6"
+      "id": "93bec24f-175c-450e-b521-3efb06a2a0fb",
+      "name": "Sticky Note7"
     }
   ],
-  "pinData": {
-    "WhatsApp Trigger1": [
-      {
-        "json": {
-          "messaging_product": "whatsapp",
-          "metadata": {
-            "display_phone_number": "15153738425",
-            "phone_number_id": "639319332599159"
-          },
-          "contacts": [
-            {
-              "profile": {
-                "name": "Jonatan Polanco"
-              },
-              "wa_id": "573166379380"
-            }
-          ],
-          "messages": [
-            {
-              "from": "573166379380",
-              "id": "wamid.HBgMNTczMTY2Mzc5MzgwFQIAEhggNDkyNkJDRDBBOUI1NEI0Rjk1RUE3QzM0QUEzNjgzMUMA",
-              "timestamp": "1752866631",
-              "text": {
-                "body": "creo que necesito ayuda"
-              },
-              "type": "text"
-            }
-          ],
-          "field": "messages"
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "connections": {
-    "HTTP Request2": {
+    "Edit Fields2": {
       "main": [
         [
           {
-            "node": "Edit Fields4",
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 4
+          },
+          {
+            "node": "conversacion cerrada",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "identificador de privacidad",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "analizador de sentimiento",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "clasificador de intencion",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "clasificador de idioma",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields2": {
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "clasificador de intencion",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "analizador de sentimiento",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "clasificador de idioma",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clasificador de idioma": {
       "main": [
         [
           {
-            "node": "text & session_id",
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "clasificador de intencion": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "analizador de sentimiento": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "detector de incidencias": {
+      "main": [
+        [
+          {
+            "node": "alerta sobre fallas tecnicas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector de incidencias",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector de insatisfaccion sin intervencion",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector intervencion humana",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "detector intervencion humana": {
+      "main": [
+        [
+          {
+            "node": "deteccion de intervencion humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "detector de disputas/enfados": {
+      "main": [
+        [
+          {
+            "node": "PROBLEMA: cliente enfadado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deteccion de intervencion humana": {
+      "main": [
+        [
+          {
+            "node": "PROBLEMA: intervencion humana",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PROBLEMA: intervencion humana": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "format respuestas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "identificador de privacidad",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "identificador de privacidad": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "format respuestas": {
+      "main": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "detector de incidencias",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "detector de insatisfaccion sin intervencion",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "detector intervencion humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model9": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "conversacion cerrada",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "conversacion cerrada": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "detector de insatisfaccion sin intervencion": {
+      "main": [
+        [
+          {
+            "node": "detector de disputas/enfados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "alerta sobre fallas tecnicas": {
+      "main": [
+        [
+          {
+            "node": "PROBLEMA: incidencia técnica",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
             "type": "main",
             "index": 0
           }
@@ -1978,7 +2293,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields2",
+            "node": "Edit Fields5",
             "type": "main",
             "index": 0
           }
@@ -1989,501 +2304,8 @@
       "main": [
         [
           {
-            "node": "Edit Fields2",
+            "node": "Edit Fields5",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "text & session_id": {
-      "main": [
-        [
-          {
-            "node": "buffer",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model2": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "clasificador de intencion",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model3": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "analizador de sentimiento",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model4": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "clasificador de idioma",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "clasificador de idioma": {
-      "main": [
-        [
-          {
-            "node": "Merge1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "clasificador de intencion": {
-      "main": [
-        [
-          {
-            "node": "Merge1",
-            "type": "main",
-            "index": 1
-          },
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 2
-          }
-        ]
-      ]
-    },
-    "analizador de sentimiento": {
-      "main": [
-        [
-          {
-            "node": "Merge1",
-            "type": "main",
-            "index": 2
-          },
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 3
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model5": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "detector de incidencias",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model6": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "detector de insatisfaccion sin intervencion",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model7": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "detector intervencion humana",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "detector de incidencias": {
-      "main": [
-        [
-          {
-            "node": "alerta sobre fallas tecnicas",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "detector intervencion humana": {
-      "main": [
-        [
-          {
-            "node": "deteccion de intervencion humana",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "deteccion de intervencion humana": {
-      "main": [
-        [
-          {
-            "node": "PROBLEMA: intervencion humana",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "No Operation, do nothing2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "detector de disputas/enfados": {
-      "main": [
-        [
-          {
-            "node": "PROBLEMA: cliente enfadado",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "No Operation, do nothing",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge1": {
-      "main": [
-        [
-          {
-            "node": "Aggregate1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model8": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "identificador de privacidad",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "identificador de privacidad": {
-      "main": [
-        [
-          {
-            "node": "Merge1",
-            "type": "main",
-            "index": 3
-          }
-        ]
-      ]
-    },
-    "Aggregate1": {
-      "main": [
-        [
-          {
-            "node": "format respuestas",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "format respuestas": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge": {
-      "main": [
-        [
-          {
-            "node": "Aggregate",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model9": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "conversacion cerrada",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Aggregate": {
-      "main": [
-        [
-          {
-            "node": "detector de incidencias",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "detector de insatisfaccion sin intervencion",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "detector intervencion humana",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "conversacion cerrada": {
-      "main": [
-        [
-          {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "encuesta",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "No Operation, do nothing3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "detector de insatisfaccion sin intervencion": {
-      "main": [
-        [
-          {
-            "node": "detector de disputas/enfados",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "PROBLEMA: intervencion humana": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "get_buffer_data": {
-      "main": [
-        [
-          {
-            "node": "Switch",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "buffer": {
-      "main": [
-        [
-          {
-            "node": "get_buffer_data",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Switch": {
-      "main": [
-        [
-          {
-            "node": "No Operation, do nothing5",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "delete_buffer",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Wait",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wait": {
-      "main": [
-        [
-          {
-            "node": "get_buffer_data",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "delete_buffer": {
-      "main": [
-        [
-          {
-            "node": "buffer_output",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "buffer_output": {
-      "main": [
-        [
-          {
-            "node": "clasificador de idioma",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "clasificador de intencion",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "analizador de sentimiento",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "identificador de privacidad",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "conversacion cerrada",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Merge1",
-            "type": "main",
-            "index": 4
-          },
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "alerta sobre fallas tecnicas": {
-      "main": [
-        [
-          {
-            "node": "PROBLEMA: incidencia técnica",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "No Operation, do nothing1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "appointment_agent": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "data_storage_master": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -2525,32 +2347,129 @@
             "node": "Merge1",
             "type": "main",
             "index": 5
-          },
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 4
           }
         ]
       ]
     },
-    "Postgres Chat Memory": {
-      "ai_memory": [
+    "Edit Fields5": {
+      "main": [
         [
           {
-            "node": "AI Agent",
-            "type": "ai_memory",
+            "node": "text & session_id",
+            "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "AI Agent": {
+    "text & session_id": {
+      "main": [
+        [
+          {
+            "node": "buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_buffer_data": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "buffer": {
+      "main": [
+        [
+          {
+            "node": "get_buffer_data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "delete_buffer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "get_buffer_data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "delete_buffer": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MASTER AI Agent": {
       "main": [
         [
           {
             "node": "WhatsApp Business Cloud",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "data_storage_master": {
+      "ai_tool": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "appointment_agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -2561,7 +2480,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "6d32cdf9-f813-4132-9d9e-864dec13f86e",
+  "versionId": "7f5ff396-192e-4383-bd43-07289f455d35",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"
