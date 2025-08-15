@@ -168,6 +168,32 @@ CREATE TABLE medical.evaluation_response (
 CREATE INDEX idx_response_appointment ON medical.evaluation_response(appointment_id);
 
 
+-- Tabla de horarios de atención por clínica
+CREATE TABLE medical.clinic_working_hours (
+    id SERIAL PRIMARY KEY,
+    clinic_id INTEGER NOT NULL REFERENCES medical.clinic(id) ON DELETE CASCADE,
+    day_of_week INTEGER NOT NULL CHECK (day_of_week BETWEEN 1 AND 7), -- 1=Lunes, 7=Domingo
+    opening_time TIME NOT NULL,
+    closing_time TIME NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Constraint para integridad de horarios
+    CONSTRAINT valid_times CHECK (opening_time < closing_time)
+);
+
+-- Índices para consultas eficientes
+CREATE INDEX idx_clinic_working_hours_clinic ON medical.clinic_working_hours(clinic_id);
+CREATE INDEX idx_clinic_working_hours_day ON medical.clinic_working_hours(day_of_week);
+
+-- Índice compuesto para consultas de disponibilidad
+CREATE INDEX idx_clinic_working_hours_lookup ON medical.clinic_working_hours(clinic_id, day_of_week);
+
+-- Constraint para evitar horarios duplicados por clínica y día
+CREATE UNIQUE INDEX idx_unique_clinic_working_hours 
+ON medical.clinic_working_hours(clinic_id, day_of_week);
+
+
 
 -- Función upsert para tabla de pacientes
 CREATE OR REPLACE FUNCTION upsert_patient(

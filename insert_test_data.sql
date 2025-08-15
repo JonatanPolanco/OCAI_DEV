@@ -9,7 +9,8 @@ INSERT INTO medical.location (
 INSERT INTO medical.clinic (id, clinic_name, phone_number, status, created_at, updated_at) VALUES 
 (1, 'OCAI Jerson', 5411223344, 'active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2, 'CLINICA DULCE', 5430099886, 'active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'consultorio Jonatan', 573166379380, 'active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(3, 'consultorio Jonatan', 573166379380, 'active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+(4, 'OCAI', 15153738425, 'active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- 3. Insertar sucursales (una por clinic_id con location_id = 1)
 INSERT INTO medical.clinic_branch (id, branch_name, branch_phone_number, location_id, clinic_id, created_at, updated_at) VALUES 
@@ -22,7 +23,8 @@ INSERT INTO medical.doctor (id, first_name, last_name, clinic_id, created_at, up
 (1, 'Dulce', 'Hernandez', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (2, 'Ana', 'Reina', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (3, 'Angee', 'Abello Zapata', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 'Juliana', 'Perdomo', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(4, 'Juliana', 'Perdomo', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP).
+(5, 'Mariana', 'Perez', 4, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
 
 
 -- 5. specialty
@@ -85,4 +87,14 @@ INSERT INTO medical.appointment (
 ) VALUES 
 (1, 1, 1, 1, 2, '2025-07-25 10:00:00', 'scheduled', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ai_agent', 'dolor de muela'),
 (2, 2, 2, 3, 1, '2025-07-26 10:00:00', 'scheduled', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ai_agent', 'revision general');
+
+
+INSERT INTO medical.clinic_working_hours (clinic_id, day_of_week, opening_time, closing_time) 
+VALUES
+(4, 1, '08:00', '17:00'), -- Lunes
+(4, 2, '08:00', '17:00'), -- Martes
+(4, 3, '08:00', '17:00'), -- Miércoles
+(4, 4, '08:00', '17:00'), -- Jueves
+(4, 5, '08:00', '17:00'), -- Viernes
+(4, 6, '08:00', '12:00'); -- Sábado
 
