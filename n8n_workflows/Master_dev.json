@@ -24,91 +24,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -7344,
-        2176
+        7344,
+        4272
       ],
-      "id": "edc2ccac-8b7c-4504-8b61-0385f678f19b",
+      "id": "325ff36a-9c94-4cbf-adff-74e994e2d26e",
       "name": "Edit Fields2"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash-001",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        448,
-        560
-      ],
-      "id": "a6423dbc-9a3e-45b3-95b1-101adb09842d",
-      "name": "Google Gemini Chat Model1",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        -3120,
-        2256
-      ],
-      "id": "c79c7cef-d36d-4f77-8c67-f51ad6a8ac90",
-      "name": "Google Gemini Chat Model2",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        -3104,
-        2752
-      ],
-      "id": "ee0eb2af-b6e4-4ecf-aa33-4bf12267fccc",
-      "name": "Google Gemini Chat Model3",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        -3136,
-        1824
-      ],
-      "id": "f0a6c512-9cab-48ab-be80-1d360416cc51",
-      "name": "Google Gemini Chat Model4",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
     },
     {
       "parameters": {
@@ -126,11 +46,12 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        -3136,
-        1584
+        11552,
+        3680
       ],
-      "id": "d09695b6-68d4-4246-bc76-5957b3d6598b",
-      "name": "clasificador de idioma"
+      "id": "1276ef90-5947-4398-ac6f-0d0dc6636fbf",
+      "name": "clasificador de idioma",
+      "retryOnFail": true
     },
     {
       "parameters": {
@@ -148,11 +69,12 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        -3120,
-        2016
+        11568,
+        4112
       ],
-      "id": "c539dda1-39f4-40d9-81a6-8367fe916d30",
-      "name": "clasificador de intencion"
+      "id": "8bfa9b75-5283-4c5d-9c82-4d13f1b48103",
+      "name": "clasificador de intencion",
+      "retryOnFail": true
     },
     {
       "parameters": {
@@ -170,20 +92,21 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        -3120,
-        2576
+        11568,
+        4672
       ],
-      "id": "2dbdd236-d60c-4f72-8c76-f10daa1ff940",
-      "name": "analizador de sentimiento"
+      "id": "77705ab0-110e-4433-833c-ffc5c60f7ec8",
+      "name": "analizador de sentimiento",
+      "retryOnFail": true
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}",
+        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}\nsentimiento del usuario:{{ $json.data[1].text }}",
         "messages": {
           "messageValues": [
             {
-              "message": "=Eres un clasificador de incidencias técnicas en mensajes de clientes de WhatsApp.\n\nTu única tarea es determinar si el mensaje describe un problema técnico claro, como un error del sistema, bug, caída o mal funcionamiento de un servicio digital (app, página web, sistema interno, etc.).\n\nNo debes activar este clasificador si el mensaje expresa:\n- Quejas sobre atención lenta o tiempos de respuesta (eso es operativo, no técnico)\n- Opiniones generales (“se puede mejorar”, “no me gustó”)\n- Frustración emocional sin mencionar fallos técnicos\n- Problemas clínicos o malestares físicos\n\nResponde solo si encuentras:\n- intencion del usuario \"reporte\"\n- Mensajes de error visibles\n- Fallas de carga o acceso\n- Caídas o interrupciones\n- Funcionalidades que no responden o no funcionan\n\nSi detectas un problema técnico específico, responde solo y exactamente con:\n`soporte_tecnico_true`\n"
+              "message": "=¿El usuario necesita intervención humana?\nEres el responsable de decidir si debemos dirigir al flujo \"human in the loop\".\n\nCriterios para activar (SÍ):\n- El usuario pide explícitamente hablar con una persona.\n- Usa frases de bloqueo: \"no entiendo\", \"nadie me ayuda\", \"esto no sirve\".\n- Repetición evidente de la misma pregunta (bucle).\n- Confusión o molestia clara donde el bot no está resolviendo.\n\nSalida ESTRICTA:\n- Si requiere humano: responde solo `intervencion_humana`\n- Si el bot puede seguir manejándolo: responde con un string vacío (nada)."
             }
           ]
         },
@@ -192,92 +115,10 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        480,
-        1776
+        15168,
+        3360
       ],
-      "id": "97523821-a3ea-48e9-9117-c031ec13f9b2",
-      "name": "detector de incidencias"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        480,
-        1984
-      ],
-      "id": "5ddd025b-4839-4d0f-bc96-f07a5bb9063c",
-      "name": "Google Gemini Chat Model5",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash-001",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        480,
-        2512
-      ],
-      "id": "a5f7a5fb-eb1c-4713-b089-9e060e186fdf",
-      "name": "Google Gemini Chat Model6",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        480,
-        1472
-      ],
-      "id": "9c0c4ea4-f37e-481c-8224-72f708edf485",
-      "name": "Google Gemini Chat Model7",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}",
-        "messages": {
-          "messageValues": [
-            {
-              "message": "=\n¿El usuario necesita intervención humana?\n\nCriterios para intervención_humana:\n- El usuario dice directamente que quiere hablar con una persona.\n- Usa frases como \"no entiendo\", \"nadie me ayuda\", \"esto no sirve\", etc.\n- Lleva varios intentos sin resolución (repetición evidente).\n- El usuario está claramente confundido o molesto.\n\n\nResponde solo con una de estas dos opciones (en minúscula):\n- `intervencion_humana`\n- `no_intervencion`\n"
-            }
-          ]
-        },
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.7,
-      "position": [
-        480,
-        1264
-      ],
-      "id": "ac1478d8-7733-4f87-a640-389db9b80d61",
+      "id": "d2ad7764-a4b6-49a8-821b-d7668d8ae85e",
       "name": "detector intervencion humana"
     },
     {
@@ -308,10 +149,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1024,
-        2304
+        15712,
+        4400
       ],
-      "id": "4df3bf43-fdea-4028-983e-2d86838f9a7c",
+      "id": "3440b49a-f712-4efb-a234-79a935b3e382",
       "name": "detector de disputas/enfados"
     },
     {
@@ -342,81 +183,84 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        992,
-        1264
+        15680,
+        3360
       ],
-      "id": "e4541e4d-433b-4770-9561-8be6cac87823",
+      "id": "4c37b6c5-6e0c-4502-8e65-6504da383b47",
       "name": "deteccion de intervencion humana"
     },
     {
       "parameters": {
+        "authentication": "serviceAccount",
         "sendTo": "operation@ocaihealth.com",
-        "subject": "Alerta: requerimiento de intervencion humana",
+        "subject": "🚨 URGENTE: Cliente solicita humano - {{ $json.sessionId }}",
         "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA:\nSe requiere intervencion humana urgente para el cliente: {{ $('Aggregate').item.json.data[0].sessionId }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "message": "=MOTIVO DE LA ALERTA:\nSe requiere intervencion humana urgente para el cliente: {{ $('Aggregate').item.json.data[4].phone_number }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[4].phone_number }}\n* ID de sessión: {{ $json.sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.\n\n\nEnlace directo de contacto: https://wa.me/{{ $('Aggregate').item.json.data.find(d => d.phone_number)?.phone_number }}",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1552,
-        1104
+        16240,
+        3200
       ],
-      "id": "d796806e-418c-4a93-b01a-32abe14561d1",
+      "id": "ac6c0a19-ab1a-43bb-92e7-a5c3b257a1c7",
       "name": "PROBLEMA: intervencion humana",
       "webhookId": "ead7a322-58b8-4f0d-b83c-426db61f6857",
       "credentials": {
-        "gmailOAuth2": {
-          "id": "zEtOwPQqVWLpYUKp",
-          "name": "Gmail account"
+        "googleApi": {
+          "id": "YagLckH3WgvYRAaD",
+          "name": "Google Service Account account"
         }
       }
     },
     {
       "parameters": {
+        "authentication": "serviceAccount",
         "sendTo": "operation@ocaihealth.com",
-        "subject": "ALERTA: se reporta incidencia técnica",
+        "subject": "⚠️ ALERTA TÉCNICA: Reporte de fallo - {{ $json.sessionId }}",
         "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA: Se reporta incidencia técnica para el cliente: Jonatan Polanco \n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisión técnica del caso\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "message": "=MOTIVO DE LA ALERTA: Se reporta incidencia técnica para el cliente: {{ $('Aggregate').item.json.data[4].phone_number }}\n\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n* ID de sessión: {{ $json.sessionId }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\n\nACCIONES A TOMAR:\n* Revisión técnica del caso\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.\n\n\n\nEnlace directo de contacto: https://wa.me/{{ $('Aggregate').item.json.data.find(d => d.phone_number)?.phone_number }}",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1568,
-        1664
+        16256,
+        3760
       ],
-      "id": "ad571709-ea01-4a77-b2af-63557ca6289f",
+      "id": "46a98211-9354-4c70-b0b4-6865d5e676f8",
       "name": "PROBLEMA: incidencia técnica",
       "webhookId": "99c33f4f-0010-4d8b-95c0-450d41ccb839",
       "credentials": {
-        "gmailOAuth2": {
-          "id": "zEtOwPQqVWLpYUKp",
-          "name": "Gmail account"
+        "googleApi": {
+          "id": "YagLckH3WgvYRAaD",
+          "name": "Google Service Account account"
         }
       }
     },
     {
       "parameters": {
+        "authentication": "serviceAccount",
         "sendTo": "operation@ocaihealth.com",
-        "subject": "ALERTA: cliente enfadado",
+        "subject": "🛑 FEEDBACK NEGATIVO: Cliente insatisfecho - {{ $json.sessionId }}",
         "emailType": "text",
-        "message": "=MOTIVO DE LA ALERTA: Se reporta enfado o inconformidad sobre cliente: {{ $('Aggregate').item.json.data[4].phone_number }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.",
+        "message": "=MOTIVO DE LA ALERTA: Se reporta enfado o inconformidad sobre cliente: {{ $('Aggregate').item.json.data[4].phone_number }}\n\nINFORMACION DEL CLIENTE:\n{{ \n  $('Aggregate').item.json.data[4].first_name || $('Aggregate').item.json.data[4].last_name \n    ? `${$('Aggregate').item.json.data[4].first_name || ''} ${$('Aggregate').item.json.data[4].last_name || ''}`.trim()\n    : 'no recuperado' \n}}\n* Número de Whatsapp: {{ $('Aggregate').item.json.data[0].sessionId }}\n* Fecha y hora: {{ $now }}\n* ID de sessión: {{ $json.sessionId }}\n\nDETALLES DE LA CONSULTA:\n* Mensaje: {{ $('Aggregate').item.json.data[0].buffer_out }}\n* Intención detectada: {{ $('Aggregate').item.json.data[2].text }}\n* Análisis de sentimiento: {{ $('Aggregate').item.json.data[3].text }}\nACCIONES A TOMAR:\n* Revisa y responde directamente al cliente desde el panel de Whatsapp\n* Responde este mismo mensaje de gmail con dos parametros:\n  * Estado:\"Resuelto\" o \"No resuelto\"\n  * Descripción: descripcion final del caso.\n\n\n\nEnlace directo de contacto: https://wa.me/{{ $('Aggregate').item.json.data.find(d => d.phone_number)?.phone_number }}",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1584,
-        2144
+        16272,
+        4240
       ],
-      "id": "cf4ffd00-4e8e-4011-9977-ef9d2b24e99a",
+      "id": "e45984c4-1ffb-4766-873b-588d026d1ee0",
       "name": "PROBLEMA: cliente enfadado",
       "webhookId": "884e1648-5b74-436d-bb26-8ffc36d11547",
       "credentials": {
-        "gmailOAuth2": {
-          "id": "zEtOwPQqVWLpYUKp",
-          "name": "Gmail account"
+        "googleApi": {
+          "id": "YagLckH3WgvYRAaD",
+          "name": "Google Service Account account"
         }
       }
     },
@@ -425,10 +269,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        1584,
-        2448
+        16272,
+        4544
       ],
-      "id": "4d31569d-3f72-4e12-85f9-98c7d6e84832",
+      "id": "b9def3fa-46d9-4b31-8bb7-0b67ff37dd7d",
       "name": "No Operation, do nothing"
     },
     {
@@ -436,10 +280,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        1584,
-        1888
+        16272,
+        3984
       ],
-      "id": "a671c652-7730-4fd9-8e91-060d20063a70",
+      "id": "64f64172-45ac-4189-a57d-6d8e4e30d448",
       "name": "No Operation, do nothing1"
     },
     {
@@ -447,10 +291,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        1568,
-        1344
+        16256,
+        3440
       ],
-      "id": "a97a64d7-216c-489e-97c4-a1aa92d85d10",
+      "id": "70aff48a-f2e4-4cb8-900c-ffac3daf7233",
       "name": "No Operation, do nothing2"
     },
     {
@@ -460,10 +304,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -1552,
-        240
+        13584,
+        2336
       ],
-      "id": "5773c243-e4e8-42a5-99d2-36060608b6d3",
+      "id": "1848f6d7-3fda-4b34-8826-e55a57109890",
       "name": "Merge1"
     },
     {
@@ -474,31 +318,11 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        -1152,
-        304
+        13984,
+        2400
       ],
-      "id": "0723803d-40ae-43f9-854b-632f1aa65ef1",
+      "id": "a653e1b9-b022-4de0-a043-422f7d0eed56",
       "name": "Aggregate1"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        -3152,
-        3280
-      ],
-      "id": "fec2e230-2512-4f78-9df8-fd6afcc40e3d",
-      "name": "Google Gemini Chat Model8",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
     },
     {
       "parameters": {
@@ -516,11 +340,12 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        -3168,
-        3040
+        11520,
+        5136
       ],
-      "id": "0de229d4-d225-4b92-8b7f-c70f7799b2b4",
-      "name": "identificador de privacidad"
+      "id": "8eca663d-ed48-4bd9-b83e-202ee392ab98",
+      "name": "identificador de privacidad",
+      "retryOnFail": true
     },
     {
       "parameters": {
@@ -599,10 +424,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -272,
-        304
+        14416,
+        2400
       ],
-      "id": "40ffb49e-94dd-4501-bf08-7beef0472ccc",
+      "id": "e47585db-8cc5-4320-9db4-aa5f381e2068",
       "name": "format respuestas"
     },
     {
@@ -612,10 +437,10 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -816,
-        1616
+        13872,
+        3712
       ],
-      "id": "4b3d633c-8436-47fc-ae08-37d3779338a0",
+      "id": "d8bcecba-3ae3-4d2b-b386-80ab81560936",
       "name": "Merge"
     },
     {
@@ -626,31 +451,11 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        -368,
-        1664
+        14192,
+        3760
       ],
-      "id": "9e306d25-2d64-4b29-88ce-6ce626cad28f",
+      "id": "606be7b0-9eea-4c73-a87e-8ae143d5290d",
       "name": "Aggregate"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        -3152,
-        3776
-      ],
-      "id": "5207d126-d3ad-4726-90aa-1b4c28328bc0",
-      "name": "Google Gemini Chat Model9",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
     },
     {
       "parameters": {
@@ -668,20 +473,21 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        -3152,
-        3536
+        11536,
+        5632
       ],
-      "id": "a9b00b88-2c2c-48db-a94b-7ec44a9a463a",
-      "name": "conversacion cerrada"
+      "id": "a70c0828-71ad-46eb-ba95-9c55aa53c070",
+      "name": "conversacion cerrada",
+      "retryOnFail": true
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=mensaje del usuario: {{ $json.data[0].buffer_out }}\nintencion detectada: {{ $json.data[2].text }}",
+        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}\nsentimiento del usuario:{{ $json.data[1].text }}",
         "messages": {
           "messageValues": [
             {
-              "message": "=Eres un clasificador que identifica si un cliente expresa enojo, frustración o molestia en su mensaje, **pero ya no necesita ayuda**.\n\nEste clasificador solo debe activarse si el mensaje refleja una emoción negativa, pero también muestra que:\n- El problema ya fue resuelto\n- El usuario solo está dando feedback\n- El cliente cierra la conversación con agradecimiento o resignación\n\n❌ No actives este clasificador si:\n- El cliente aún espera solución\n- Está haciendo una nueva pregunta\n- Expresa confusión, bloqueo o falta de resolución\n- Describe una falla técnica concreta\n\n✅ Ejemplos válidos:\n- “Gracias, pero me pareció lento todo.”\n- “Me ayudaron, pero fue una mala experiencia.”\n- “Listo, pero no me gustó cómo funcionó.”\n\nSi detectas esta situación, responde solo con:\n`usuario_enojado_sin_intervencion`\n\nde lo contrario responde un string vacío\n"
+              "message": "=# ROL\nEres un analista de calidad de servicio al cliente. Tu objetivo es detectar \"Feedback Negativo de Cierre\".\n\n# TAREA\nAnaliza el mensaje del usuario e identifica si cumple TODAS las siguientes condiciones simultáneamente:\n1.  **Emoción:** Expresa molestia, enojo, decepción o sarcasmo.\n2.  **Estado:** La interacción ha concluido (el problema se resolvió o el usuario explícitamente termina la charla).\n3.  **Acción:** NO solicita ayuda adicional ni hace nuevas preguntas.\n\n# CRITERIOS DE EXCLUSIÓN (NO ACTIVAR SI):\n- El usuario dice \"olvídalo\", \"no entiendes\" o \"déjalo así\" mientras el problema persiste (esto es abandono por frustración y REQUIERE ayuda).\n- El usuario amenaza con darse de baja o demandar.\n- El usuario hace una pregunta retórica (\"¿Alguien piensa atenderme?\").\n- Persiste un problema técnico o administrativo no resuelto.\n\n# EJEMPLOS POSITIVOS (Responder `usuario_enojado_sin_intervencion`):\n- \"Al fin pude, pero qué sistema tan malo.\"\n- \"Gracias por nada, ya lo arreglé por mi cuenta.\"\n- \"Ok, espero que mejoren porque fue muy difícil agendar.\"\n- \"Listo, adiós. Pésimo servicio.\"\n\n# SALIDA\n- Si cumple las condiciones: `usuario_enojado_sin_intervencion`\n- En cualquier otro caso: Responde con un string vacío (no escribas nada, ni siquiera espacios)."
             }
           ]
         },
@@ -690,35 +496,14 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        480,
-        2304
+        15168,
+        4400
       ],
-      "id": "854fb4d0-1bb3-4648-8d6e-24100b4a6240",
-      "name": "detector de insatisfaccion sin intervencion"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "6ffce54b-c53c-4b09-828f-5782086678db",
-              "name": "respuesta",
-              "value": "Lo entendemos! Te informo que un asesor se comunicará contigo lo mas rapido posible. Gracias por mantener la comunicacion!",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        1904,
-        1104
-      ],
-      "id": "970ff6c3-f219-4885-a9d4-4085d4ea93a9",
-      "name": "Edit Fields",
-      "disabled": true
+      "id": "51e10d26-d4fd-4346-9639-2c8cd42437eb",
+      "name": "detector de insatisfaccion sin intervencion",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -748,10 +533,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1008,
-        1776
+        15696,
+        3872
       ],
-      "id": "0ec8a496-46ec-4d04-b1da-8f24f04c83b7",
+      "id": "92632e0b-074d-4cdb-80ba-60664d749a1b",
       "name": "alerta sobre fallas tecnicas"
     },
     {
@@ -762,11 +547,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -3488,
-        1360
+        11200,
+        3456
       ],
       "typeVersion": 1,
-      "id": "6b99ea13-f2f8-4ecc-9f7f-54de63b79aea",
+      "id": "32c3e823-c136-44a7-9806-46a90cfc8dac",
       "name": "Sticky Note1"
     },
     {
@@ -778,11 +563,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        32,
-        1072
+        14720,
+        3168
       ],
       "typeVersion": 1,
-      "id": "a9c62b83-d0d0-4a2a-b586-bc5481e57477",
+      "id": "bb661542-9dbc-47af-a9be-24e17d2182b0",
       "name": "Sticky Note3"
     },
     {
@@ -794,11 +579,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        192,
-        64
+        14880,
+        2160
       ],
       "typeVersion": 1,
-      "id": "dfcbdc8a-438c-4e98-b430-6a71a283411a",
+      "id": "81e13915-1e1e-4a88-b0a5-d739bb660c52",
       "name": "Sticky Note4"
     },
     {
@@ -811,15 +596,15 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        608,
-        560
+        15296,
+        2656
       ],
-      "id": "970d8070-f557-475d-977b-23c436b483cf",
+      "id": "1e8c3698-9858-40bc-84c5-07503eaf4e55",
       "name": "Postgres Chat Memory",
       "credentials": {
         "postgres": {
-          "id": "SmsF7FcYnrtoA3pa",
-          "name": "Postgres account"
+          "id": "EJs1NEgSSe4mKLEH",
+          "name": "sql cloud"
         }
       }
     },
@@ -847,17 +632,17 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -11152,
-        2000
+        3536,
+        4096
       ],
-      "id": "365f9b8b-f313-4419-b947-ae02e525b672",
+      "id": "27094368-1064-4b07-bc5d-19b9a4ee1e9a",
       "name": "HTTP Request2",
       "retryOnFail": false,
       "maxTries": 2,
       "waitBetweenTries": 10,
       "credentials": {
         "googlePalmApi": {
-          "id": "drUK7k42KutXIYHa",
+          "id": "x9KO1B9x6qwBG2xT",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -872,15 +657,15 @@
       "type": "n8n-nodes-base.whatsAppTrigger",
       "typeVersion": 1,
       "position": [
-        -12864,
-        2096
+        1824,
+        4192
       ],
-      "id": "f6a25895-52ae-4a14-81b9-0fdcba15a038",
+      "id": "6a2da5e8-c39f-40a2-996e-cec387c7cec3",
       "name": "WhatsApp Trigger1",
       "webhookId": "6ad09c77-974e-46af-986f-3d26426fd500",
       "credentials": {
         "whatsAppTriggerApi": {
-          "id": "nocrQg4pLKxUh07E",
+          "id": "yYLaUbUYMUdHsKTP",
           "name": "WhatsApp OAuth account"
         }
       }
@@ -893,10 +678,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -11344,
-        2000
+        3344,
+        4096
       ],
-      "id": "b4c62185-fba9-4807-9bba-5ad0af09201c",
+      "id": "7e974949-70fb-4bce-97af-c2dda251f718",
       "name": "Extract from File1"
     },
     {
@@ -918,15 +703,15 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -11552,
-        2000
+        3136,
+        4096
       ],
-      "id": "7f713cc3-ac0f-4fe4-9128-52e6f1b14d19",
+      "id": "5b91f223-cd27-4580-bdb7-5d37fa9d19b3",
       "name": "HTTP Request3",
       "alwaysOutputData": false,
       "credentials": {
         "whatsAppApi": {
-          "id": "LoJ5ALntOAq7lzvg",
+          "id": "wfkKGi4kHTcA4zm8",
           "name": "WhatsApp account"
         }
       }
@@ -940,15 +725,15 @@
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1,
       "position": [
-        -11744,
-        2000
+        2944,
+        4096
       ],
-      "id": "fbde0fc3-f18c-41d4-9849-b618d53f765e",
+      "id": "e3b1fcbc-95db-482d-ac46-e188948afea2",
       "name": "WhatsApp Business Cloud2",
       "webhookId": "70f82b65-51ae-4390-aa33-add73c8eadda",
       "credentials": {
         "whatsAppApi": {
-          "id": "LoJ5ALntOAq7lzvg",
+          "id": "wfkKGi4kHTcA4zm8",
           "name": "WhatsApp account"
         }
       }
@@ -1015,10 +800,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -12096,
-        2096
+        2592,
+        4192
       ],
-      "id": "cb2e0fc3-32f4-4623-9c62-c9cbdbcc5c4a",
+      "id": "751258e2-254d-4eb8-9afe-ffb939a5cd56",
       "name": "Switch1",
       "alwaysOutputData": false
     },
@@ -1030,10 +815,10 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -12272,
-        2096
+        2416,
+        4192
       ],
-      "id": "ffce2e8d-5923-4556-b13c-49f40d23cf89",
+      "id": "26bb1ced-a48f-4cae-9f92-639ff59a5f4f",
       "name": "Split Out1"
     },
     {
@@ -1059,10 +844,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -11008,
-        2624
+        3680,
+        4720
       ],
-      "id": "158c609a-94c8-47a6-94f4-1078e92c8ca7",
+      "id": "784010d7-d796-49da-8b9b-57ffdf360fe6",
       "name": "Edit Fields3"
     },
     {
@@ -1082,26 +867,26 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -10896,
-        2000
+        3792,
+        4096
       ],
-      "id": "0ece4790-b96a-46b2-bfa8-3aedbb68c421",
+      "id": "376a5a53-7d17-41b2-825c-abf8bffe9a5f",
       "name": "Edit Fields4"
     },
     {
       "parameters": {
         "content": "## audio a texto\nSi se detecta que es un mensaje de voz, se convierte a texto usando la API de vertex AI",
-        "height": 1008,
+        "height": 720,
         "width": 1952,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -12352,
-        1808
+        2336,
+        3904
       ],
       "typeVersion": 1,
-      "id": "380e18b3-3d17-4231-90c9-3b578417b19c",
+      "id": "43647522-c19d-4e7d-b203-31c3009c028d",
       "name": "Sticky Note2"
     },
     {
@@ -1113,15 +898,15 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -12208,
-        1104
+        2480,
+        3200
       ],
-      "id": "83ad6117-f2a7-44e7-b1b3-2897a540d3c1",
+      "id": "4aef8df1-861f-4639-8f01-852803c66d9d",
       "name": "Execute a SQL query",
       "credentials": {
         "postgres": {
-          "id": "SmsF7FcYnrtoA3pa",
-          "name": "Postgres account"
+          "id": "EJs1NEgSSe4mKLEH",
+          "name": "sql cloud"
         }
       }
     },
@@ -1153,10 +938,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -12000,
-        1104
+        2688,
+        3200
       ],
-      "id": "977c0d35-8429-4ee6-8a75-d572bb6b00d2",
+      "id": "99fbfe53-d305-4214-93c0-c8e660a93ffa",
       "name": "If1"
     },
     {
@@ -1164,10 +949,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -11712,
-        880
+        2976,
+        2976
       ],
-      "id": "b5aaf0ed-7074-4dd9-90b9-13ae9e13b16e",
+      "id": "13a0ebc6-a6c8-48ef-a282-c91ee96c8468",
       "name": "No Operation, do nothing4"
     },
     {
@@ -1211,10 +996,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -11248,
-        1120
+        3440,
+        3216
       ],
-      "id": "a86c55df-9bf5-450a-a4f8-f168a401503e",
+      "id": "40509dc9-cda9-4e48-be97-d5d12e940971",
       "name": "datos del paciente"
     },
     {
@@ -1226,11 +1011,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -12320,
-        736
+        2368,
+        2832
       ],
       "typeVersion": 1,
-      "id": "ed6b00fb-a6ce-4fa9-8f87-d6ae75ad2088",
+      "id": "c465a492-b970-43d6-8709-172e1b98d6d2",
       "name": "Sticky Note6"
     },
     {
@@ -1262,10 +1047,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -10208,
-        2176
+        4480,
+        4272
       ],
-      "id": "fd5e72ce-d810-4dc3-bd8f-33eacce0aeab",
+      "id": "e0d944e6-749f-43fa-b9e5-335239f157b5",
       "name": "Edit Fields5"
     },
     {
@@ -1279,15 +1064,15 @@
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1,
       "position": [
-        1136,
-        304
+        15824,
+        2400
       ],
-      "id": "22190aa6-2124-4800-8ba5-bbff63383eae",
+      "id": "4bc58498-ce29-4287-ab3f-0fc5e7e4250a",
       "name": "WhatsApp Business Cloud",
       "webhookId": "83c09c98-8f2e-4d18-a64d-1d7a187103aa",
       "credentials": {
         "whatsAppApi": {
-          "id": "LoJ5ALntOAq7lzvg",
+          "id": "wfkKGi4kHTcA4zm8",
           "name": "WhatsApp account"
         }
       }
@@ -1321,10 +1106,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -9584,
-        2176
+        5104,
+        4272
       ],
-      "id": "c4793540-93ff-417b-83d4-9383dbecda63",
+      "id": "c7f1c47f-a2ca-454a-96e4-42b7dbdae05c",
       "name": "text & session_id"
     },
     {
@@ -1337,14 +1122,14 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        -9024,
-        2176
+        5664,
+        4272
       ],
-      "id": "b163b004-794c-4a41-ac87-f62690b824f0",
+      "id": "7ce00a5d-4655-4cee-9c88-364b9d88937c",
       "name": "get_buffer_data",
       "credentials": {
         "redis": {
-          "id": "AHVX7tfe0gAZLaSB",
+          "id": "cWc8eAelCVioaKaM",
           "name": "Redis account"
         }
       }
@@ -1358,14 +1143,14 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        -9248,
-        2176
+        5440,
+        4272
       ],
-      "id": "c6b1412e-3d2f-405e-8b1f-5bad17285b70",
+      "id": "cea7fbf4-78f9-461b-a1c7-d1ea6ac95132",
       "name": "buffer",
       "credentials": {
         "redis": {
-          "id": "AHVX7tfe0gAZLaSB",
+          "id": "cWc8eAelCVioaKaM",
           "name": "Redis account"
         }
       }
@@ -1432,23 +1217,23 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -8656,
-        2160
+        6032,
+        4256
       ],
-      "id": "65f42ae3-9d9c-4cd9-9011-8d3343c359fb",
+      "id": "f8331e7e-df23-4723-bba8-de9d2c8f572c",
       "name": "Switch"
     },
     {
       "parameters": {
-        "amount": 7
+        "amount": 4.5
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -8656,
-        2448
+        6032,
+        4544
       ],
-      "id": "3a8b6997-bbcb-44e6-9f20-e4bd09717d99",
+      "id": "6309e260-8f7f-4ea2-946c-bf025945c628",
       "name": "Wait",
       "webhookId": "1bb02ea8-dfbf-426a-82ea-503c00de3b12"
     },
@@ -1460,14 +1245,14 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        -8368,
-        2176
+        6320,
+        4272
       ],
-      "id": "57612359-19eb-44f4-b413-124ab2e0343c",
+      "id": "1a30d991-fbd3-43e3-b09e-089cd3e6acbe",
       "name": "delete_buffer",
       "credentials": {
         "redis": {
-          "id": "AHVX7tfe0gAZLaSB",
+          "id": "cWc8eAelCVioaKaM",
           "name": "Redis account"
         }
       }
@@ -1481,11 +1266,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -9648,
-        1776
+        5040,
+        3872
       ],
       "typeVersion": 1,
-      "id": "9d721ad0-97bd-466d-8e6c-dd7a10a8c6d8",
+      "id": "235447b6-77ba-4be1-8f37-14f9634df63d",
       "name": "Sticky Note"
     },
     {
@@ -1493,10 +1278,10 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -8352,
-        1936
+        6336,
+        4032
       ],
-      "id": "1062bc59-0276-4634-8d0c-533f6c69302d",
+      "id": "4bc58161-7a28-4378-b053-d16a9713f415",
       "name": "No Operation, do nothing9"
     },
     {
@@ -1510,10 +1295,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.8,
       "position": [
-        448,
-        304
+        15136,
+        2400
       ],
-      "id": "910b14a1-a17b-4a8d-a1ce-50dd2e744747",
+      "id": "f057fe22-4331-40e2-948a-a097b5a8caae",
       "name": "MASTER AI Agent",
       "retryOnFail": true,
       "waitBetweenTries": 1000,
@@ -1653,34 +1438,76 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.1,
       "position": [
-        976,
-        560
+        15648,
+        2656
       ],
-      "id": "004dca97-e654-4098-871c-3c2b27cd9ff8",
+      "id": "d6d62ca5-d5f6-4352-8be6-5bab715cd322",
       "name": "data_storage_master"
+    },
+    {
+      "parameters": {
+        "content": "## Recuperación de datos de la clinica\n** Consulta a postgresql consultando por datos de la clinica como especialidades, encuestas de auto-evaluacion, direccion fisica, horarios entr eotros",
+        "height": 608,
+        "width": 1200,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2368,
+        2032
+      ],
+      "typeVersion": 1,
+      "id": "51a30ea7-9e9e-4eda-ba9e-9e92e179eca0",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje del usuario: {{ $json.data[0].buffer_out }}\nIntencion del usuario: {{ $json.data[2].text }}\nsentimiento del usuario:{{ $json.data[1].text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=# ROL\nEres un analista de logs y soporte de nivel 1. Tu única función es filtrar si un mensaje reporta una INCIDENCIA TÉCNICA DIGITAL.\n\n# TAREA\nAnaliza el mensaje, intencion y sentimiento del usuario buscando patrones de fallos en el software o plataformas digitales.\n\n# CRITERIOS DE EXCLUSIÓN (NO ACTIVAR SI):\n- El usuario reporta dolor físico o problemas médicos (\"me duele la muela\", \"se me cayó el bracket\").\n- El usuario da opiniones subjetivas (\"el servicio es malo\", \"no me gustó\").\n- El usuario pide reagendar o cancelar (eso es administrativo).\n\n# CRITERIOS DE INCLUSIÓN (ACTIVAR SOLO SI):\n- Menciona errores explícitos (\"error 404\", \"pantalla blanca\", \"no me deja entrar\").\n- Menciona fallos de funcionalidad (\"el botón no sirve\", \"no me llega el código\").\n- Reporta caídas del sistema (\"la página está caída\", \"la app se cierra\").\n\n# FORMATO DE RESPUESTA (ESTRICTO)\n- Si detectas una incidencia técnica clara: Responde ÚNICAMENTE con la palabra clave: `soporte_tecnico_true`\n- En CUALQUIER otro caso (duda, tema médico, queja administrativa): Responde con un string vacío (no escribas nada).\n\nNO des explicaciones. NO saludes. Solo la palabra clave o vacío."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        15168,
+        3872
+      ],
+      "id": "a7b57dee-ad6d-4665-8d0f-94f97ac2efed",
+      "name": "detector de incidencias",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
         "description": "Use this tool to call the appointment agent",
         "workflowId": {
           "__rl": true,
-          "value": "WNmI6hFgGM4RT1YM",
+          "value": "vNPFh3N6KwCIxih9",
           "mode": "list",
-          "cachedResultName": "mcp_test_agent"
+          "cachedResultUrl": "/workflow/vNPFh3N6KwCIxih9",
+          "cachedResultName": "appointment_agent"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
           "value": {
-            "calendar_requirement_text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar_requirement_text', `make a sumamry of the requirement given by the user. include date and time if given.`, 'string') }}",
-            "session_id": "={{ $json.sessionId }}",
-            "user_age": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_age', `calculate the user age from birth date. The age is an integer number.`, 'number') }}",
+            "calendar_requirement_text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar_requirement_text', ``, 'string') }}",
+            "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('sessionId', ``, 'string') }}",
+            "user_age": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_age', ``, 'string') }}",
             "user_selected_specialty": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_selected_specialty', ``, 'string') }}",
             "user_phone_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_phone_number', ``, 'string') }}",
-            "self_evaluation_responses": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation_responses', `add self evaluation question and answers if given. if not given, send \"No\"`, 'string') }}",
             "required_date_time": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('required_date_time', ``, 'string') }}",
             "user_full_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_full_name', ``, 'string') }}",
-            "action_type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('action_type', `appointment action type: schedule, reschedule or cancel`, 'string') }}",
-            "event_to_reschedule": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_to_reschedule', `appointment event description name for reschedule (event description: date and time)`, 'string') }}"
+            "action_type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('action_type', ``, 'string') }}",
+            "event_to_reschedule": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_to_reschedule', ``, 'string') }}",
+            "self_evaluation_responses": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation_responses', ``, 'string') }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -1695,8 +1522,37 @@
               "removed": false
             },
             {
-              "id": "session_id",
-              "displayName": "session_id",
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "user_age",
+              "displayName": "user_age",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "user_selected_specialty",
+              "displayName": "user_selected_specialty",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "user_phone_number",
+              "displayName": "user_phone_number",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -1725,45 +1581,6 @@
               "removed": false
             },
             {
-              "id": "user_selected_specialty",
-              "displayName": "user_selected_specialty",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "user_age",
-              "displayName": "user_age",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "number",
-              "removed": false
-            },
-            {
-              "id": "user_phone_number",
-              "displayName": "user_phone_number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "self_evaluation_responses",
-              "displayName": "self_evaluation_responses",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
               "id": "action_type",
               "displayName": "action_type",
               "required": false,
@@ -1782,6 +1599,16 @@
               "canBeUsedToMatch": true,
               "type": "string",
               "removed": false
+            },
+            {
+              "id": "self_evaluation_responses",
+              "displayName": "self_evaluation_responses",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -1791,27 +1618,227 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        784,
-        560
+        15456,
+        2656
       ],
-      "id": "795a2e6d-b3f0-41b2-99be-795d0a2ca4c1",
+      "id": "ee1e9806-ff6b-4d26-8b63-873d4014e60b",
       "name": "appointment_agent"
     },
     {
       "parameters": {
-        "content": "## Recuperación de datos de la clinica\n** Consulta a postgresql consultando por datos de la clinica como especialidades, encuestas de auto-evaluacion, direccion fisica, horarios entr eotros",
-        "height": 608,
-        "width": 1200,
-        "color": 7
+        "content": "## To do\n** guardar data de cada incidencia para analisis posterior (clasificacion y reporte)"
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -12320,
-        -64
+        16480,
+        3840
       ],
       "typeVersion": 1,
-      "id": "93bec24f-175c-450e-b521-3efb06a2a0fb",
-      "name": "Sticky Note7"
+      "id": "e069eaed-0661-4529-99e0-781519da9476",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## considera enviar un mensaje de \"ACK\" (Acknowledge) inmediato si detectas que es un audio largo o si el buffer cierra, tipo un Check de lectura o un \"Escribiendo...\" programático (usando la API de WhatsApp para marcar estado reading o composing), para que el usuario sepa que \"Mel\" está pensando.",
+        "height": 384,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16272,
+        2240
+      ],
+      "typeVersion": 1,
+      "id": "a88db997-4419-4085-b031-e1265657a982",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        15184,
+        3552
+      ],
+      "id": "7a367d40-f9d6-438c-904f-00f6b1a57224",
+      "name": "AWS Bedrock Chat Model",
+      "retryOnFail": true,
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        15168,
+        4080
+      ],
+      "id": "a32e500f-37e6-4606-bd80-5ea09e55c618",
+      "name": "AWS Bedrock Chat Model1",
+      "retryOnFail": true,
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        15168,
+        4608
+      ],
+      "id": "deca4ae7-66f4-4f26-a9a2-69280b057631",
+      "name": "AWS Bedrock Chat Model2",
+      "retryOnFail": true,
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        15136,
+        2656
+      ],
+      "id": "b9770266-a64f-4e4c-8584-7ccf08969dca",
+      "name": "AWS Bedrock Chat Model3",
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        11552,
+        3904
+      ],
+      "id": "dbd479cc-2bac-40b9-b077-66dfa19b781a",
+      "name": "AWS Bedrock Chat Model4",
+      "retryOnFail": true,
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        11568,
+        4352
+      ],
+      "id": "691fb2a3-7de7-4095-85b2-a98e8f7ffeb8",
+      "name": "AWS Bedrock Chat Model5",
+      "retryOnFail": true,
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        11568,
+        4912
+      ],
+      "id": "6b1820be-c002-404b-9faf-dcd2a48dc7e0",
+      "name": "AWS Bedrock Chat Model6",
+      "retryOnFail": true,
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        11520,
+        5376
+      ],
+      "id": "3b38b3c9-1a5b-4347-a33a-e6053d8b9830",
+      "name": "AWS Bedrock Chat Model7",
+      "retryOnFail": true,
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        11536,
+        5888
+      ],
+      "id": "87817a7c-c20e-4095-ae76-90db3f971dfe",
+      "name": "AWS Bedrock Chat Model8",
+      "retryOnFail": true,
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -1852,50 +1879,6 @@
           {
             "node": "clasificador de idioma",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "MASTER AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model2": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "clasificador de intencion",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model3": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "analizador de sentimiento",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model4": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "clasificador de idioma",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -1949,50 +1932,6 @@
         ]
       ]
     },
-    "detector de incidencias": {
-      "main": [
-        [
-          {
-            "node": "alerta sobre fallas tecnicas",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model5": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "detector de incidencias",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model6": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "detector de insatisfaccion sin intervencion",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model7": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "detector intervencion humana",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "detector intervencion humana": {
       "main": [
         [
@@ -2042,13 +1981,7 @@
     },
     "PROBLEMA: intervencion humana": {
       "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Merge1": {
@@ -2068,17 +2001,6 @@
           {
             "node": "format respuestas",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model8": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "identificador de privacidad",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -2121,11 +2043,6 @@
       "main": [
         [
           {
-            "node": "detector de incidencias",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "detector de insatisfaccion sin intervencion",
             "type": "main",
             "index": 0
@@ -2134,16 +2051,10 @@
             "node": "detector intervencion humana",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model9": {
-      "ai_languageModel": [
-        [
+          },
           {
-            "node": "conversacion cerrada",
-            "type": "ai_languageModel",
+            "node": "detector de incidencias",
+            "type": "main",
             "index": 0
           }
         ]
@@ -2464,6 +2375,17 @@
         ]
       ]
     },
+    "detector de incidencias": {
+      "main": [
+        [
+          {
+            "node": "alerta sobre fallas tecnicas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "appointment_agent": {
       "ai_tool": [
         [
@@ -2474,30 +2396,138 @@
           }
         ]
       ]
+    },
+    "AWS Bedrock Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector intervencion humana",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector de incidencias",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "detector de insatisfaccion sin intervencion",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "MASTER AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "clasificador de idioma",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "clasificador de intencion",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "analizador de sentimiento",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "identificador de privacidad",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "conversacion cerrada",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
   },
-  "versionId": "7f5ff396-192e-4383-bd43-07289f455d35",
+  "versionId": "25888584-6401-4376-b096-a6207a8842a6",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"
   },
-  "id": "jzRQMBkyrSYXZ9sR",
+  "id": "5QLkwH9yKLSpailJ",
   "tags": [
     {
-      "createdAt": "2025-07-16T22:20:41.438Z",
-      "updatedAt": "2025-07-16T22:20:41.438Z",
-      "id": "AWfqgI192rOaWXZP",
+      "updatedAt": "2026-01-05T21:18:39.839Z",
+      "createdAt": "2026-01-05T21:18:39.839Z",
+      "id": "1f3UbIiB818yRuxe",
       "name": "Whatsapp"
     },
     {
-      "createdAt": "2025-07-15T22:57:53.015Z",
-      "updatedAt": "2025-07-15T22:57:53.015Z",
-      "id": "uRxo37SIMxx7eIZl",
+      "updatedAt": "2025-04-25T13:27:49.031Z",
+      "createdAt": "2025-04-25T13:27:49.031Z",
+      "id": "8Nn9mUNpohNW7SNY",
       "name": "dev"
+    },
+    {
+      "updatedAt": "2025-04-24T15:49:46.546Z",
+      "createdAt": "2025-04-24T15:49:46.546Z",
+      "id": "ImPiMws0BAiwhn4T",
+      "name": "Prod"
     }
   ]
 }
