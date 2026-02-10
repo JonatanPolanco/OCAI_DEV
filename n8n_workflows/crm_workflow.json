@@ -1,0 +1,309 @@
+{
+    "name": "crm_workflow",
+    "nodes": [
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1nLtocQ1Ch_3AWmc4Q5SgJP7Mxe2zicR0iDQJLvv_iao",
+                    "mode": "list",
+                    "cachedResultName": "OCAI CRM",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nLtocQ1Ch_3AWmc4Q5SgJP7Mxe2zicR0iDQJLvv_iao/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "clinic",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nLtocQ1Ch_3AWmc4Q5SgJP7Mxe2zicR0iDQJLvv_iao/edit#gid=0"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                -32,
+                16
+            ],
+            "id": "b5af93af-28f4-4c0b-a840-4405390d7e54",
+            "name": "Get clinic row(s)",
+            "alwaysOutputData": false,
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "wXi9XyMLaECeFDc1",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1nLtocQ1Ch_3AWmc4Q5SgJP7Mxe2zicR0iDQJLvv_iao",
+                    "mode": "list",
+                    "cachedResultName": "OCAI CRM",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nLtocQ1Ch_3AWmc4Q5SgJP7Mxe2zicR0iDQJLvv_iao/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1582230162,
+                    "mode": "list",
+                    "cachedResultName": "doctor",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nLtocQ1Ch_3AWmc4Q5SgJP7Mxe2zicR0iDQJLvv_iao/edit#gid=1582230162"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                -48,
+                416
+            ],
+            "id": "aa24bce5-a6a3-4615-98b7-681562979b80",
+            "name": "Get doctor row(s)",
+            "alwaysOutputData": false,
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "wXi9XyMLaECeFDc1",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT distinct clinic_name FROM medical.clinic",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.6,
+            "position": [
+                -48,
+                224
+            ],
+            "id": "e1178362-cba8-47e3-86be-bb0b0db4aa3d",
+            "name": "Execute a SQL query",
+            "alwaysOutputData": false,
+            "executeOnce": false,
+            "credentials": {
+                "postgres": {
+                    "id": "EJs1NEgSSe4mKLEH",
+                    "name": "sql cloud"
+                }
+            },
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "fieldsToMatchString": "clinic_name",
+                "joinMode": "keepNonMatches",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                432,
+                32
+            ],
+            "id": "04b9e0db-dd92-49d7-9246-dc2ca5dc7f23",
+            "name": "Merge",
+            "alwaysOutputData": false
+        },
+        {
+            "parameters": {
+                "jsCode": "// 1. Recogemos todo lo que llega de las dos flechas\nconst allItems = $input.all();\nconst groups = {};\n\n// Si no llega NADA de clínicas nuevas, paramos aquí para evitar errores.\n// (Asumimos que si no hay clínicas, no hay nada que insertar en onboarding)\nconst hasClinics = allItems.some(item => item.json.city !== undefined || item.json.address !== undefined);\nif (!hasClinics) {\n  return []; // Retorna vacío y el nodo SQL no se ejecutará\n}\n\nfor (const item of allItems) {\n  const data = item.json;\n  \n  // Validación: Si el item está vacío, lo saltamos\n  if (!data.clinic_name) continue;\n\n  const clinicName = data.clinic_name;\n\n  // CREAR GRUPO (Solo si es una clínica nueva válida)\n  if (!groups[clinicName]) {\n     // Solo creamos el grupo si detectamos que es una clínica (tiene dirección)\n     // O si es un doctor, solo lo procesamos si ya existe el grupo (clínica padre)\n     if (data.city || data.address) {\n        groups[clinicName] = {\n          clinic_name: clinicName,\n          clinic_phone: data.whatsapp_phone || data.clinic_phone,\n          country: data.country,\n          city: data.city,\n          address: data.address,\n          subscription_plan: data.subscription_plan || 'Basic',\n          branch_name: data.branch_name || 'Sede Principal',\n          opening_time: data.working_hour_min || '08:00',\n          closing_time: data.working_hour_max || '18:00',\n          evaluation_template_name: data.evaluation_name || 'General',\n          evaluation_questions: data.evaluation_template,\n          doctors_list: [],\n          onboarding_status: 'Ready'\n        };\n     }\n  }\n\n  // SI ES DOCTOR (Y la clínica padre existe en el grupo)\n  if (data.doc_first_name && groups[clinicName]) {\n    groups[clinicName].doctors_list.push({\n      first_name: data.doc_first_name,\n      last_name: data.doc_last_name,\n      specialty: data.doc_specialty\n    });\n  }\n}\n\nreturn Object.values(groups).map(g => ({ json: g }));"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1184,
+                144
+            ],
+            "id": "542a9a62-1208-4453-878a-f8d62c6216ce",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "WITH new_onboarding AS (\n  INSERT INTO medical.clinic_onboarding \n  (\n    clinic_name, \n    clinic_phone, \n    country, \n    city, \n    address, \n    subscription_plan, \n    doctors_list, \n    branch_name, \n    opening_time, \n    closing_time, \n    evaluation_template_name, \n    evaluation_questions,\n    onboarding_status\n  )\n  VALUES (\n    $1, $2, $3, $4, $5, $6, \n    $7::jsonb, \n    $8, $9, $10, $11, $12,\n    'Ready'\n  )\n  RETURNING id\n)\nSELECT medical.process_clinic_onboarding(id) FROM new_onboarding;",
+                "options": {
+                    "queryReplacement": "={{ $json.clinic_name }}, {{ $json.clinic_phone }}, {{ $json.country }}, {{ $json.city }}, {{ $json.address }}, {{ $json.subscription_plan }}, {{ JSON.stringify($json.doctors_list) }}, {{ $json.branch_name }}, {{ $json.opening_time }}, {{ $json.closing_time }}, {{ $json.evaluation_template_name }}, {{ $json.evaluation_questions }}"
+                }
+            },
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.6,
+            "position": [
+                1456,
+                144
+            ],
+            "id": "7e636c6e-c061-4042-9fad-7fcb797d8d91",
+            "name": "Execute a SQL query1",
+            "credentials": {
+                "postgres": {
+                    "id": "EJs1NEgSSe4mKLEH",
+                    "name": "sql cloud"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                -464,
+                160
+            ],
+            "id": "bbe1246d-246e-4645-b2ef-6fb55e0d9b52",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                816,
+                144
+            ],
+            "id": "fc88d2f5-f81f-4d73-acce-2f3bf9b1dd39",
+            "name": "Merge2",
+            "alwaysOutputData": false
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "fieldsToMatchString": "clinic_name",
+                "joinMode": "keepNonMatches",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                432,
+                336
+            ],
+            "id": "a5278b53-1d1e-4005-8104-69a5b92a2f4b",
+            "name": "Merge1",
+            "alwaysOutputData": false
+        }
+    ],
+    "pinData": {},
+    "connections": {
+        "Get clinic row(s)": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute a SQL query": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    },
+                    {
+                        "node": "Merge1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get doctor row(s)": {
+            "main": [
+                [
+                    {
+                        "node": "Merge1",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Merge2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Execute a SQL query1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Get clinic row(s)",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Execute a SQL query",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get doctor row(s)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge2": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge1": {
+            "main": [
+                [
+                    {
+                        "node": "Merge2",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "versionId": "ffe1a90a-8f2b-4e37-91fb-31769f21796c",
+    "meta": {
+        "templateCredsSetupCompleted": true,
+        "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"
+    },
+    "id": "EZ7ZfI4Ot0jA4T78entQc",
+    "tags": []
+}
