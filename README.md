@@ -1,49 +1,79 @@
-## Resumen de Estrategia y Arquitectura
+# Documentación de Arquitectura y Estrategia - OCAI Medical
 
-### Estrategia General
+## 1. Estrategia General
 
-Este desarrollo se centra en la creación robusta de citas médicas (MVP), asegurando una operación atómica y consistente a través de funciones unificadas y validación exhaustiva. La función principal en Python (`handle_mvp_appointment_creation`) expone una API HTTP que procesa solicitudes JSON, valida y sanitiza entradas, y ejecuta operaciones PostgreSQL atomizadas mediante funciones unificadas en PL/pgSQL.
+Este desarrollo implementa una arquitectura híbrida y modular dividida en dos grandes flujos:
 
-### Arquitectura Técnica
+1.  **Operación Clínica (Citas/Pacientes):** Enfocada en la atomicidad y velocidad transaccional para el Agente de IA.
+2.  **Gestión Administrativa (Onboarding B2B):** Enfocada en la integridad referencial masiva y la facilidad de uso para el equipo de operaciones.
 
-* **Backend**: Cloud Function (Python + Flask)
+Ambos flujos convergen en una única base de datos PostgreSQL en Google Cloud, garantizando una "Fuente Única de Verdad".
 
-  * Recibe solicitudes HTTP POST.
-  * Valida y sanitiza datos obligatorios (nombres, teléfono, citas, evaluación).
-  * Realiza conexión directa a PostgreSQL usando `pg8000`.
-  * Invoca funciones unificadas PL/pgSQL para transacciones seguras.
+---
 
-* **Base de Datos**: PostgreSQL
+## 2. Diagrama de Entidad-Relación (ERD)
 
-  * Esquema principal: `medical`
-  * Tablas: `patient`, `appointment`, `clinic`, `doctor`, `chat_history`, `evaluation_response`, entre otras.
-  * Índices únicos y checks de integridad para evitar datos duplicados y garantizar consistencia.
-  * Funciones PL/pgSQL para operaciones atómicas tipo UPSERT, asegurando operaciones idempotentes.
-  * **Función orquestadora (`mvp_create_patient_appointment_evaluation`)**:
+El siguiente esquema muestra la estructura relacional de la base de datos `medical`.
 
-    * Coordina llamadas a funciones individuales (paciente, cita, evaluación).
-    * Previene condiciones de carrera (race conditions) mediante secuenciación explícita y comprobaciones intermedias.
-    * Garantiza atomicidad y consistencia transaccional, manejando errores y realizando rollback automático si ocurre alguna excepción.
+*Nota: La tabla `clinic_onboarding` aparece desconectada intencionalmente en el diagrama, ya que funciona como tabla de paso (staging) antes de poblar las tablas relacionales mediante procedimientos almacenados.*
 
-### Flujo de Datos
+![ERD Arquitectura Médica](ERD.png)
 
-1. **Validación**: Datos mínimos requeridos se validan y sanitizan.
-2. **Conexión**: Se establece una conexión segura con PostgreSQL.
-3. **Operación Unificada (Transacción)**:
+---
 
-   * UPSERT de paciente (`upsert_patient`).
-   * Creación opcional de historial de chat (`chat_history`).
-   * UPSERT de cita (`upsert_appointment`).
-   * Registro condicional de respuestas de evaluación (`upsert_evaluation_response`).
-4. **Respuesta**: Retorna JSON estructurado con resultados y metadatos.
+## 3. Arquitectura Técnica
 
-### Observabilidad
+### A. Backend Operativo (Citas & Pacientes)
+* **Tecnología:** Cloud Function (Python + Flask) + `pg8000`.
+* **Función:** Procesa solicitudes en tiempo real del Agente de IA.
+* **Lógica:**
+    * Valida y sanitiza entradas (nombres, teléfonos).
+    * Ejecuta la función orquestadora `mvp_create_patient_appointment_evaluation`.
+    * Realiza operaciones idempotentes (UPSERT) para evitar duplicados.
 
-* Logging detallado en cada paso, identificadores únicos por solicitud (`request_id`).
-* Métricas integradas para seguimiento de rendimiento (tiempos de ejecución).
+### B. Backend Administrativo (Onboarding Clínicas)
+* **Interfaz (UI):** NocoDB (alojado en AWS EC2).
+* **Middleware:** n8n (Orquestación de flujos).
+* **Base de Datos:** PostgreSQL (Google Cloud SQL).
+* **Estrategia "Staging Table":**
+    * Se utiliza una tabla plana `clinic_onboarding` para la entrada de datos.
+    * Soporta estructuras anidadas (JSONB) para cargar listas de doctores en un solo registro.
+    * Un Procedimiento Almacenado (`process_clinic_onboarding`) transforma y distribuye estos datos a las tablas relacionales (`clinic`, `branch`, `doctor`, `specialty`, etc.) en una sola transacción atómica.
 
-### Ventajas
+---
 
-* Operaciones seguras, rápidas y resilientes.
-* Manejo explícito de errores y excepciones.
-* Fácil escalabilidad y mantenimiento.
+## 4. Flujos de Datos Detallados
+
+### Flujo 1: Creación de Citas (MVP)
+1.  **Validación:** Datos mínimos requeridos se validan y sanitizan en Python.
+2.  **Conexión:** Se establece conexión segura a PostgreSQL.
+3.  **Transacción Unificada (PL/pgSQL)**:
+    * `upsert_patient`: Crea o actualiza paciente.
+    * `chat_history`: Registra la traza de la conversación.
+    * `upsert_appointment`: Agenda la cita validando disponibilidad.
+    * `upsert_evaluation_response`: Guarda respuestas de triaje.
+4.  **Respuesta:** Retorna JSON con IDs generados.
+
+### Flujo 2: Onboarding de Clínicas (B2B)
+1.  **Entrada:** El equipo de operaciones llena **una sola fila** en NocoDB (Tabla `clinic_onboarding`).
+    * Incluye datos de la clínica, sede, suscripción y un JSON con el staff médico.
+2.  **Disparador:** n8n detecta el nuevo registro.
+3.  **Procesamiento (ETL en Database):**
+    * n8n invoca al SP `process_clinic_onboarding`.
+    * El SP crea la **Clínica** -> **Ubicación** -> **Sede** -> **Suscripción**.
+    * Genera horarios por defecto.
+    * Itera sobre el JSON de doctores para crear **Especialidades** (si no existen) y **Doctores**, vinculándolos automáticamente.
+4.  **Resultado:** El estado en NocoDB cambia a "Completed" o "Error" (con detalle del fallo).
+
+---
+
+## 5. Observabilidad y Seguridad
+
+* **Integridad de Datos:** Uso estricto de `FOREIGN KEYS`, `CHECK constraints` y transacciones ACID.
+* **Seguridad de Red:** Conexiones restringidas por IP (AWS <-> GCP) y uso de SSL.
+* **Logging:** Identificadores únicos (`request_id`) y registro de errores detallado en tablas de sistema.
+
+### Ventajas de esta Arquitectura
+* **Desacoplamiento:** El Agente de IA no se ve afectado por tareas administrativas.
+* **Escalabilidad:** El modelo de datos soporta múltiples sedes y doctores por clínica desde el diseño.
+* **Resiliencia:** Si falla un paso en el onboarding, se hace rollback total, evitando datos "huérfanos".
