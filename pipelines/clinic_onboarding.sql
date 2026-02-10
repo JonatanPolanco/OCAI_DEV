@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS medical.clinic_onboarding;
 CREATE TABLE medical.clinic_onboarding (
     id SERIAL PRIMARY KEY,
     
-    -- 1. Info General de la Clínica (Se llena una sola vez)
+    -- 1. Info General de la Clínica
     clinic_name VARCHAR(255) NOT NULL,
     clinic_phone VARCHAR(20) NOT NULL,  
     
@@ -18,12 +18,16 @@ CREATE TABLE medical.clinic_onboarding (
     -- 4. Lista de Doctores (JSON)
     doctors_list JSONB NOT NULL DEFAULT '[]'::jsonb,
     
-    -- 5. Configuración
+    -- 5. Configuración de Evaluación (Nuevos campos corregidos)
+    evaluation_template_name VARCHAR(255) DEFAULT 'General',
+    evaluation_questions TEXT, -- Aquí se guarda el texto con \n del Excel
+    
+    -- 6. Horarios
     opening_time TIME DEFAULT '08:00:00',
     closing_time TIME DEFAULT '18:00:00',
     operating_days VARCHAR(50) DEFAULT '1,2,3,4,5',
     
-    -- 6. Control
+    -- 7. Control
     onboarding_status VARCHAR(50) DEFAULT 'Pending',
     error_message TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
