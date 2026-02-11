@@ -299,7 +299,7 @@
     },
     {
       "parameters": {
-        "numberInputs": 7
+        "numberInputs": 8
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
@@ -1453,8 +1453,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2368,
-        2032
+        2288,
+        2048
       ],
       "typeVersion": 1,
       "id": "51a30ea7-9e9e-4eda-ba9e-9e92e179eca0",
@@ -1839,6 +1839,74 @@
           "name": "AWS (IAM) account"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM medical.v_agent_context WHERE clinic_phone = $1;",
+        "options": {
+          "queryReplacement": "={{ $json.metadata.display_phone_number }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2416,
+        2304
+      ],
+      "id": "e52bd181-86ac-4ed7-b10a-ea5fb55bd4f4",
+      "name": "Execute a SQL query1",
+      "credentials": {
+        "postgres": {
+          "id": "EJs1NEgSSe4mKLEH",
+          "name": "sql cloud"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d4791525-3af7-4d92-9ec1-c2999034d7c5",
+              "leftValue": "={{ $json.clinic_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2704,
+        2288
+      ],
+      "id": "168c94ad-6c20-4fa8-b6d4-2d9ac10eb7f6",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2928,
+        2176
+      ],
+      "id": "7e93c248-2bf3-4958-bb99-d06d61aa2c8d",
+      "name": "No Operation, do nothing3"
     }
   ],
   "pinData": {},
@@ -2132,6 +2200,11 @@
           },
           {
             "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Execute a SQL query1",
             "type": "main",
             "index": 0
           }
@@ -2495,6 +2568,35 @@
           }
         ]
       ]
+    },
+    "Execute a SQL query1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 7
+          }
+        ]
+      ]
     }
   },
   "active": true,
@@ -2504,7 +2606,7 @@
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false
   },
-  "versionId": "25888584-6401-4376-b096-a6207a8842a6",
+  "versionId": "540b5b4d-d20e-4c4b-bccd-4e2d1c034ff7",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"
@@ -2516,12 +2618,6 @@
       "createdAt": "2026-01-05T21:18:39.839Z",
       "id": "1f3UbIiB818yRuxe",
       "name": "Whatsapp"
-    },
-    {
-      "updatedAt": "2025-04-25T13:27:49.031Z",
-      "createdAt": "2025-04-25T13:27:49.031Z",
-      "id": "8Nn9mUNpohNW7SNY",
-      "name": "dev"
     },
     {
       "updatedAt": "2025-04-24T15:49:46.546Z",
