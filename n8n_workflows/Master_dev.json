@@ -24,7 +24,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        7344,
+        7552,
         4272
       ],
       "id": "325ff36a-9c94-4cbf-adff-74e994e2d26e",
@@ -33,11 +33,11 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
+        "text": "=MENSAJE DEL CLIENTE: {{ $json.buffer_out }}",
         "messages": {
           "messageValues": [
             {
-              "message": "detecta en que idioma está hablando el usuario. solo devuelve el idioma."
+              "message": "detecta en que idioma está hablando el usuario. solo devuelve el idioma, no añadas texto adicional."
             }
           ]
         },
@@ -46,7 +46,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        11552,
+        11760,
         3680
       ],
       "id": "1276ef90-5947-4398-ac6f-0d0dc6636fbf",
@@ -56,7 +56,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
+        "text": "=MENSAJE DEL CLIENTE: {{ $json.buffer_out }}",
         "messages": {
           "messageValues": [
             {
@@ -69,7 +69,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        11568,
+        11776,
         4112
       ],
       "id": "8bfa9b75-5283-4c5d-9c82-4d13f1b48103",
@@ -79,11 +79,11 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
+        "text": "=MENSAJE DEL CLIENTE: {{ $json.buffer_out }}",
         "messages": {
           "messageValues": [
             {
-              "message": "evalua el sentimiento del usuario: positivo, neutro, negativo o muy negativo"
+              "message": "Evalúa el sentimiento del usuario y responde solo uno de estos valores: positivo, neutro, negativo o muy negativo. No añadas texto adicional."
             }
           ]
         },
@@ -92,7 +92,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        11568,
+        11776,
         4672
       ],
       "id": "77705ab0-110e-4433-833c-ffc5c60f7ec8",
@@ -106,7 +106,7 @@
         "messages": {
           "messageValues": [
             {
-              "message": "=¿El usuario necesita intervención humana?\nEres el responsable de decidir si debemos dirigir al flujo \"human in the loop\".\n\nCriterios para activar (SÍ):\n- El usuario pide explícitamente hablar con una persona.\n- Usa frases de bloqueo: \"no entiendo\", \"nadie me ayuda\", \"esto no sirve\".\n- Repetición evidente de la misma pregunta (bucle).\n- Confusión o molestia clara donde el bot no está resolviendo.\n\nSalida ESTRICTA:\n- Si requiere humano: responde solo `intervencion_humana`\n- Si el bot puede seguir manejándolo: responde con un string vacío (nada)."
+              "message": "=¿El usuario necesita intervención humana?\nEres el responsable de decidir si debemos dirigir al flujo \"human in the loop\".\n\nCriterios para activar (SÍ):\n- El usuario pide explícitamente hablar con una persona.\n- Usa frases de bloqueo: \"no entiendo\", \"nadie me ayuda\", \"esto no sirve\".\n- Repetición evidente de la misma pregunta (bucle).\n- Confusión o molestia clara donde el bot no está resolviendo.\n\nSalida ESTRICTA:\n- Si requiere humano: responde solo `intervencion_humana`\n- Si el bot puede seguir manejándolo: responde solo con una cadena vacía, sin explicaciones ni texto adicional."
             }
           ]
         },
@@ -115,7 +115,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        15168,
+        15376,
         3360
       ],
       "id": "d2ad7764-a4b6-49a8-821b-d7668d8ae85e",
@@ -149,7 +149,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        15712,
+        15920,
         4400
       ],
       "id": "3440b49a-f712-4efb-a234-79a935b3e382",
@@ -183,7 +183,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        15680,
+        15888,
         3360
       ],
       "id": "4c37b6c5-6e0c-4502-8e65-6504da383b47",
@@ -201,7 +201,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        16240,
+        16448,
         3200
       ],
       "id": "ac6c0a19-ab1a-43bb-92e7-a5c3b257a1c7",
@@ -226,7 +226,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        16256,
+        16464,
         3760
       ],
       "id": "46a98211-9354-4c70-b0b4-6865d5e676f8",
@@ -251,7 +251,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        16272,
+        16480,
         4240
       ],
       "id": "e45984c4-1ffb-4766-873b-588d026d1ee0",
@@ -269,7 +269,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        16272,
+        16480,
         4544
       ],
       "id": "b9def3fa-46d9-4b31-8bb7-0b67ff37dd7d",
@@ -280,7 +280,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        16272,
+        16480,
         3984
       ],
       "id": "64f64172-45ac-4189-a57d-6d8e4e30d448",
@@ -291,7 +291,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        16256,
+        16464,
         3440
       ],
       "id": "70aff48a-f2e4-4cb8-900c-ffac3daf7233",
@@ -304,7 +304,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        13584,
+        13792,
         2336
       ],
       "id": "1848f6d7-3fda-4b34-8826-e55a57109890",
@@ -318,7 +318,7 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        13984,
+        14192,
         2400
       ],
       "id": "a653e1b9-b022-4de0-a043-422f7d0eed56",
@@ -327,11 +327,11 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.buffer_out }}",
+        "text": "=MENSAJE DEL CLIENTE: {{ $json.buffer_out }}",
         "messages": {
           "messageValues": [
             {
-              "message": "En caso de que el usuario está solicitando informacion que pueda ser sensible (datos personales, de pagos, de recursos internos tecnicos del funcionamiento, datos sensibles de la empresa, etc...). de ser cierto marcalo como \"true\" de lo contrario marca \"false\""
+              "message": "Aquí tienes una versión **corta, clara y perfecta para n8n**:      Si la solicitud contiene información sensible (datos personales, pagos, credenciales, información interna), responde solo: true. De lo contrario responde solo: false."
             }
           ]
         },
@@ -340,7 +340,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        11520,
+        11728,
         5136
       ],
       "id": "8eca663d-ed48-4bd9-b83e-202ee392ab98",
@@ -416,6 +416,66 @@
               "name": "conversacion_finalizada",
               "value": "={{ $json.data[6].text }}",
               "type": "string"
+            },
+            {
+              "id": "61f4d3b9-0536-4764-aa85-787344393694",
+              "name": "clinic_id",
+              "value": "={{ $json.data[7].clinic_id }}",
+              "type": "number"
+            },
+            {
+              "id": "d2d6c49c-0b2e-42e5-a3ff-ced00145978c",
+              "name": "clinic_name",
+              "value": "={{ $json.data[7].clinic_name }}",
+              "type": "string"
+            },
+            {
+              "id": "f59ccf68-200d-47b1-bb0c-552f3fad541d",
+              "name": "clinic_phone",
+              "value": "={{ $json.data[7].clinic_phone }}",
+              "type": "string"
+            },
+            {
+              "id": "bd1fb062-6b62-459c-aeb9-d0cfd7b893ac",
+              "name": "clinic_city",
+              "value": "={{ $json.data[7].city }}",
+              "type": "string"
+            },
+            {
+              "id": "089a645f-0c16-4dbc-bc22-30cec8920546",
+              "name": "clinic_address",
+              "value": "={{ $json.data[7].address }}",
+              "type": "string"
+            },
+            {
+              "id": "d3d2ffdb-0fba-4289-8b2e-03c9ccf4d76b",
+              "name": "clinic_branch_name",
+              "value": "={{ $json.data[7].branch_name }}",
+              "type": "string"
+            },
+            {
+              "id": "dcf4ce92-6180-4249-971c-1c2d31e36526",
+              "name": "clinic_opening_time",
+              "value": "={{ $json.data[7].opening_time }}",
+              "type": "string"
+            },
+            {
+              "id": "fd8b50c8-a039-428c-9161-cf94fcb7f87a",
+              "name": "clinic_closing_time",
+              "value": "={{ $json.data[7].closing_time }}",
+              "type": "string"
+            },
+            {
+              "id": "9bf94f8b-e138-4811-8b43-4c5445a160d1",
+              "name": "clinic_staff_list",
+              "value": "={{ $json.data[7].staff_list }}",
+              "type": "string"
+            },
+            {
+              "id": "1a4b4396-de00-4bed-a185-d670938fa358",
+              "name": "clinic_assessment_questions",
+              "value": "={{ $json.data[7].assessment_questions }}",
+              "type": "array"
             }
           ]
         },
@@ -424,7 +484,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        14416,
+        14624,
         2400
       ],
       "id": "e47585db-8cc5-4320-9db4-aa5f381e2068",
@@ -437,7 +497,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        13872,
+        14080,
         3712
       ],
       "id": "d8bcecba-3ae3-4d2b-b386-80ab81560936",
@@ -451,7 +511,7 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        14192,
+        14400,
         3760
       ],
       "id": "606be7b0-9eea-4c73-a87e-8ae143d5290d",
@@ -473,7 +533,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        11536,
+        11744,
         5632
       ],
       "id": "a70c0828-71ad-46eb-ba95-9c55aa53c070",
@@ -487,7 +547,7 @@
         "messages": {
           "messageValues": [
             {
-              "message": "=# ROL\nEres un analista de calidad de servicio al cliente. Tu objetivo es detectar \"Feedback Negativo de Cierre\".\n\n# TAREA\nAnaliza el mensaje del usuario e identifica si cumple TODAS las siguientes condiciones simultáneamente:\n1.  **Emoción:** Expresa molestia, enojo, decepción o sarcasmo.\n2.  **Estado:** La interacción ha concluido (el problema se resolvió o el usuario explícitamente termina la charla).\n3.  **Acción:** NO solicita ayuda adicional ni hace nuevas preguntas.\n\n# CRITERIOS DE EXCLUSIÓN (NO ACTIVAR SI):\n- El usuario dice \"olvídalo\", \"no entiendes\" o \"déjalo así\" mientras el problema persiste (esto es abandono por frustración y REQUIERE ayuda).\n- El usuario amenaza con darse de baja o demandar.\n- El usuario hace una pregunta retórica (\"¿Alguien piensa atenderme?\").\n- Persiste un problema técnico o administrativo no resuelto.\n\n# EJEMPLOS POSITIVOS (Responder `usuario_enojado_sin_intervencion`):\n- \"Al fin pude, pero qué sistema tan malo.\"\n- \"Gracias por nada, ya lo arreglé por mi cuenta.\"\n- \"Ok, espero que mejoren porque fue muy difícil agendar.\"\n- \"Listo, adiós. Pésimo servicio.\"\n\n# SALIDA\n- Si cumple las condiciones: `usuario_enojado_sin_intervencion`\n- En cualquier otro caso: Responde con un string vacío (no escribas nada, ni siquiera espacios)."
+              "message": "=# TAREA\nAnaliza el mensaje del usuario e identifica si cumple TODAS las siguientes condiciones simultáneamente:\n1.  **Emoción:** Expresa molestia, enojo, decepción o sarcasmo.\n2.  **Estado:** La interacción ha concluido (el problema se resolvió o el usuario explícitamente termina la charla).\n3.  **Acción:** NO solicita ayuda adicional ni hace nuevas preguntas.\n\n# CRITERIOS DE EXCLUSIÓN (NO ACTIVAR SI):\n- El usuario dice \"olvídalo\", \"no entiendes\" o \"déjalo así\" mientras el problema persiste (esto es abandono por frustración y REQUIERE ayuda).\n- El usuario amenaza con darse de baja o demandar.\n- El usuario hace una pregunta retórica (\"¿Alguien piensa atenderme?\").\n- Persiste un problema técnico o administrativo no resuelto.\n\n# EJEMPLOS POSITIVOS (Responder `usuario_enojado_sin_intervencion`):\n- \"Al fin pude, pero qué sistema tan malo.\"\n- \"Gracias por nada, ya lo arreglé por mi cuenta.\"\n- \"Ok, espero que mejoren porque fue muy difícil agendar.\"\n- \"Listo, adiós. Pésimo servicio.\"\n\n# SALIDA\n- Si cumple las condiciones: `usuario_enojado_sin_intervencion`\n- En cualquier otro caso: responde solo con una cadena vacía, sin explicaciones ni texto adicional."
             }
           ]
         },
@@ -496,7 +556,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        15168,
+        15376,
         4400
       ],
       "id": "51e10d26-d4fd-4346-9639-2c8cd42437eb",
@@ -533,7 +593,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        15696,
+        15904,
         3872
       ],
       "id": "92632e0b-074d-4cdb-80ba-60664d749a1b",
@@ -547,7 +607,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        11200,
+        11408,
         3456
       ],
       "typeVersion": 1,
@@ -563,7 +623,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        14720,
+        14928,
         3168
       ],
       "typeVersion": 1,
@@ -579,7 +639,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        14880,
+        15088,
         2160
       ],
       "typeVersion": 1,
@@ -596,7 +656,7 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        15296,
+        15504,
         2656
       ],
       "id": "1e8c3698-9858-40bc-84c5-07503eaf4e55",
@@ -605,45 +665,6 @@
         "postgres": {
           "id": "EJs1NEgSSe4mKLEH",
           "name": "sql cloud"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://speech.googleapis.com/v1/speech:recognize?key=AIzaSyBsE9DIYqEnkJsss43ltEfLKnmgfplirRI",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googlePalmApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "contentType": "raw",
-        "rawContentType": "json",
-        "body": "={\n  \"config\": {\n    \"encoding\": \"OGG_OPUS\",\n    \"languageCode\": \"es-MX\", \n    \"alternativeLanguageCodes\": [\"en-US\", \"pt-BR\", \"es-ES\"],\n    \"sampleRateHertz\": 16000\n  },\n  \"audio\": {\n    \"content\": \"{{ $json[\"data\"] }}\"\n  }\n}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        3536,
-        4096
-      ],
-      "id": "27094368-1064-4b07-bc5d-19b9a4ee1e9a",
-      "name": "HTTP Request2",
-      "retryOnFail": false,
-      "maxTries": 2,
-      "waitBetweenTries": 10,
-      "credentials": {
-        "googlePalmApi": {
-          "id": "x9KO1B9x6qwBG2xT",
-          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
@@ -667,52 +688,6 @@
         "whatsAppTriggerApi": {
           "id": "yYLaUbUYMUdHsKTP",
           "name": "WhatsApp OAuth account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "binaryToPropery",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.extractFromFile",
-      "typeVersion": 1,
-      "position": [
-        3344,
-        4096
-      ],
-      "id": "7e974949-70fb-4bce-97af-c2dda251f718",
-      "name": "Extract from File1"
-    },
-    {
-      "parameters": {
-        "url": "={{ $json.url }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "whatsAppApi",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer EAA30fEDMDqIBO3rfE44drFm8JKPm0p0ZBNwUlrlJUcK2j2wv4s6dGZA16htFJK6DqMgZB0lsrxnPZCa0ejeVmURggngm3ZBCqxZAWcaMVWyRRsMxINoeNoiSAYHlVS9pYK1FZAJqM66bhnfhSgzXScmiw285c2B15NbkoAljiY4wfyfIel7UpEVVSOHl0tYu8211armZCGVqrg7w8QEWEfI2lJUe3AZDZD"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        3136,
-        4096
-      ],
-      "id": "5b91f223-cd27-4580-bdb7-5d37fa9d19b3",
-      "name": "HTTP Request3",
-      "alwaysOutputData": false,
-      "credentials": {
-        "whatsAppApi": {
-          "id": "wfkKGi4kHTcA4zm8",
-          "name": "WhatsApp account"
         }
       }
     },
@@ -857,7 +832,7 @@
             {
               "id": "263e6c54-4372-4b8f-814e-d1fc3b47d444",
               "name": "chatInput",
-              "value": "={{ $json.results[0].alternatives[0].transcript }}",
+              "value": "={{ $json.transcript }}",
               "type": "string"
             }
           ]
@@ -867,7 +842,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3792,
+        4272,
         4096
       ],
       "id": "376a5a53-7d17-41b2-825c-abf8bffe9a5f",
@@ -877,13 +852,13 @@
       "parameters": {
         "content": "## audio a texto\nSi se detecta que es un mensaje de voz, se convierte a texto usando la API de vertex AI",
         "height": 720,
-        "width": 1952,
+        "width": 2160,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         2336,
-        3904
+        3888
       ],
       "typeVersion": 1,
       "id": "43647522-c19d-4e7d-b203-31c3009c028d",
@@ -1047,7 +1022,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        4480,
+        4688,
         4272
       ],
       "id": "e0d944e6-749f-43fa-b9e5-335239f157b5",
@@ -1064,7 +1039,7 @@
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1,
       "position": [
-        15824,
+        16032,
         2400
       ],
       "id": "4bc58498-ce29-4287-ab3f-0fc5e7e4250a",
@@ -1106,7 +1081,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        5104,
+        5312,
         4272
       ],
       "id": "c7f1c47f-a2ca-454a-96e4-42b7dbdae05c",
@@ -1122,7 +1097,7 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        5664,
+        5872,
         4272
       ],
       "id": "7ce00a5d-4655-4cee-9c88-364b9d88937c",
@@ -1143,7 +1118,7 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        5440,
+        5648,
         4272
       ],
       "id": "cea7fbf4-78f9-461b-a1c7-d1ea6ac95132",
@@ -1217,7 +1192,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        6032,
+        6240,
         4256
       ],
       "id": "f8331e7e-df23-4723-bba8-de9d2c8f572c",
@@ -1230,7 +1205,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        6032,
+        6240,
         4544
       ],
       "id": "6309e260-8f7f-4ea2-946c-bf025945c628",
@@ -1245,7 +1220,7 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        6320,
+        6528,
         4272
       ],
       "id": "1a30d991-fbd3-43e3-b09e-089cd3e6acbe",
@@ -1266,7 +1241,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        5040,
+        5248,
         3872
       ],
       "typeVersion": 1,
@@ -1278,7 +1253,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        6336,
+        6544,
         4032
       ],
       "id": "4bc58161-7a28-4378-b053-d16a9713f415",
@@ -1287,15 +1262,15 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=## Datos personales recuperados del cliente (si es antiguo)\nnombre: {{ $json.first_name }}\napellido: {{ $json.last_name }}\nfecha de nacimiento: {{ $json.birth_date }}\nteléfono: {{ $json.phone_number }}\n\n## informacion del usuario\nEl cliente ha enviado el siguiente mensaje: {{ $json.text }}\nLa intención del mensaje: {{ $json.intencion }}\nSentimiento del cliente: {{ $json.sentimiento }}\nIdioma detectado: {{ $json.idioma }}\nSolicita información personal sensible o privada: {{ $json.warning_privacy }}\nfecha y hora actual: {{ $now.setZone(\"America/Mexico_City\") }}\nconversacion_finalizada: {{ $json.conversacion_finalizada }}\n\n\n## datos del sistema\n* Fecha y hora actual: {{ $now.setZone(\"America/Mexico_City\") }}\n* Zona horaria: America/Mexico_City\n* Formato: 12 h (ej: 3:00 PM)\n\n\n## Información de la clínica\n* Dirección: Cuauhtémoc, CDMX\n* Teléfono: +54 11 1888‑877\n* Horario físico: 8 AM–5 PM; WhatsApp 24/7\n* Autoevaluación (si el usuario acepta):\n\n  1. Última visita al dentista? (6 meses, 1 año, más de 1 año)\n  2. Sangrado de encías? si es afirmativo, ¿cada cuánto?\n  3. Dientes flojos (Sí/No)\n  4. Dolor (Sí/No); si Sí: nivel 0–10 y tipo de dolor",
+        "text": "=## Datos personales recuperados del cliente (si es antiguo)\nnombre: {{ $json.first_name }}\napellido: {{ $json.last_name }}\nfecha de nacimiento: {{ $json.birth_date }}\nteléfono: {{ $json.phone_number }}\n\n## informacion del usuario\nEl cliente ha enviado el siguiente mensaje: {{ $json.text }}\nLa intención del mensaje: {{ $json.intencion }}\nSentimiento del cliente: {{ $json.sentimiento }}\nIdioma detectado: {{ $json.idioma }}\nSolicita información personal sensible o privada: {{ $json.warning_privacy }}\nfecha y hora actual: {{ $now.setZone(\"America/Mexico_City\") }}\nconversacion_finalizada: {{ $json.conversacion_finalizada }}\n\n\n## datos del sistema\n* Fecha y hora actual: {{ $now.setZone(\"America/Mexico_City\") }}\n* Zona horaria: America/Mexico_City\n* Formato: 12 h (ej: 3:00 PM)\n\n\n## Información de la clínica\n* id de la clinica: {{ $json.clinic_id }}\n* nombre: {{ $json.clinic_name }}\n* Dirección: {{ $json.clinic_address }}\n* Teléfono: {{ $json.clinic_phone }}\n* ciudad: {{ $json.clinic_city }}\n* sede de la clinica: {{ $json.clinic_branch_name }}\n* Horario físico: {{ $json.clinic_opening_time }} - {{ $json.clinic_closing_time }}\n* lista de doctores:{{ $json.clinic_staff_list }}\n* Autoevaluación (si el usuario acepta):\n\n  {{ $json.clinic_assessment_questions }}\n",
         "options": {
-          "systemMessage": "=# SYSTEM PROMPT - MEL ASSISTANT v2.6 (AGENTE MASTER)\n\n## IDENTIDAD Y CONTEXTO\n\nEres Mel, el asistente virtual principal y orquestador de OCAI Clinic. Tu rol es coordinar agentes y herramientas para gestionar citas odontológicas y resolver consultas generales.\n\n* Preséntate apropiadamente para que el usuario sepa que habla con el asistente de OCAI.\n* Sé empático: reconoces el malestar del usuario y aportas cercanía.\n* Si ya conoces el nombre del usuario, salúdalo directamente por su nombre al inicio del mensaje.\n* Tu decides sobre herramientas y agentes y orquestas la conversación de forma autónoma.\n\n\n## REGLAS CRÍTICAS\n\n1. **Idioma y tono:**\n   * Detecta si el usuario escribe en español, inglés o portugués.\n   * Responde siempre en ese mismo idioma.\n   * Mantén el tono, sé positivo y empático, sin ser empalagoso. siempre profesional.\n\n2. **Orquestación de herramientas:**\n   * No inventes datos de herramientas.\n   * Usa exclusivamente `@appointment_agent` y `@data_storage_master`.\n   * Llama a herramientas solo cuando tengas datos necesarios.\n   * Antes de responder al usuario, el sistema debe ejecutar directamente la acción necesaria (por ejemplo, validar disponibilidad y crear cita).\n   * No muestres mensajes como “Estoy verificando” o “Déjame revisar”.\n   * No menciones información sobre herramientas al usuario.\n\n3. **Confirmación controlada:**\n   * Solo cuando la herramienta haya devuelto una respuesta con éxito (por ejemplo, un ID de evento), puedes decir:\n     “¡Tu cita ha sido agendada exitosamente!”\n\n4. **Claridad:**\n   * Haz solo una pregunta por mensaje. Esto incluye en recolección de datos y en la autoevaluación médica.\n   * Usa formato de hora en 12 h.\n\n5. **Nombre completo:**\n   * Si el usuario da solo el primer nombre, solicita exclusivamente el apellido (sin repetir todo lo anterior).\n\n6. No repitas saludos si ya has saludado previamente en la conversación.\n7. No envíes mensajes intermedios ni de espera al usuario. Solo responde cuando tengas una acción concreta, útil o una pregunta necesaria\n\n\n## RAZONAMIENTO INTERNO\n\nAntes de responder:\n\n1. Detecta intención del usuario.\n2. Verifica si tienes los datos necesarios.\n3. Define herramientas requeridas: `tools_needed`.\n4. Si falta información, pregunta solo lo necesario.\n5. No confirmes nada hasta recibir una respuesta exitosa de la herramienta.\n6. Si estás esperando una herramienta, NO respondas aún. Espera a obtener la respuesta para construir una única respuesta útil y empática para el usuario.\n\n\n## FLUJOS DE TRABAJO\n\n### Crear cita\n\n1. **(No preguntar si es paciente nuevo, ya lo sabes tú con la base de datos).**\n2. Recolecta datos necesarios: nombre completo, fecha de nacimiento, teléfono y motivo de la cita si faltan.\n3. Si solo hay primer nombre, pide apellido.\n4. Confirma con el usuario los datos completos.\n5. Ofrece hacer autoevaluación (solo si el usuario acepta).\n6. Recomienda \"Odontología General\" o ajusta según malestar.\n7. Solicita fecha en lenguaje natural.\n8. Llama a `@appointment_agent` para disponibilidad real.\n9. Muestra opciones retornadas agrupadas.\n10. Solicita elección.\n11. Dale un resumen del requerimiento al usuario con el fin de con firmar todos los datos de la cita.\n12. Llama a `@appointment_agent` para crear la cita.\n13. Confirma tras éxito.\n14. Llama a `@data_storage_master` para guardar los datos en nustra base de datos.\n\n### Cancelar cita\n\n1. Solicita nombre completo y teléfono (si no los tienes ya).\n2. Busca eventos entre {{ $now.minus({days:2}).startOf('day') }} y {{ $now.plus({days:14}).startOf('day') }}.\n3. Presenta citas encontradas, las cuales, en la descripcion del evento aparezca el nombre del usuario.\n4. Pregunta si desea reagendar en vez de cancelar.\n5. Cancela con ID; confirma tras éxito.\n\n### Reagendar cita\n\n1. Solicita nombre completo y teléfono (si no los tienes ya).\n2. Llama a `@appointment_agent` con action_type=\"search\" y user_full_name para buscar citas existentes del usuario.\n3. El appointment_agent retorna las citas encontradas del usuario.\n4. Presenta citas encontradas numeradas al usuario (ej: \"1. Cita de Odontología General - 26 julio 2025 a las 3:00 PM\").\n5. Usuario selecciona número de la cita a reagendar.\n6. Master almacena internamente el texto completo de la cita seleccionada como event_to_reschedule.\n7. Solicita nueva fecha al usuario.\n8. Llama a `@appointment_agent` para buscar disponibilidad en la nueva fecha solicitada.\n9. Muestra opciones retornadas agrupadas.\n10. Solicita elección de horario.\n11. Llama a `@appointment_agent` con:\n    ```\n    action_type=\"reschedule\"\n    event_to_reschedule=[TEXTO_COMPLETO_DE_LA_CITA_SELECCIONADA]\n    required_date_time=[NUEVA_FECHA_HORA]\n    user_full_name, user_age, user_phone_number, etc.\n    ```\n12. Confirma tras éxito.\n\n## MANEJO DE AMBIGÜEDADES\n\n* Si dice “no podré ir”: pregunta si desea reagendar o cancelar.\n* Si dice “mañana en la tarde”: interpreta como 2 PM–6 PM del día siguiente (CDMX).\n* Si falta info, solo pide lo que falte.\n* Si herramienta falla, responde con empatía y ofrece reintento.\n\n## EJEMPLOS DE SALUDO HACIA EL USUARIO\nte daré algunos ejemplos sobre como debes saludar al usuario.\n\n* si es nuevo: \n\"¡Hola! 😊 Soy Mel de Clínica OCAI. Te doy la bienvenida.\n  ¿Cómo puedo ayudarte hoy? ¿Necesitas agendar una cita o tienes alguna consulta? \"\n\n* si ya es recurrente y sabes su nombre:\n  \"¡Hola de nuevo Jonatan! 😊\n    ¿En qué puedo ayudarte hoy?\"\n\n\n## CHECKLIST PREVIA A LA RESPUESTA\n\n* ¿Idioma detectado y aplicado?\n* ¿Intención clara?\n* ¿Herramientas declaradas (`tools_needed`)?\n* ¿Pregunté solo lo necesario?\n* ¿Estoy esperando una herramienta? Si sí, ¿respondí con mensaje de espera?\n* ¿Confirmé solo tras herramienta exitosa?\n* ¿Saludé al inicio al usuario por su nombre si lo conocía?\n* ¿Mantengo tono empático y profesional?\n* ¿Estoy enviando un mensaje que compromete la seguridad y privacidad de la informacion?\n\n## ENCUESTA AL FINALIZAR LA CONVERSACION\nsi la conversación con el usuario se ha finalizado, debes preguntarle si le gustaria responder unas preguntas de satisfacción sobre el servicio. de ser positiva la respuesta del usuario, pregunta:\n\n* ¿De 1 a 5, cómo calificarías la atención recibida hoy?\n* ¿Tu consulta fue resuelta satisfactoriamente?\n* ¿Qué podríamos mejorar para ofrecerte una mejor experiencia?"
+          "systemMessage": "=# SYSTEM PROMPT - MEL ASSISTANT v2.6 (AGENTE MASTER)\n\n## IDENTIDAD Y CONTEXTO\n\nEres Mel, el asistente virtual principal y orquestador de OCAI Clinic. Tu rol es coordinar agentes y herramientas para gestionar citas odontológicas y resolver consultas generales via Whatsapp.\n\n* Preséntate apropiadamente para que el usuario sepa que habla con el asistente de OCAI.\n* Sé empático: reconoces el malestar del usuario y aportas cercanía.\n* Si ya conoces el nombre del usuario, salúdalo directamente por su nombre al inicio del mensaje.\n* Tu decides sobre herramientas y agentes y orquestas la conversación de forma autónoma.\n* Siempre tienes en cuenta el formato especial de texto en WhatsApp:\n\n  Negrita: Coloca un asterisco antes y después: *texto*.\n  Cursiva: Coloca un guion bajo antes y después: _texto_.\n  Tachado: Coloca una virgulilla antes y después: ~texto~.\n  Monoespaciado: Coloca tres comillas invertidas antes y después: ```texto```.\n  Listas (viñetas/números): Usa un asterisco o guion seguido de un espacio (* ), o un número y punto (1. ).\n\n\n## REGLAS CRÍTICAS\n\n1. **Idioma y tono:**\n   * Responde siempre en ese mismo idioma.\n   * Mantén el tono, sé positivo y empático, sin ser empalagoso. siempre profesional.\n\n2. **Orquestación de herramientas:**\n   * No inventes datos de herramientas.\n   * Usa exclusivamente `@appointment_agent` y `@data_storage_master`.\n   * Llama a herramientas solo cuando tengas datos necesarios.\n   * Antes de responder al usuario, el sistema debe ejecutar directamente la acción necesaria (por ejemplo, validar disponibilidad y crear cita).\n   * No muestres mensajes como “Estoy verificando” o “Déjame revisar”.\n   * No menciones información sobre herramientas al usuario.\n\n3. **Confirmación controlada:**\n   * Solo cuando la herramienta haya devuelto una respuesta con éxito (por ejemplo, un ID de evento), puedes decir:\n     “¡Tu cita ha sido agendada exitosamente!”\n\n4. **Claridad:**\n   * Haz solo una pregunta por mensaje. Esto incluye en recolección de datos y en la autoevaluación médica.\n   * Usa formato de hora en 12 h.\n\n5. **Nombre completo:**\n   * Si el usuario da solo el primer nombre, solicita exclusivamente el apellido (sin repetir todo lo anterior).\n\n6. No repitas saludos si ya has saludado previamente en la conversación.\n7. No envíes mensajes intermedios ni de espera al usuario. Solo responde cuando tengas una acción concreta, útil o una pregunta necesaria\n\n\n## RAZONAMIENTO INTERNO\n\nAntes de responder:\n\n1. Verifica si tienes los datos necesarios.\n2. Define herramientas requeridas: `tools_needed`.\n3. Si falta información, pregunta solo lo necesario.\n4. No confirmes nada hasta recibir una respuesta exitosa de la herramienta.\n5. Si estás esperando una herramienta, NO respondas aún. Espera a obtener la respuesta para construir una única respuesta útil y empática para el usuario.\n\n\n## FLUJOS DE TRABAJO\n\n### Crear cita\n\n1. **(No preguntar si es paciente nuevo, ya lo sabes tú con la base de datos).**\n2. Recolecta datos necesarios: nombre completo, fecha de nacimiento, teléfono y motivo de la cita si faltan.\n3. Si solo hay primer nombre, pide apellido.\n4. Confirma con el usuario los datos completos.\n5. Ofrece hacer autoevaluación (solo si el usuario acepta).\n6. Recomienda \"Odontología General\" o ajusta según malestar.\n7. Solicita fecha en lenguaje natural.\n8. Llama a `@appointment_agent` para disponibilidad real.\n9. Muestra opciones retornadas agrupadas.\n10. Solicita elección.\n11. Dale un resumen del requerimiento al usuario con el fin de con firmar todos los datos de la cita.\n12. Llama a `@appointment_agent` para crear la cita.\n13. Confirma tras éxito.\n14. Llama a `@data_storage_master` para guardar los datos en nustra base de datos.\n\n### Cancelar cita\n\n1. Solicita nombre completo y teléfono (si no los tienes ya).\n2. Busca eventos entre {{ $now.minus({days:2}).startOf('day') }} y {{ $now.plus({days:14}).startOf('day') }}.\n3. Presenta citas encontradas, las cuales, en la descripcion del evento aparezca el nombre del usuario.\n4. Pregunta si desea reagendar en vez de cancelar.\n5. Cancela con ID; confirma tras éxito.\n\n### Reagendar cita\n\n1. Solicita nombre completo y teléfono (si no los tienes ya).\n2. Llama a `@appointment_agent` con action_type=\"search\" y user_full_name para buscar citas existentes del usuario.\n3. El appointment_agent retorna las citas encontradas del usuario.\n4. Presenta citas encontradas numeradas al usuario (ej: \"1. Cita de Odontología General - 26 julio 2025 a las 3:00 PM\").\n5. Usuario selecciona número de la cita a reagendar.\n6. Master almacena internamente el texto completo de la cita seleccionada como event_to_reschedule.\n7. Solicita nueva fecha al usuario.\n8. Llama a `@appointment_agent` para buscar disponibilidad en la nueva fecha solicitada.\n9. Muestra opciones retornadas agrupadas.\n10. Solicita elección de horario.\n11. Llama a `@appointment_agent` con:\n    ```\n    action_type=\"reschedule\"\n    event_to_reschedule=[TEXTO_COMPLETO_DE_LA_CITA_SELECCIONADA]\n    required_date_time=[NUEVA_FECHA_HORA]\n    user_full_name, user_age, user_phone_number, etc.\n    ```\n12. Confirma tras éxito.\n\n## MANEJO DE AMBIGÜEDADES\n\n* Si dice “no podré ir”: pregunta si desea reagendar o cancelar.\n* Si dice “mañana en la tarde”: interpreta como 2 PM–6 PM del día siguiente (CDMX).\n* Si falta info, solo pide lo que falte.\n* Si herramienta falla, responde con empatía y ofrece reintento.\n\n## EJEMPLOS DE SALUDO HACIA EL USUARIO\nte daré algunos ejemplos sobre como debes saludar al usuario.\n\n* si es nuevo: \n\"¡Hola! 😊 Soy Mel de Clínica OCAI. Te doy la bienvenida.\n  ¿Cómo puedo ayudarte hoy? ¿Necesitas agendar una cita o tienes alguna consulta? \"\n\n* si ya es recurrente y sabes su nombre:\n  \"¡Hola de nuevo Jonatan! 😊\n    ¿En qué puedo ayudarte hoy?\"\n\n\n## CHECKLIST PREVIA A LA RESPUESTA\n\n* ¿Idioma detectado y aplicado?\n* ¿Intención clara?\n* ¿Herramientas declaradas (`tools_needed`)?\n* ¿Pregunté solo lo necesario?\n* ¿Estoy esperando una herramienta? Si sí, ¿respondí con mensaje de espera?\n* ¿Confirmé solo tras herramienta exitosa?\n* ¿Saludé al inicio al usuario por su nombre si lo conocía?\n* ¿Mantengo tono empático y profesional?\n* ¿Estoy enviando un mensaje que compromete la seguridad y privacidad de la informacion?\n\n## ENCUESTA AL FINALIZAR LA CONVERSACION\nsi la conversación con el usuario se ha finalizado, debes preguntarle si le gustaria responder unas preguntas de satisfacción sobre el servicio. de ser positiva la respuesta del usuario, pregunta:\n\n* ¿De 1 a 5, cómo calificarías la atención recibida hoy?\n* ¿Tu consulta fue resuelta satisfactoriamente?\n* ¿Qué podríamos mejorar para ofrecerte una mejor experiencia?"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.8,
       "position": [
-        15136,
+        15344,
         2400
       ],
       "id": "f057fe22-4331-40e2-948a-a097b5a8caae",
@@ -1438,7 +1413,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.1,
       "position": [
-        15648,
+        15856,
         2656
       ],
       "id": "d6d62ca5-d5f6-4352-8be6-5bab715cd322",
@@ -1467,7 +1442,7 @@
         "messages": {
           "messageValues": [
             {
-              "message": "=# ROL\nEres un analista de logs y soporte de nivel 1. Tu única función es filtrar si un mensaje reporta una INCIDENCIA TÉCNICA DIGITAL.\n\n# TAREA\nAnaliza el mensaje, intencion y sentimiento del usuario buscando patrones de fallos en el software o plataformas digitales.\n\n# CRITERIOS DE EXCLUSIÓN (NO ACTIVAR SI):\n- El usuario reporta dolor físico o problemas médicos (\"me duele la muela\", \"se me cayó el bracket\").\n- El usuario da opiniones subjetivas (\"el servicio es malo\", \"no me gustó\").\n- El usuario pide reagendar o cancelar (eso es administrativo).\n\n# CRITERIOS DE INCLUSIÓN (ACTIVAR SOLO SI):\n- Menciona errores explícitos (\"error 404\", \"pantalla blanca\", \"no me deja entrar\").\n- Menciona fallos de funcionalidad (\"el botón no sirve\", \"no me llega el código\").\n- Reporta caídas del sistema (\"la página está caída\", \"la app se cierra\").\n\n# FORMATO DE RESPUESTA (ESTRICTO)\n- Si detectas una incidencia técnica clara: Responde ÚNICAMENTE con la palabra clave: `soporte_tecnico_true`\n- En CUALQUIER otro caso (duda, tema médico, queja administrativa): Responde con un string vacío (no escribas nada).\n\nNO des explicaciones. NO saludes. Solo la palabra clave o vacío."
+              "message": "=# ROL\nEres un analista de logs y soporte de nivel 1. Tu única función es filtrar si un mensaje reporta una INCIDENCIA TÉCNICA DIGITAL.\n\n# TAREA\nAnaliza el mensaje, intencion y sentimiento del usuario buscando patrones de fallos en el software o plataformas digitales.\n\n# CRITERIOS DE EXCLUSIÓN (NO ACTIVAR SI):\n- El usuario reporta dolor físico o problemas médicos (\"me duele la muela\", \"se me cayó el bracket\").\n- El usuario da opiniones subjetivas (\"el servicio es malo\", \"no me gustó\").\n- El usuario pide reagendar o cancelar (eso es administrativo).\n\n# CRITERIOS DE INCLUSIÓN (ACTIVAR SOLO SI):\n- Menciona errores explícitos (\"error 404\", \"pantalla blanca\", \"no me deja entrar\").\n- Menciona fallos de funcionalidad (\"el botón no sirve\", \"no me llega el código\").\n- Reporta caídas del sistema (\"la página está caída\", \"la app se cierra\").\n\n# FORMATO DE RESPUESTA (ESTRICTO)\n- Si detectas una incidencia técnica clara: Responde ÚNICAMENTE con la palabra clave: `soporte_tecnico_true`\n- En CUALQUIER otro caso (duda, tema médico, queja administrativa): responde solo con una cadena vacía, sin explicaciones ni texto adicional.\n\nNO des explicaciones. NO saludes. Solo la palabra clave o vacío."
             }
           ]
         },
@@ -1476,7 +1451,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        15168,
+        15376,
         3872
       ],
       "id": "a7b57dee-ad6d-4665-8d0f-94f97ac2efed",
@@ -1490,10 +1465,10 @@
         "description": "Use this tool to call the appointment agent",
         "workflowId": {
           "__rl": true,
-          "value": "vNPFh3N6KwCIxih9",
+          "value": "coky8UTEixI3SEPU",
           "mode": "list",
-          "cachedResultUrl": "/workflow/vNPFh3N6KwCIxih9",
-          "cachedResultName": "appointment_agent"
+          "cachedResultUrl": "/workflow/coky8UTEixI3SEPU",
+          "cachedResultName": "appointment_mcp_agent"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -1507,7 +1482,13 @@
             "user_full_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('user_full_name', ``, 'string') }}",
             "action_type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('action_type', ``, 'string') }}",
             "event_to_reschedule": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_to_reschedule', ``, 'string') }}",
-            "self_evaluation_responses": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation_responses', ``, 'string') }}"
+            "self_evaluation_responses": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('self_evaluation_responses', ``, 'string') }}",
+            "clinic_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('clinic_name', ``, 'string') }}",
+            "clinic_branch": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('clinic_branch', ``, 'string') }}",
+            "clinic_opening_time": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('clinic_opening_time', ``, 'string') }}",
+            "clinic_address": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('clinic_address', ``, 'string') }}",
+            "clinic_city": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('clinic_city', ``, 'string') }}",
+            "doctor_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('doctor_name', `Selected doctor for patient required specialty`, 'string') }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -1609,6 +1590,66 @@
               "canBeUsedToMatch": true,
               "type": "string",
               "removed": false
+            },
+            {
+              "id": "clinic_name",
+              "displayName": "clinic_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "clinic_branch",
+              "displayName": "clinic_branch",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "doctor_name",
+              "displayName": "doctor_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "clinic_opening_time",
+              "displayName": "clinic_opening_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "clinic_address",
+              "displayName": "clinic_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "clinic_city",
+              "displayName": "clinic_city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -1618,7 +1659,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        15456,
+        15664,
         2656
       ],
       "id": "ee1e9806-ff6b-4d26-8b63-873d4014e60b",
@@ -1630,7 +1671,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        16480,
+        16688,
         3840
       ],
       "typeVersion": 1,
@@ -1645,7 +1686,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        16272,
+        16480,
         2240
       ],
       "typeVersion": 1,
@@ -1654,13 +1695,13 @@
     },
     {
       "parameters": {
-        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "model": "=us.anthropic.claude-sonnet-4-5-20250929-v1:0",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        15184,
+        15392,
         3552
       ],
       "id": "7a367d40-f9d6-438c-904f-00f6b1a57224",
@@ -1675,13 +1716,13 @@
     },
     {
       "parameters": {
-        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "model": "=us.anthropic.claude-sonnet-4-5-20250929-v1:0",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        15168,
+        15376,
         4080
       ],
       "id": "a32e500f-37e6-4606-bd80-5ea09e55c618",
@@ -1696,13 +1737,13 @@
     },
     {
       "parameters": {
-        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "model": "=us.anthropic.claude-sonnet-4-5-20250929-v1:0",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        15168,
+        15376,
         4608
       ],
       "id": "deca4ae7-66f4-4f26-a9a2-69280b057631",
@@ -1723,7 +1764,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        15136,
+        15344,
         2656
       ],
       "id": "b9770266-a64f-4e4c-8584-7ccf08969dca",
@@ -1737,13 +1778,13 @@
     },
     {
       "parameters": {
-        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "model": "anthropic.claude-3-haiku-20240307-v1:0",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        11552,
+        11760,
         3904
       ],
       "id": "dbd479cc-2bac-40b9-b077-66dfa19b781a",
@@ -1758,13 +1799,13 @@
     },
     {
       "parameters": {
-        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "model": "anthropic.claude-3-haiku-20240307-v1:0",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        11568,
+        11776,
         4352
       ],
       "id": "691fb2a3-7de7-4095-85b2-a98e8f7ffeb8",
@@ -1779,13 +1820,13 @@
     },
     {
       "parameters": {
-        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "model": "anthropic.claude-3-haiku-20240307-v1:0",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        11568,
+        11776,
         4912
       ],
       "id": "6b1820be-c002-404b-9faf-dcd2a48dc7e0",
@@ -1800,13 +1841,13 @@
     },
     {
       "parameters": {
-        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "model": "anthropic.claude-3-haiku-20240307-v1:0",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        11520,
+        11728,
         5376
       ],
       "id": "3b38b3c9-1a5b-4347-a33a-e6053d8b9830",
@@ -1821,13 +1862,13 @@
     },
     {
       "parameters": {
-        "model": "=us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "model": "anthropic.claude-3-haiku-20240307-v1:0",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
       "typeVersion": 1.1,
       "position": [
-        11536,
+        11744,
         5888
       ],
       "id": "87817a7c-c20e-4095-ae76-90db3f971dfe",
@@ -1907,6 +1948,121 @@
       ],
       "id": "7e93c248-2bf3-4958-bb99-d06d61aa2c8d",
       "name": "No Operation, do nothing3"
+    },
+    {
+      "parameters": {
+        "transcriptionJobName": "={{ $node[\"HTTP Request download whatsapp audio\"].json[\"id\"] }}",
+        "mediaFileUri": "=s3://whatsapp-n8n-audio-files/{{ $node[\"HTTP Request download whatsapp audio\"].json[\"id\"] }}.ogg",
+        "detectLanguage": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.awsTranscribe",
+      "typeVersion": 1,
+      "position": [
+        4288,
+        4768
+      ],
+      "id": "68ba4b68-fd65-46ed-b467-2955036c0689",
+      "name": "Create transcriptionJob",
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "transcriptionJobName": "={{ $node[\"HTTP Request download whatsapp audio\"].json[\"id\"] }}"
+      },
+      "type": "n8n-nodes-base.awsTranscribe",
+      "typeVersion": 1,
+      "position": [
+        4496,
+        4688
+      ],
+      "id": "f70c1149-64b5-40cf-9a8d-acf04a0cbf23",
+      "name": "Get transcriptionJob",
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://abj7cgtkwg5kqyz6atrhofqsye0fhbpe.lambda-url.us-east-1.on.aws/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"audio_url\": \"{{ $json.Location }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3904,
+        4096
+      ],
+      "id": "853d7180-814e-4785-b134-9d1626b80320",
+      "name": "HTTP Request - Lambda Function (aws transcribe)"
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "bucketName": "whatsapp-n8n-audio-files",
+        "fileName": "={{ $('HTTP Request download whatsapp audio').item.json.id }}.ogg",
+        "binaryPropertyName": "=data",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        4096
+      ],
+      "id": "b2c616f1-5885-4558-9898-702a4a7cf5c8",
+      "name": "Upload audio to s3",
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAA30fEDMDqIBO3rfE44drFm8JKPm0p0ZBNwUlrlJUcK2j2wv4s6dGZA16htFJK6DqMgZB0lsrxnPZCa0ejeVmURggngm3ZBCqxZAWcaMVWyRRsMxINoeNoiSAYHlVS9pYK1FZAJqM66bhnfhSgzXScmiw285c2B15NbkoAljiY4wfyfIel7UpEVVSOHl0tYu8211armZCGVqrg7w8QEWEfI2lJUe3AZDZD"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3280,
+        4096
+      ],
+      "id": "5b91f223-cd27-4580-bdb7-5d37fa9d19b3",
+      "name": "HTTP Request download whatsapp audio",
+      "alwaysOutputData": false,
+      "credentials": {
+        "whatsAppApi": {
+          "id": "wfkKGi4kHTcA4zm8",
+          "name": "WhatsApp account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -2179,17 +2335,6 @@
         ]
       ]
     },
-    "HTTP Request2": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields4",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "WhatsApp Trigger1": {
       "main": [
         [
@@ -2211,33 +2356,11 @@
         ]
       ]
     },
-    "Extract from File1": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HTTP Request3": {
-      "main": [
-        [
-          {
-            "node": "Extract from File1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "WhatsApp Business Cloud2": {
       "main": [
         [
           {
-            "node": "HTTP Request3",
+            "node": "HTTP Request download whatsapp audio",
             "type": "main",
             "index": 0
           }
@@ -2597,6 +2720,49 @@
           }
         ]
       ]
+    },
+    "Create transcriptionJob": {
+      "main": [
+        []
+      ]
+    },
+    "Get transcriptionJob": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request - Lambda Function (aws transcribe)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload audio to s3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Lambda Function (aws transcribe)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request download whatsapp audio": {
+      "main": [
+        [
+          {
+            "node": "Upload audio to s3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
@@ -2606,7 +2772,7 @@
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false
   },
-  "versionId": "540b5b4d-d20e-4c4b-bccd-4e2d1c034ff7",
+  "versionId": "a16c7070-a182-4f40-b21d-438453f59bb5",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"

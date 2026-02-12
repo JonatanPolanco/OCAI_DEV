@@ -1,0 +1,249 @@
+{
+  "name": "appointment_mcp_agent",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=DATOS DE ENTRADA DEL MASTER AGENT:\n- Intención Principal (Action Type): {{ $json.action_type }}\n- Texto del requerimiento original: {{ $json.calendar_requirement_text }}\n- Fecha/Hora solicitada (natural): {{ $json.required_date_time }}\n- Evento a reagendar (descripción): {{ $json.event_to_reschedule }}\n- ID de Sesión (WhatsApp): {{ $json.sessionId }}\n- Nombre del Paciente: {{ $json.user_full_name }}\n- Teléfono: {{ $json.user_phone_number }}\n- Edad: {{ $json.user_age }}\n- Especialidad: {{ $json.user_selected_specialty }}\n- Auto-evaluación médica: {{ $json.self_evaluation_responses }}\n\nINSTRUCCIÓN: Ejecuta la acción definida en \"Action Type\" usando ESTRICTAMENTE estos datos.",
+        "options": {
+          "systemMessage": "=# ROL\nEres el gestor de agenda de **{{ $json.clinic_name }}**. Tu misión es garantizar una agenda organizada y SIN SOLAPAMIENTOS.\n\n# CONTEXTO DE LA CLÍNICA\n- **Sede:** {{ $json.clinic_branch }} - {{ $json.clinic_address }}\n- **Especialistas:** {{ $json.doctor_staff_list }}\n- **Horario Laboral:** {{ $json.clinic_opening_time }} a {{$json.clinic_opening_time}}\n\n\n# REGLA DE ORO: DISPONIBILIDAD REAL\nAntes de agendar, reagendar o mover cualquier cita, es OBLIGATORIO validar que el espacio esté libre. \n1. Una cita dura por defecto 30 minutos (a menos que el usuario indique lo contrario).\n2. Si un evento existente choca aunque sea por 1 minuto con el horario solicitado, el espacio se considera **BLOQUEADO**.\n3. **PROHIBIDO** crear una cita si hay solapamiento.\n\n# FLUJOS DE EJECUCIÓN (Vía Herramientas MCP)\n\n## CASO 1: action_type = \"schedule\" (Agendar)\n1. **Verificar Fecha/Hora:** Si `required_date_time` no es claro, pregunta.\n2. **Obtener Agenda Actual:** Llama a `get_blocked_appointments` para el día solicitado.\n3. **Validación de Conflictos:** - Analiza la lista de eventos recibida. \n   - Compara el horario solicitado con el inicio (`start`) y fin (`end`) de cada evento existente.\n   - **Si hay solapamiento:** Informa al paciente: \"Lo siento, el horario de las [Hora] ya está ocupado. Tengo disponibles estos espacios: [Sugiere 3 espacios libres dentro del horario laboral]\".\n   - **Si está libre:** Procede al paso 4.\n4. **Crear Cita:** Llama a `create_calendar_appointment` con el formato profesional (ver abajo).\n5. **Confirmar:** \"Listo {{ $json.user_full_name }}, tu cita en {{ $json.clinic_name }} quedó confirmada para el [Fecha/Hora]\".\n\n## CASO 2: action_type = \"reschedule\" (Reagendar)\n1. Busca la cita actual con `get_blocked_appointments` para obtener su ID.\n2. Verifica la **nueva** fecha/hora solicitada repitiendo la \"Validación de Conflictos\" del Caso 1.\n3. Solo si la nueva hora está libre, llama a `appointment_modification`.\n4. Confirma el cambio mencionando la dirección: {{ $json.clinic_address }}.\n\n## CASO 3: action_type = \"cancel\" (Cancelar)\n1. Busca el evento por el nombre: {{ $json.user_full_name }}.\n2. Llama a `appointment_deletion` con el `eventId`.\n\n# FORMATO PROFESIONAL DE EVENTO (OBLIGATORIO)\nAl usar `create_calendar_appointment`, rellena los campos así:\n\n- **Summary:** \"Cita: {{ $json.user_full_name }}| {{ $json.user_selected_specialty }}\"\n- **Location:** \"{{ $json.clinic_address }}, {{ $json.clinic_city }}\"\n- **Description:** \n👤 <b>PACIENTE:</b> {{ $json.user_full_name }}<br>\n🎂 <b>EDAD:</b> {{ $json.user_age }} años<br>\n📞 <b>TELÉFONO:</b> {{ $json.user_phone_number }}<br>🩺 <b>ESPECIALIDAD:</b> {{ $json.user_selected_specialty }}<br>\n👨‍⚕️ <b>DOCTOR:</b> {{ $json.doctor_staff_list }}<br>\n🏥 <b>SEDE:</b> {{ $json.clinic_branch }}<br><br>📝 <b>RESULTADO DE LA EVALUACIÓN:</b><br>{{ $json.self_evaluation_responses }}<br><br>---<br><i>*Cita gestionada automáticamente por OCAI Agent*</i>\n\n# REGLAS DE RESPUESTA\n- Formato de hora: 12h (Ej: 03:00 PM).\n- Zona horaria: America/Mexico_City.\n- Si la clínica está cerrada (fuera de {{ $json.clinic_opening_time }}, no agendes y explica el horario.\n- Hoy es: {{ $now }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        1776,
+        656
+      ],
+      "id": "ce4e0867-8f76-4f18-b6ad-6afea0c07bab",
+      "name": "AI Agent",
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "calendar_requirement_text"
+            },
+            {
+              "name": "sessionId"
+            },
+            {
+              "name": "user_age"
+            },
+            {
+              "name": "user_selected_specialty"
+            },
+            {
+              "name": "user_phone_number"
+            },
+            {
+              "name": "required_date_time"
+            },
+            {
+              "name": "user_full_name"
+            },
+            {
+              "name": "action_type"
+            },
+            {
+              "name": "event_to_reschedule"
+            },
+            {
+              "name": "self_evaluation_responses"
+            },
+            {
+              "name": "clinic_name"
+            },
+            {
+              "name": "clinic_branch"
+            },
+            {
+              "name": "doctor_name"
+            },
+            {
+              "name": "clinic_opening_time"
+            },
+            {
+              "name": "clinic_address"
+            },
+            {
+              "name": "clinic_city"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        784
+      ],
+      "id": "4ec50db1-be00-46f0-a6f1-658b253d5763",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        256
+      ],
+      "id": "2d161bb9-d3f6-4a05-aa99-03e39e1b9b0d",
+      "name": "When chat message received",
+      "webhookId": "4fb148fb-d7ac-4389-9ec8-730a9eacf537"
+    },
+    {
+      "parameters": {
+        "tableName": "medical.chat_history",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1856,
+        976
+      ],
+      "id": "3d2dd39b-1f42-4ab6-a62c-2510e0b92f74",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "EJs1NEgSSe4mKLEH",
+          "name": "sql cloud"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8n.ocaihealth.com/mcp/mcp-server",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        2048,
+        992
+      ],
+      "id": "87f09f2b-bbe5-43ee-a8a3-1edd783959a5",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "model": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "typeVersion": 1.1,
+      "position": [
+        1664,
+        976
+      ],
+      "id": "97cbbaba-647c-48c3-90a4-8b0533ce5d81",
+      "name": "AWS Bedrock Chat Model",
+      "credentials": {
+        "aws": {
+          "id": "fixjkopUAUmfdbew",
+          "name": "AWS (IAM) account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "calendar_requirement_text": "Cita para revisión general para mañana a la 1 pm",
+          "sessionId": "573166379380",
+          "user_age": "26",
+          "user_selected_specialty": "Odontología General",
+          "user_phone_number": "573166379380",
+          "required_date_time": "2026-02-13 08:00",
+          "user_full_name": "Jonatan Polanco",
+          "action_type": "schedule",
+          "event_to_reschedule": "",
+          "self_evaluation_responses": "No",
+          "clinic_name": "ocai_test",
+          "clinic_branch": "Principal",
+          "doctor_name": "Dana Polanco (Odontología general)",
+          "clinic_opening_time": "8:00 - 16:00",
+          "clinic_city": "Medellin",
+          "clinic_address": "Santa Elena"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS Bedrock Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "bd199ee3-68f8-44cb-81f9-2153949d9809",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddd57d53954c5e880e2c91238b42eb39b338340cd86844f4c6f48cd1c229035d"
+  },
+  "id": "coky8UTEixI3SEPU",
+  "tags": []
+}
