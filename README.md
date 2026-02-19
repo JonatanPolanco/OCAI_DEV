@@ -185,7 +185,7 @@ cd OCAI_DEV
 
 ```bash
 # Conectar a RDS
-export PGPASSWORD='OcaiMedical2026!Secure#DB'
+export PGPASSWORD='<your-rds-password>'
 psql -h ocai-medical-db.copmy0ewmif4.us-east-1.rds.amazonaws.com \
      -U postgres \
      -d n8n_db \
