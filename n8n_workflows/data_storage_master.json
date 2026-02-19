@@ -17,97 +17,94 @@
     },
     {
       "parameters": {
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "users_entity",
-          "mode": "list",
-          "cachedResultName": "users_entity"
-        },
-        "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {
-            "full_name": "{{ $fromAI('user_full_name', user full name') }}",
-            "phone_number": "={{ $fromAI('user_phone_number', 'user phone number') }}",
-            "birth_date": "={{ $fromAI('user_birth_date', 'user birth date') }}",
-            "created_at": "={{ $fromAI('user_creation_date', 'user creation date. using $now time and date') }}"
-          },
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": [
-            {
-              "id": "id",
-              "displayName": "id",
-              "required": false,
-              "defaultMatch": true,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "full_name",
-              "displayName": "full_name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "phone_number",
-              "displayName": "phone_number",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "birth_date",
-              "displayName": "birth_date",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "created_at",
-              "displayName": "created_at",
-              "required": true,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
+        "jsCode": "// Procesar datos del paciente antes de enviar a Lambda\nconst inputData = $input.first().json;\n\n// Dividir full_name en first_name y last_name\nconst nameParts = (inputData.full_name || '').trim().split(' ');\nconst firstName = nameParts[0] || '';\nconst lastName = nameParts.slice(1).join(' ') || '';\n\n// Sanitizar teléfono (agregar código país si no tiene)\nlet phone = (inputData.phone || '').toString().trim();\nif (!phone.startsWith('+')) {\n  phone = '+57' + phone.replace(/\\D/g, ''); // Asume Colombia +57\n}\n\n// Preparar payload para Lambda\nconst payload = {\n  first_name: firstName,\n  last_name: lastName,\n  phone: phone,\n  birth_date: inputData.birth_date || null,\n  appointment_date: inputData.appointment_date || null,\n  appointment_time: inputData.appointment_time || null,\n  appointment_reason: inputData.appointment_reason || 'Consulta general',\n  self_evaluation: inputData.self_evaluation || 'No',\n  sessionId: inputData.sessionId || null,\n  doctor_id: inputData.doctor_id || 1,\n  clinic_id: inputData.clinic_id || 1\n};\n\n// Validación básica\nif (!firstName) {\n  throw new Error('El campo full_name es requerido');\n}\nif (!phone) {\n  throw new Error('El campo phone es requerido');\n}\nif (!payload.appointment_date || !payload.appointment_time) {\n  throw new Error('Los campos appointment_date y appointment_time son requeridos');\n}\n\nreturn { json: payload };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "Prepare Data for Lambda"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://YOUR-API-GATEWAY-ID.execute-api.us-east-1.amazonaws.com/prod/appointment/create",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
         "options": {
-          "replaceEmptyStrings": false
+          "timeout": 30000
         }
       },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        360,
-        -220
+        460,
+        0
       ],
-      "id": "dc10600f-9c9c-48c2-8847-403da9ad383f",
-      "name": "upsert_postgres",
-      "credentials": {
-        "postgres": {
-          "id": "eIRkefA9cFA2V9Eq",
-          "name": "Postgres account"
-        }
-      }
+      "id": "b2c3d4e5-f6g7-8901-bcde-f12345678901",
+      "name": "Call Lambda Appointment Store"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c3d4e5f6-g7h8-9012-cdef-123456789012",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        700,
+        0
+      ],
+      "id": "d4e5f6g7-h8i9-0123-defg-234567890123",
+      "name": "Check Success"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Formatear respuesta exitosa\nconst response = $input.first().json;\n\nreturn {\n  json: {\n    status: 'success',\n    message: 'Paciente y cita creados exitosamente',\n    patient_id: response.patient_id,\n    appointment_id: response.appointment_id,\n    chat_history_id: response.chat_history_id,\n    evaluations_processed: response.evaluations_processed || 0,\n    processing_time: response.processing_time_seconds || 0,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        -100
+      ],
+      "id": "e5f6g7h8-i9j0-1234-efgh-345678901234",
+      "name": "Format Success Response"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Formatear respuesta de error\nconst response = $input.first().json;\n\nreturn {\n  json: {\n    status: 'error',\n    message: 'Error al crear paciente y cita',\n    error: response.error || response.details || 'Unknown error',\n    error_code: response.error_code || 'UNKNOWN',\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        100
+      ],
+      "id": "f6g7h8i9-j0k1-2345-fghi-456789012345",
+      "name": "Format Error Response"
     }
   ],
   "pinData": {
@@ -118,12 +115,14 @@
           "birth_date": "1998-08-10",
           "phone": "3009998877",
           "new_user": "yes",
-          "self_evaluation": "No",
+          "self_evaluation": "Me duele la muela desde hace 3 días",
           "appointment_reason": "Revisión general",
           "appointment_time": "15:00",
-          "appointment_date": "2025-04-16",
+          "appointment_date": "2026-03-01",
           "language": "es",
-          "sessionId": "5213009998877"
+          "sessionId": "5213009998877",
+          "doctor_id": 1,
+          "clinic_id": 1
         }
       }
     ]
@@ -133,7 +132,47 @@
       "main": [
         [
           {
-            "node": "upsert_postgres",
+            "node": "Prepare Data for Lambda",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Data for Lambda": {
+      "main": [
+        [
+          {
+            "node": "Call Lambda Appointment Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Lambda Appointment Store": {
+      "main": [
+        [
+          {
+            "node": "Check Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Success": {
+      "main": [
+        [
+          {
+            "node": "Format Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Error Response",
             "type": "main",
             "index": 0
           }
@@ -143,7 +182,11 @@
   },
   "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "versionId": "64ed46e5-06b1-43ae-bb2c-51ad149ee875",
   "meta": {

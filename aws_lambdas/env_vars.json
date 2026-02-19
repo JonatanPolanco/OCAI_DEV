@@ -1,0 +1,9 @@
+{
+  "Variables": {
+    "DB_HOST": "ocai-medical-db.copmy0ewmif4.us-east-1.rds.amazonaws.com",
+    "DB_PORT": "5432",
+    "DB_NAME": "n8n_db",
+    "DB_USER": "postgres",
+    "DB_PASSWORD": "OcaiMedical2026!Secure#DB"
+  }
+}

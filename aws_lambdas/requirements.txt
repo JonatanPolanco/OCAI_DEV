@@ -1,0 +1,5 @@
+# Producción - pg8000 es pure Python, funciona en Lambda sin compilación
+pg8000==1.31.2
+
+# Testing local (no se incluye en Lambda)
+python-dotenv==1.0.0

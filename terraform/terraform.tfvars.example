@@ -1,0 +1,37 @@
+# Terraform Variables Configuration
+# Copiar este archivo a terraform.tfvars y llenar con tus valores
+
+# AWS Configuration
+aws_region  = "us-east-1"
+environment = "production"
+
+# RDS Configuration
+db_instance_class       = "db.t3.micro"    # db.t3.small para más potencia
+db_allocated_storage    = 20                # GB
+db_name                 = "n8n_db"
+db_username             = "postgres"
+db_password             = "CAMBIAR-CONTRASEÑA-SEGURA-AQUI"  # Mínimo 8 caracteres
+db_publicly_accessible  = false             # Cambiar a true si necesitas acceso desde internet
+db_skip_final_snapshot  = false             # true en desarrollo, false en producción
+db_deletion_protection  = true              # Protección contra eliminación accidental
+
+# EC2 Configuration
+ec2_instance_type = "t3.small"              # t3.micro, t3.small, o t3.medium
+ec2_volume_size   = 30                      # GB
+
+# SSH Key Configuration
+key_name         = "ocai-key-pair-aws"
+public_key_path  = "~/.ssh/id_rsa.pub"      # Ruta a tu clave pública SSH
+private_key_path = "~/.ssh/id_rsa"          # Ruta a tu clave privada SSH
+# Windows: "C:/Users/TuUsuario/.ssh/id_rsa.pub"
+
+# n8n Configuration
+domain_name = "ocaihealth.com"
+subdomain   = "n8n"
+ssl_email   = "operation@ocaihealth.com"
+
+# IMPORTANTE:
+# 1. Renombrar este archivo a terraform.tfvars
+# 2. Cambiar db_password por una contraseña segura
+# 3. Verificar rutas de SSH keys
+# 4. NO commitear terraform.tfvars a Git (ya está en .gitignore)

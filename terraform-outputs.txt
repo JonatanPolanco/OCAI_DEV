@@ -1,0 +1,8 @@
+﻿connection_string = <sensitive>
+ec2_instance_id = "i-05ba9cd3ecff764dc"
+ec2_public_ip = "3.222.104.151"
+n8n_url = "https://n8n.ocaihealth.com"
+rds_database_name = "n8n_db"
+rds_endpoint = "ocai-medical-db.copmy0ewmif4.us-east-1.rds.amazonaws.com"
+rds_port = 5432
+ssh_command = "ssh -i ~/.ssh/id_rsa ubuntu@3.222.104.151"

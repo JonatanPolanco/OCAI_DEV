@@ -1,0 +1,8 @@
+# Terraform Variables para Lambda - Copiar a lambda.tfvars y configurar
+
+# RDS Configuration
+db_host     = "ocai-medical-db.copmy0ewmif4.us-east-1.rds.amazonaws.com"
+db_password = "your-rds-password-here"
+
+# Lambda Configuration
+lambda_runtime = "python3.11"

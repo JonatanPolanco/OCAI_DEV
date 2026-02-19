@@ -1,1 +1,51 @@
+# SSH Keys
 ocai-key-pair.pem
+ocai-key-pair-aws.pem
+*.pem
+*.ppk
+ocai_keys.txt
+
+# Environment files with credentials
+.env
+pipelines/.env
+gcp_instance/.env
+**/. env.local
+**/.env.production
+
+# AWS credentials and migration notes
+aws-credentials.txt
+migration/*.txt
+migration/*.log
+AWS_MIGRATION_NOTES.md
+
+# Database dumps and backups
+*.sql.gz
+*.dump
+backup/
+
+# Traefik SSL certificates
+acme.json
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.claude
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+terraform/*.tfplan
+terraform/crash.log

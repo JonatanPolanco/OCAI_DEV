@@ -85,7 +85,7 @@ CREATE TABLE doctor (
 
 CREATE TABLE medical.specialty (
     id SERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL,
+    name VARCHAR NOT NULL UNIQUE,
     description TEXT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
@@ -365,10 +365,8 @@ BEGIN
         ) VALUES (
             p_session_id,
             jsonb_build_object(
-                'type', 'mvp_appointment_creation',
-                'patient_id', v_patient_id,
-                'timestamp', p_appointment_timestamp,
-                'reason', p_appointment_reason
+                'type', 'ai',
+                'text', 'Confirmación: Cita agendada para el ' || p_appointment_timestamp::text
             ),
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
@@ -379,7 +377,7 @@ BEGIN
     -- Ahora tenemos patient_id garantizado, no hay race condition
     PERFORM medical.upsert_appointment(
         v_chat_history_id,
-        v_patient_id,  -- ✅ Ahora tenemos este ID
+        v_patient_id, 
         p_doctor_id,
         p_clinic_id,
         p_appointment_timestamp,
