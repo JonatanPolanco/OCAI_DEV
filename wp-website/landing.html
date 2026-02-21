@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO MEJORADO -->
+    <title>OCAi Health - Automatiza tu Clínica con IA | Programa Clientes Fundadores</title>
+    <meta name="description" content="Únete como Cliente Fundador de OCAi. Agentes de IA que agendan citas 24/7 por WhatsApp. Descuento exclusivo de fundador. Solo 10 cupos disponibles.">
+    <meta name="keywords" content="IA para clínicas, automatización médica, agendamiento inteligente, WhatsApp salud">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="OCAi Health - Programa Clientes Fundadores">
+    <meta property="og:description" content="Sé una de las primeras 10 clínicas. Beneficios exclusivos para clientes fundadores.">
+    <meta property="og:image" content="https://ocaihealth.com/favicon.jpg">
+    <meta property="og:url" content="https://ocaihealth.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OCAi Health - Programa Clientes Fundadores">
+    <meta name="twitter:description" content="Beneficios exclusivos para clientes fundadores. Solo 10 cupos disponibles.">
+    <meta name="twitter:image" content="https://ocaihealth.com/twitter-image.jpg">
+    
+    <!-- Schema.org para SEO Local/Healthcare -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "OCAi Health",
+      "applicationCategory": "HealthApplication",
+      "description": "Plataforma de automatización con IA para clínicas médicas"
+    }
+    </script>
+    
+    <!-- Preconnect para Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    
+    <!-- Fonts con font-display para Performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://ocaihealth.com/favicon.png">
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXX');
+    </script>
+
+<style>
+    :root {
+        color-scheme: light;
+        --primary-color: #8F94E3;
+        --primary-light: #AAB0F0;
+        --primary-dark: #6B70B8;
+        --dark-blue: #1C203E;
+        --white: #FFFFFF;
+        --text-primary: #333;
+        --text-secondary: #555;
+        --background-light: #f8f9fa;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --linkedin: #0077b5;
+        
+        /* Nuevas variables para engagement */
+        --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+        --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+        --shadow-lg: 0 10px 40px rgba(0,0,0,0.15);
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  
+    * { 
+        margin: 0; 
+        padding: 0; 
+        box-sizing: border-box; 
+    }
+    
+    html { 
+        scroll-behavior: smooth;
+        scroll-padding-top: 80px;
+    }
+    
+    body { 
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        line-height: 1.7; 
+        color: var(--text-primary); 
+        background-color: var(--white); 
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .container { 
+        max-width: 1280px; 
+        margin: 0 auto; 
+        padding: 0 clamp(1rem, 5vw, 2rem);
+    }
+
+    /* ==================== NAVBAR MEJORADO ==================== */
+    .navbar { 
+        background: rgba(28, 32, 62, 0.95); 
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        position: fixed; 
+        width: 100%; 
+        top: 0; 
+        z-index: 1000; 
+        transition: var(--transition-smooth);
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .navbar.scrolled {
+        padding: 0.5rem 0;
+        background: rgba(28, 32, 62, 0.98);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    
+    .nav-container { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+    }
+    
+    .logo-container { 
+        display: flex; 
+        align-items: center; 
+        gap: 0.8rem; 
+        text-decoration: none;
+        outline-offset: 4px;
+    }
+    
+    .logo-container:focus-visible {
+        outline: 2px solid var(--primary-color);
+        border-radius: 8px;
+    }
+    
+    .logo-svg { 
+        width: 45px; 
+        height: 45px; 
+        transition: var(--transition-smooth);
+        border-radius: 8px;
+        will-change: transform;
+    }
+    
+    .logo-container:hover .logo-svg { 
+        transform: rotate(5deg) scale(1.05);
+    }
+    
+    .logo-text { 
+        font-size: clamp(1.2rem, 3vw, 1.6rem);
+        font-weight: 700; 
+        color: var(--white); 
+    }
+    
+    .logo-text span { 
+        font-weight: 400; 
+        color: var(--primary-light); 
+    }
+    
+    .nav-right { 
+        display: flex; 
+        align-items: center; 
+        gap: 2.5rem; 
+    }
+    
+    .nav-menu { 
+        display: flex; 
+        gap: 2.5rem; 
+        list-style: none; 
+    }
+    
+    .nav-menu a { 
+        text-decoration: none; 
+        color: rgba(255,255,255,0.85);
+        font-weight: 500; 
+        transition: var(--transition-smooth);
+        position: relative; 
+        padding: 0.5rem 0.25rem;
+    }
+    
+    .nav-menu a::after { 
+        content: ''; 
+        position: absolute; 
+        width: 0; 
+        height: 2px; 
+        bottom: 0; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        background: var(--primary-color);
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .nav-menu a:hover, 
+    .nav-menu a.active { 
+        color: var(--white); 
+    }
+    
+    .nav-menu a:hover::after, 
+    .nav-menu a.active::after { 
+        width: 100%; 
+    }
+    
+    .nav-cta a { 
+        background: var(--primary-color);
+        color: var(--white); 
+        padding: 0.7rem 1.8rem;
+        border-radius: 50px; 
+        font-weight: 600; 
+        transition: var(--transition-smooth);
+        text-decoration: none; 
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(143, 148, 227, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .nav-cta a::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    
+    .nav-cta a:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .nav-cta a:hover { 
+        background: var(--primary-light);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(143, 148, 227, 0.5);
+    }
+    
+    .nav-cta a:active {
+        transform: translateY(0);
+    }
+    
+    .menu-toggle { 
+        display: none; 
+    }
+    
+    .nav-menu-mobile { 
+        display: none; 
+    }
+
+    /* ==================== HERO MEJORADO ==================== */
+    .hero { 
+        color: var(--white); 
+        padding: 180px 2rem 120px;
+        text-align: center; 
+        position: relative; 
+        overflow: hidden; 
+        min-height: 100vh; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        background: linear-gradient(-45deg, #1C203E, #3b3a63, #8F94E3, #23a6d5);
+        background-size: 400% 400%; 
+        animation: gradientBG 15s ease infinite;
+    }
+    
+    @keyframes gradientBG { 
+        0% { background-position: 0% 50%; } 
+        50% { background-position: 100% 50%; } 
+        100% { background-position: 0% 50%; } 
+    }
+    
+    .hero::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 1px, transparent 1px),
+            radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 1px, transparent 1px),
+            radial-gradient(circle at 40% 20%, rgba(255,255,255,0.1) 1px, transparent 1px);
+        background-size: 50px 50px, 80px 80px, 100px 100px;
+        animation: float 20s linear infinite;
+        pointer-events: none;
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-100px); }
+    }
+    
+    .hero-content { 
+        max-width: 900px; 
+        z-index: 2; 
+        position: relative; 
+    }
+    
+    .hero h1 { 
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        font-weight: 800; 
+        margin-bottom: 1.5rem; 
+        line-height: 1.1; 
+        text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        animation: slideInUp 0.8s ease-out;
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .highlight { 
+        background: linear-gradient(90deg, var(--primary-light), var(--white));
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        background-clip: text;
+        background-size: 200% auto;
+        animation: shimmer 3s linear infinite;
+    }
+    
+    @keyframes shimmer {
+        to {
+            background-position: 200% center;
+        }
+    }
+    
+    .hero p { 
+        font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+        margin-bottom: 2.5rem; 
+        max-width: 700px; 
+        margin: 0 auto 2.5rem;
+        font-weight: 300; 
+        color: rgba(255,255,255,0.9);
+        animation: slideInUp 0.8s ease-out 0.2s both;
+    }
+    
+    .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        margin: 3rem 0;
+        flex-wrap: wrap;
+        animation: slideInUp 0.8s ease-out 0.4s both;
+    }
+    
+    .hero-stat {
+        text-align: center;
+    }
+    
+    .hero-stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--white);
+        display: block;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero-stat-label {
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.8);
+        font-weight: 500;
+    }
+    
+    .cta-button { 
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: var(--white);
+        color: var(--dark-blue); 
+        padding: 1.3rem 3.5rem;
+        border-radius: 50px; 
+        text-decoration: none; 
+        font-weight: 700; 
+        font-size: 1.1rem; 
+        transition: var(--transition-smooth);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        position: relative;
+        overflow: hidden;
+        animation: slideInUp 0.8s ease-out 0.6s both;
+        animation: pulse-cta 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-cta {
+        0%, 100% {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        50% {
+            box-shadow: 0 15px 50px rgba(143,148,227,0.6);
+            transform: translateY(-2px);
+        }
+    }
+    
+    .cta-button:hover { 
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 20px 60px rgba(143,148,227,0.5);
+        background-color: var(--primary-light);
+        animation: none;
+    }
+    
+    .cta-button:active {
+        transform: translateY(-2px) scale(1.02);
+    }
+
+    .hero-trust {
+        margin-top: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+        opacity: 0.8;
+        animation: slideInUp 0.8s ease-out 0.8s both;
+    }
+    
+    .hero-trust-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.9);
+    }
+    
+    .hero-trust-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--success);
+    }
+
+    /* ==================== SOCIAL PROOF SECTION ==================== */
+    /* ==================== EARLY ADOPTER SECTION ==================== */
+    .early-adopter {
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        padding: 5rem 0;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .early-adopter-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin: 0 auto 2rem;
+        display: flex;
+        justify-content: center;
+        width: fit-content;
+        box-shadow: 0 4px 15px rgba(143, 148, 227, 0.3);
+    }
+
+    .badge-icon {
+        font-size: 1.2rem;
+    }
+
+    .early-adopter-title {
+        text-align: center;
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--dark-blue);
+    }
+
+    .early-adopter-subtitle {
+        text-align: center;
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .early-adopter-benefits {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .benefit-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+
+    .benefit-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .benefit-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 1rem;
+        background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .benefit-icon svg {
+        width: 30px;
+        height: 30px;
+        stroke: white;
+    }
+
+    .benefit-card h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: var(--dark-blue);
+    }
+
+    .benefit-card p {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+    }
+
+    .benefit-card p strong {
+        color: var(--primary-dark);
+        font-weight: 600;
+    }
+
+    .early-adopter-cta {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    .cta-urgency {
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+
+    .cta-urgency strong {
+        color: var(--primary-dark);
+        font-weight: 700;
+    }
+
+    /* ==================== SECCIONES GENERALES ==================== */
+    section { 
+        padding: 100px 0; 
+    }
+    
+    section:not(.hero):not(.cta-section) .container { 
+        padding: 0 clamp(1rem, 5vw, 2rem);
+    }
+    
+    .section-title { 
+        text-align: center; 
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        font-weight: 700; 
+        margin-bottom: 1rem; 
+        color: var(--dark-blue);
+        position: relative;
+    }
+    
+    .section-title::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: var(--accent-gradient);
+        margin: 1rem auto 0;
+        border-radius: 2px;
+    }
+    
+    .section-subtitle { 
+        text-align: center; 
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        color: var(--text-secondary); 
+        margin-bottom: 4rem; 
+        font-weight: 400; 
+        max-width: 800px; 
+        margin-left: auto; 
+        margin-right: auto; 
+    }
+    
+    .feature-icon { 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        width: 60px; 
+        height: 60px; 
+        border-radius: 15px; 
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: var(--white);
+        box-shadow: 0 8px 20px rgba(143, 148, 227, 0.4);
+    }
+    
+    .feature-icon svg { 
+        width: 32px; 
+        height: 32px; 
+    }
+
+    /* ==================== FEATURES MEJORADO ==================== */
+    .features-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+        gap: 2rem; 
+    }
+    
+    .feature-card { 
+        background: var(--white); 
+        padding: 2.5rem; 
+        border-radius: 20px; 
+        text-align: left; 
+        border: 1px solid #eee;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--accent-gradient);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 0;
+    }
+    
+    .feature-card:hover::before {
+        opacity: 0.05;
+    }
+    
+    .feature-card:hover { 
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+        border-color: var(--primary-color); 
+    }
+    
+    .feature-card > * {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .feature-card .feature-icon { 
+        margin-bottom: 1.5rem;
+        transition: var(--transition-smooth);
+    }
+    
+    .feature-card:hover .feature-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    .feature-card h3 { 
+        font-size: 1.5rem; 
+        margin-bottom: 0.5rem; 
+        color: var(--dark-blue); 
+    }
+    
+    .feature-card p {
+        color: var(--text-secondary);
+        line-height: 1.8;
+    }
+
+    /* ==================== DEMO EN VIVO ==================== */
+    .demo-live-section {
+        background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+        padding: 100px 2rem;
+        overflow: hidden;
+    }
+
+    .demo-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .demo-wrapper {
+        margin-top: 3rem;
+        position: relative;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.12);
+    }
+
+    .demo-iframe {
+        width: 100%;
+        height: 900px;
+        border: none;
+        display: block;
+    }
+
+    .demo-video {
+        width: 100%;
+        height: auto;
+        display: none;
+        background: #000;
+    }
+
+    @media (max-width: 992px) {
+        .demo-iframe {
+            display: none;
+        }
+
+        .demo-video {
+            display: block;
+        }
+
+        .demo-live-section {
+            padding: 60px 1rem;
+        }
+
+        .demo-wrapper {
+            border-radius: 15px;
+        }
+    }
+
+    /* ==================== CÓMO FUNCIONA ==================== */
+    #como-funciona { 
+        background: var(--background-light); 
+    }
+    
+    .steps-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 3rem; 
+        text-align: center; 
+        margin-top: 4rem; 
+    }
+    
+    .step-card { 
+        position: relative; 
+    }
+    
+    .step-card:not(:last-child)::after {
+        content: '→';
+        position: absolute;
+        right: -2rem;
+        top: 30px;
+        font-size: 2rem;
+        color: var(--primary-light);
+        opacity: 0.5;
+    }
+    
+    @media (max-width: 992px) {
+        .step-card::after {
+            display: none;
+        }
+    }
+    
+    .step-number { 
+        width: 60px; 
+        height: 60px; 
+        background: var(--white);
+        border: 3px solid var(--primary-color);
+        color: var(--primary-color); 
+        border-radius: 50%; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-size: 1.8rem; 
+        font-weight: 700; 
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 5px 15px rgba(143, 148, 227, 0.2);
+        transition: var(--transition-smooth);
+    }
+    
+    .step-card:hover .step-number {
+        transform: scale(1.1);
+        background: var(--primary-color);
+        color: var(--white);
+        box-shadow: 0 8px 25px rgba(143, 148, 227, 0.4);
+    }
+    
+    .step-card h3 { 
+        font-size: 1.4rem; 
+        color: var(--dark-blue); 
+        margin-bottom: 0.5rem; 
+    }
+    
+    .step-card p { 
+        color: var(--text-secondary); 
+    }
+
+    /* ==================== TECNOLOGÍA ==================== */
+    #tecnologia { 
+        background: var(--dark-blue); 
+        color: var(--white); 
+        overflow: hidden;
+        position: relative;
+    }
+    
+    #tecnologia::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+    }
+    
+    #tecnologia .section-title { 
+        color: var(--white); 
+    }
+    
+    #tecnologia .section-subtitle { 
+        color: rgba(255,255,255,0.7); 
+    }
+    
+    .tech-diagram { 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        gap: 1rem; 
+        margin: 5rem auto; 
+        flex-wrap: wrap; 
+    }
+    
+    .tech-diagram__node, 
+    .tech-diagram__connector { 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        text-align: center; 
+    }
+    
+    .tech-diagram__node { 
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px; 
+        padding: 1rem 1.5rem;
+        min-width: 150px; 
+        transition: var(--transition-smooth);
+        backdrop-filter: blur(10px);
+    }
+    
+    .tech-diagram__node:hover { 
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-5px) scale(1.05);
+        border-color: var(--primary-light);
+    }
+    
+    .tech-diagram__node.core { 
+        background: var(--primary-color);
+        color: var(--white); 
+        font-weight: 700; 
+        transform: scale(1.1);
+        box-shadow: 0 0 30px var(--primary-light);
+        animation: pulse 2s infinite; 
+    }
+    
+    @keyframes pulse { 
+        0% { 
+            box-shadow: 0 0 20px rgba(170, 176, 240, 0.5);
+            transform: scale(1.1);
+        } 
+        50% { 
+            box-shadow: 0 0 35px rgba(170, 176, 240, 0.9);
+            transform: scale(1.15);
+        } 
+        100% { 
+            box-shadow: 0 0 20px rgba(170, 176, 240, 0.5);
+            transform: scale(1.1);
+        } 
+    }
+    
+    .tech-diagram__connector { 
+        font-size: 2rem; 
+        color: var(--primary-light); 
+        opacity: 0.5; 
+    }
+    
+    .tech-pillars-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+        gap: 2rem; 
+        margin-top: 4rem; 
+    }
+    
+    .pillar-card { 
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2rem; 
+        border-radius: 20px; 
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: var(--transition-smooth);
+        backdrop-filter: blur(10px);
+    }
+    
+    .pillar-card:hover { 
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--primary-color); 
+        transform: translateY(-5px);
+    }
+    
+    .pillar-card .feature-icon { 
+        margin-bottom: 1rem; 
+    }
+    
+    .pillar-card h3 { 
+        font-size: 1.3rem; 
+        color: var(--white); 
+        margin-bottom: 0.5rem; 
+    }
+    
+    .pillar-card p { 
+        color: rgba(255,255,255,0.7); 
+        font-size: 0.95rem; 
+    }
+    
+    .tech-stack { 
+        margin-top: 5rem; 
+        text-align: center; 
+    }
+    
+    .tech-stack-title { 
+        color: rgba(255,255,255,0.5); 
+        font-weight: 500; 
+        margin-bottom: 1.5rem; 
+        text-transform: uppercase; 
+        letter-spacing: 2px; 
+        font-size: 0.9rem; 
+    }
+    
+    .tech-stack-logos { 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        gap: 2.5rem; 
+        flex-wrap: wrap; 
+    }
+    
+    .tech-stack-logos img { 
+        height: 35px; 
+        width: auto; 
+        opacity: 0.6;
+        filter: brightness(0) invert(1);
+        transition: var(--transition-smooth);
+    }
+    
+    .tech-stack-logos img:hover { 
+        opacity: 1;
+        filter: brightness(1) invert(0);
+        transform: scale(1.1);
+    }
+    
+    /* ==================== TESTIMONIOS ==================== */
+    #testimonios {
+        background: var(--background-light);
+        padding: 100px 0;
+    }
+    
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+    }
+    
+    .testimonial-card {
+        background: var(--white);
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        transition: var(--transition-smooth);
+    }
+    
+    .testimonial-card::before {
+        content: '"';
+        position: absolute;
+        top: -20px;
+        left: 20px;
+        font-size: 6rem;
+        color: var(--primary-light);
+        opacity: 0.3;
+        font-family: Georgia, serif;
+        line-height: 1;
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .testimonial-text {
+        font-style: italic;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        line-height: 1.8;
+    }
+    
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .testimonial-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--accent-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    
+    .testimonial-info h4 {
+        font-size: 1rem;
+        color: var(--dark-blue);
+        margin-bottom: 0.25rem;
+    }
+    
+    .testimonial-info p {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+    
+    .testimonial-rating {
+        color: #fbbf24;
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
+    }
+
+    /* ==================== FUNDADORES ==================== */
+    #equipo { 
+        background: var(--white); 
+    }
+    
+    .founders-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 3rem; 
+        justify-content: center; 
+    }
+    
+    .founder-card { 
+        background: var(--white);
+        border-radius: 20px; 
+        padding: 3rem 2rem;
+        text-align: center; 
+        box-shadow: var(--shadow-md);
+        transition: var(--transition-smooth);
+        position: relative; 
+        overflow: hidden;
+        border: 1px solid transparent;
+    }
+    
+    .founder-card::before { 
+        content: ''; 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        height: 5px; 
+        background: var(--accent-gradient);
+    }
+    
+    .founder-card:hover { 
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(143, 148, 227, 0.3);
+        border-color: var(--primary-light);
+    }
+
+    .founder-image { 
+        width: 150px; 
+        height: 150px; 
+        border-radius: 50%; 
+        margin: 0 auto 1.5rem;
+        object-fit: cover; 
+        border: 4px solid var(--white);
+        box-shadow: 0 10px 30px rgba(143, 148, 227, 0.4);
+        transition: var(--transition-smooth);
+    }
+    
+    .founder-card:hover .founder-image { 
+        transform: scale(1.1);
+        box-shadow: 0 15px 40px rgba(143, 148, 227, 0.6);
+    }
+
+    .founder-name { 
+        font-size: 1.8rem; 
+        font-weight: 700; 
+        color: var(--dark-blue); 
+        margin-bottom: 0.5rem; 
+    }
+    
+    .founder-title { 
+        font-size: 1.1rem; 
+        color: var(--primary-color); 
+        font-weight: 600; 
+        margin-bottom: 1.5rem; 
+    }
+    
+    .founder-bio { 
+        color: var(--text-secondary); 
+        line-height: 1.8; 
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* NUEVO: Estilos para el link de LinkedIn del fundador */
+    .founder-social {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .founder-social a {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--linkedin);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-smooth);
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0, 119, 181, 0.3);
+    }
+
+    .founder-social a:hover {
+        background: #005885;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 119, 181, 0.5);
+    }
+
+    .founder-social a svg {
+        width: 22px;
+        height: 22px;
+        fill: white;
+    }
+
+    /* ==================== FAQ ==================== */
+    #faq {
+        background: var(--background-light);
+        padding: 100px 0;
+    }
+    
+    .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .faq-item {
+        background: var(--white);
+        border-radius: 15px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-smooth);
+    }
+    
+    .faq-item:hover {
+        box-shadow: var(--shadow-md);
+    }
+    
+    .faq-question {
+        width: 100%;
+        padding: 1.5rem;
+        background: none;
+        border: none;
+        text-align: left;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--dark-blue);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: var(--transition-smooth);
+    }
+    
+    .faq-question:hover {
+        color: var(--primary-color);
+    }
+    
+    .faq-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .faq-item.active .faq-icon {
+        transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        padding: 0 1.5rem;
+    }
+    
+    .faq-item.active .faq-answer {
+        max-height: 500px;
+        padding: 0 1.5rem 1.5rem;
+    }
+    
+    .faq-answer p {
+        color: var(--text-secondary);
+        line-height: 1.8;
+    }
+
+    /* ==================== CTA FINAL ==================== */
+    .cta-section { 
+        background: var(--accent-gradient);
+        padding: 100px 2rem;
+        text-align: center; 
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: 
+            radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+            radial-gradient(circle at 70% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        animation: rotate 20s linear infinite;
+    }
+    
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    .cta-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .cta-section h2 { 
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        font-weight: 700; 
+        margin-bottom: 1rem; 
+    }
+    
+    .cta-section p { 
+        font-size: 1.2rem; 
+        color: rgba(255,255,255,0.9);
+        margin-bottom: 2.5rem; 
+        max-width: 600px; 
+        margin-left: auto; 
+        margin-right: auto; 
+    }
+    
+    .cta-urgency {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(239, 68, 68, 0.2);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.3);
+    }
+    
+    .cta-urgency-icon {
+        width: 20px;
+        height: 20px;
+        animation: pulse-icon 1s infinite;
+    }
+    
+    @keyframes pulse-icon {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    
+    /* ==================== FOOTER ==================== */
+    footer { 
+        background: var(--dark-blue); 
+        color: rgba(255,255,255,0.7); 
+        padding: 80px 0 30px; 
+    }
+    
+    .footer-content { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem; 
+        margin-bottom: 3rem; 
+    }
+    
+    .footer-section h3 { 
+        color: var(--white); 
+        margin-bottom: 1.5rem; 
+        font-size: 1.2rem; 
+        font-weight: 600; 
+    }
+    
+    .footer-section p, 
+    .footer-section a { 
+        color: rgba(255,255,255,0.7); 
+        line-height: 1.8; 
+        text-decoration: none; 
+        display: block; 
+        margin-bottom: 0.5rem; 
+        transition: var(--transition-smooth);
+    }
+    
+    .footer-section a:hover { 
+        color: var(--primary-light);
+        transform: translateX(5px);
+    }
+    
+    .footer-social {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .footer-social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-smooth);
+        transform: translateX(0);
+    }
+    
+    .footer-social a:hover {
+        background: var(--linkedin);
+        transform: translateY(-3px);
+    }
+
+    .footer-social a svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+    }
+    
+    .footer-bottom { 
+        text-align: center; 
+        padding-top: 2rem; 
+        border-top: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.5); 
+        font-size: 0.9rem; 
+    }
+    
+    /* ==================== ANIMACIONES ==================== */
+    .animate-on-scroll { 
+        opacity: 0; 
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    
+    .animate-on-scroll.is-visible { 
+        opacity: 1; 
+        transform: translateY(0);
+    }
+
+    .scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 4px;
+        background: var(--accent-gradient);
+        z-index: 9999;
+        transition: width 0.1s ease;
+    }
+
+    /* ==================== FLOATING CTA ==================== */
+    .floating-cta {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 999;
+        opacity: 0;
+        transform: translateY(100px);
+        transition: var(--transition-smooth);
+    }
+    
+    .floating-cta.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .floating-cta-button {
+        background: var(--primary-color);
+        color: var(--white);
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 10px 40px rgba(143, 148, 227, 0.5);
+        transition: var(--transition-smooth);
+        animation: float-bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes float-bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .floating-cta-button:hover {
+        background: var(--primary-light);
+        transform: scale(1.05);
+        box-shadow: 0 15px 50px rgba(143, 148, 227, 0.7);
+        animation: none;
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 992px) {
+        .nav-menu { 
+            gap: 1.5rem; 
+        }
+        
+        .hero h1 { 
+            font-size: clamp(2.5rem, 7vw, 3.5rem);
+        }
+        
+        .hero-stats {
+            gap: 2rem;
+        }
+        
+        .hero-stat-number {
+            font-size: 2rem;
+        }
+        
+        .footer-content { 
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .tech-pillars-grid { 
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .menu-toggle { 
+            display: block; 
+            background: none; 
+            border: none; 
+            font-size: 2rem; 
+            cursor: pointer; 
+            color: var(--white); 
+            z-index: 1001;
+            padding: 0.5rem;
+        }
+        
+        .nav-menu, 
+        .nav-cta { 
+            display: none; 
+        }
+        
+        .nav-menu-mobile { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: var(--dark-blue);
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 2rem; 
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            list-style: none; 
+        }
+        
+        .nav-menu-mobile.active { 
+            display: flex; 
+            transform: translateY(0);
+        }
+        
+        .nav-menu-mobile a { 
+            font-size: 1.5rem; 
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+        
+        .nav-menu-mobile a:hover {
+            color: var(--primary-light);
+            transform: scale(1.1);
+        }
+        
+        .nav-cta-mobile a { 
+            background: var(--primary-color);
+            color: var(--white); 
+            padding: 1rem 2.5rem;
+            border-radius: 50px; 
+            font-size: 1.2rem;
+        }
+        
+        .hero { 
+            padding: 120px 1.5rem 60px;
+            min-height: 80vh; 
+        }
+        
+        .hero-stats {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        section { 
+            padding: 60px 0; 
+        }
+        
+        .tech-diagram { 
+            flex-direction: column; 
+        }
+        
+        .tech-diagram__connector { 
+            transform: rotate(90deg); 
+        }
+        
+        .footer-content { 
+            grid-template-columns: 1fr; 
+        }
+        
+        .founders-grid { 
+            grid-template-columns: 1fr; 
+        }
+        
+        .tech-pillars-grid { 
+            grid-template-columns: 1fr; 
+        }
+        
+        .floating-cta {
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        .floating-cta-button {
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .cta-button {
+            padding: 1.1rem 2rem;
+            font-size: 1rem;
+        }
+        
+        .proof-number {
+            font-size: 2.5rem;
+        }
+        
+        .tech-stack-logos img {
+            height: 28px;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#inicio" class="logo-container">
+                <img src="https://ocaihealth.com/wp-content/uploads/2025/10/OCAi_Logo.png" alt="Logo OCAi Health" class="logo-svg" loading="eager">
+                <span class="logo-text">OCAi <span>Health</span></span>
+            </a>
+            <div class="nav-right">
+                <ul class="nav-menu">
+                    <li><a href="#inicio" class="active">Inicio</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#tecnologia">Tecnología</a></li>
+                    <li><a href="#equipo">Equipo</a></li>
+                </ul>
+                <div class="nav-cta">
+                    <a href="https://calendar.app.google/EFAdNjqsdibXRdYd9" target="_blank" rel="noopener">
+                        <span>✨ Agendar Demo</span>
+                    </a>
+                </div>
+                <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+            </div>
+        </div>
+        
+        <ul id="navMenuMobile" class="nav-menu-mobile">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#tecnologia">Tecnología</a></li>
+            <li><a href="#equipo">Equipo</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li class="nav-cta-mobile">
+                <a href="https://calendar.app.google/EFAdNjqsdibXRdYd9" target="_blank" rel="noopener">Agendar Demo</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+        <div class="hero-content animate-on-scroll">
+            <h1>Revoluciona la <span class="highlight">Atención al Paciente</span></h1>
+            <p>Automatiza tu clínica con agentes de IA que agendan, confirman y recuerdan citas 24/7. Libera a tu equipo para que se enfoque en lo que realmente importa: cuidar a las personas.</p>
+            
+            <!-- Beneficios clave -->
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">24/7</span>
+                    <span class="hero-stat-label">Atención Automática</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">48h</span>
+                    <span class="hero-stat-label">Setup Completo</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">100%</span>
+                    <span class="hero-stat-label">WhatsApp Nativo</span>
+                </div>
+            </div>
+            
+            <a class="cta-button" href="https://calendar.app.google/EFAdNjqsdibXRdYd9" target="_blank" rel="noopener">
+                <span>📅 Agendar Demo Gratuita</span>
+            </a>
+            
+            <!-- Trust indicators -->
+            <div class="hero-trust">
+                <div class="hero-trust-item">
+                    <svg class="hero-trust-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Demo personalizada</span>
+                </div>
+                <div class="hero-trust-item">
+                    <svg class="hero-trust-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    <span>Datos 100% seguros</span>
+                </div>
+                <div class="hero-trust-item">
+                    <svg class="hero-trust-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span>Setup en 48 horas</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRAMA CLIENTES FUNDADORES -->
+    <section class="early-adopter">
+        <div class="container">
+            <div class="early-adopter-badge animate-on-scroll">
+                <span class="badge-icon">🏆</span>
+                <span class="badge-text">Programa Clientes Fundadores</span>
+            </div>
+
+            <h2 class="early-adopter-title animate-on-scroll">Sé una de las primeras 10 clínicas en implementar OCAi</h2>
+            <p class="early-adopter-subtitle animate-on-scroll">Beneficios exclusivos permanentes para nuestros clientes fundadores</p>
+
+            <div class="early-adopter-benefits">
+                <div class="benefit-card animate-on-scroll">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M2 12h20"/>
+                        </svg>
+                    </div>
+                    <h3>Pricing Preferencial de Fundador</h3>
+                    <p><strong>Descuento exclusivo</strong> para clientes fundadores durante el primer año</p>
+                </div>
+
+                <div class="benefit-card animate-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <h3>Acceso Prioritario a Nuevas Features</h3>
+                    <p>Serás el <strong>primero en probar</strong> cada nueva funcionalidad que lancemos</p>
+                </div>
+
+                <div class="benefit-card animate-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>Soporte Premium Incluido</h3>
+                    <p>Onboarding <strong>1-on-1 personalizado</strong> y canal directo con el equipo técnico</p>
+                </div>
+
+                <div class="benefit-card animate-on-scroll" style="transition-delay: 0.3s;">
+                    <div class="benefit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <h3>Tu Logo en Nuestro Sitio</h3>
+                    <p>Reconocimiento como <strong>cliente fundador</strong> + backlink a tu clínica</p>
+                </div>
+            </div>
+
+            <div class="early-adopter-cta animate-on-scroll">
+                <p class="cta-urgency">Solo <strong>10 cupos disponibles</strong> para clientes fundadores</p>
+                <a class="cta-button" href="https://calendar.app.google/EFAdNjqsdibXRdYd9" target="_blank" rel="noopener">
+                    <span>📅 Agendar Demo y Asegurar mi Cupo</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">La plataforma todo en uno para tu clínica</h2>
+            <p class="section-subtitle animate-on-scroll">Desde el primer contacto y recordatorio de citas, hasta la analítica avanzada, cubrimos todo el ciclo de vida del paciente y potenciamos la gestión de tu clínica de forma inteligente.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"></path>
+                            <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a4 4 0 0 1 -4 -4v-1a.5 .5 0 0 0 -1 0v1"></path>
+                        </svg>
+                    </div>
+                    <h3>Atención 24/7 en WhatsApp</h3>
+                    <p>Agente de IA que conversa naturalmente, resuelve dudas frecuentes y agenda citas automáticamente, sin importar la hora.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
+                            <path d="M16 3l0 4"></path>
+                            <path d="M8 3l0 4"></path>
+                            <path d="M4 11l16 0"></path>
+                            <path d="M8 15h2v2h-2z"></path>
+                        </svg>
+                    </div>
+                    <h3>Sincronización de Agenda</h3>
+                    <p>Conexión bidireccional con Google Calendar. Ofrece solo espacios libres reales, evitando duplicados y conflictos de horario.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 21a9 9 0 1 1 0 -18a9 9 0 0 1 0 18z"></path>
+                            <path d="M12 7v5l3 3"></path>
+                        </svg>
+                    </div>
+                    <h3>Recordatorios Anti No-Show</h3>
+                    <p>Envío automático de confirmaciones y recordatorios. Si el paciente cancela, la IA intenta reagendar o liberar el cupo al instante.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll" style="transition-delay: 0.3s;">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                        </svg>
+                    </div>
+                    <h3>CRM de Pacientes</h3>
+                    <p>Centraliza la información. Accede al historial de chats, preferencias y datos de cada paciente para brindar un trato personalizado.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll" style="transition-delay: 0.4s;">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 12h4l3 8l4 -16l3 8h4"></path>
+                        </svg>
+                    </div>
+                    <h3>Dashboard de Métricas</h3>
+                    <p>Visualiza tus números clave: tasa de asistencia, horarios pico y crecimiento de ingresos. Toma decisiones basadas en datos reales.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll" style="transition-delay: 0.5s;">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M13 2l9 0l-9 12l6 0l-9 10l0 -12l-6 0z"></path>
+                        </svg>
+                    </div>
+                    <h3>Campañas de Reactivación</h3>
+                    <p>La IA identifica pacientes inactivos y envía mensajes personalizados para agendar chequeos, recuperando ingresos perdidos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO EN VIVO -->
+    <section class="demo-live-section">
+        <div class="demo-container">
+            <h2 class="section-title animate-on-scroll">Ve a Mel en Acción</h2>
+            <p class="section-subtitle animate-on-scroll">Observa cómo funciona una conversación real con nuestro asistente de IA</p>
+
+            <div class="demo-wrapper animate-on-scroll">
+                <!-- Iframe para Desktop -->
+                <iframe
+                    src="https://ocaihealth.com/demo/"
+                    class="demo-iframe"
+                    title="Demo Interactiva OCAi Health"
+                    loading="lazy"
+                ></iframe>
+
+                <!-- Video para Móvil -->
+                <video
+                    class="demo-video"
+                    controls
+                    preload="metadata"
+                    poster="https://ocaihealth.com/demo/WhatsApp%20UI.mp4#t=0.1"
+                >
+                    <source src="https://ocaihealth.com/demo/WhatsApp%20UI.mp4" type="video/mp4">
+                    Tu navegador no soporta el video.
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section id="como-funciona">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Tan fácil como 1, 2, 3</h2>
+            <p class="section-subtitle animate-on-scroll">Implementa la IA en tu clínica sin complicaciones. Nosotros nos encargamos de todo.</p>
+            <div class="steps-grid">
+                <div class="step-card animate-on-scroll">
+                    <div class="step-number">1</div>
+                    <h3>Agenda una Demo</h3>
+                    <p>Nos reunimos 30 minutos para entender tus necesidades y mostrarte cómo OCAi puede ayudarte.</p>
+                </div>
+                <div class="step-card animate-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="step-number">2</div>
+                    <h3>Configuración Personalizada</h3>
+                    <p>Configuramos y entrenamos a tu agente de IA con la información de tu clínica, horarios y servicios.</p>
+                </div>
+                <div class="step-card animate-on-scroll" style="transition-delay: 0.4s;">
+                    <div class="step-number">3</div>
+                    <h3>Lanzamiento y Optimización</h3>
+                    <p>¡Listo! Tu asistente de IA comienza a trabajar. Monitoreamos y optimizamos su rendimiento continuamente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EQUIPO - JONATAN PRIMERO -->
+    <section id="equipo">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Nuestros Cofundadores</h2>
+            <p class="section-subtitle animate-on-scroll"><strong>El equipo detrás de la innovación</strong></p>
+            <div class="founders-grid">
+                <!-- JONATAN POLANCO PRIMERO -->
+                <div class="founder-card animate-on-scroll">
+                    <img src="https://ocaihealth.com/wp-content/uploads/2025/10/upscalemedia-transformed.png" alt="Foto de Jonatan Polanco, Cofundador de OCAi Health" class="founder-image" loading="lazy">
+                    <h3 class="founder-name">Jonatan Polanco</h3>
+                    <p class="founder-title">Cofundador & Tecnología</p>
+                    <p class="founder-bio">Experto en inteligencia artificial y desarrollo de productos tecnológicos. Jonatan dirige la innovación técnica, creando soluciones que conectan la IA con las necesidades del sector salud.</p>
+                    <!-- NUEVO: Link de LinkedIn -->
+                    <div class="founder-social">
+                        <a href="https://www.linkedin.com/in/jonatanpolanco/" target="_blank" rel="noopener" aria-label="LinkedIn de Jonatan Polanco" title="Conectar en LinkedIn">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- JERSON CORREA SEGUNDO -->
+                <div class="founder-card animate-on-scroll" style="transition-delay: 0.2s;">
+                    <img src="https://ocaihealth.com/wp-content/uploads/2025/10/upscalemedia-transformed.jpeg" alt="Foto de Jerson Correa, Cofundador de OCAi Health" class="founder-image" loading="lazy">
+                    <h3 class="founder-name">Jerson Correa</h3>
+                    <p class="founder-title">Cofundador & Producto</p>
+                    <p class="founder-bio">Desarrollo de producto, gestión del cambio y estrategias comerciales. Jerson lidera la dirección estratégica de OCAi Health, impulsando la innovación y el crecimiento del negocio.</p>
+                    <!-- NUEVO: Link de LinkedIn -->
+                    <div class="founder-social">
+                        <a href="https://www.linkedin.com/in/jerson-correa/" target="_blank" rel="noopener" aria-label="LinkedIn de Jerson Correa" title="Conectar en LinkedIn">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Preguntas Frecuentes</h2>
+            <p class="section-subtitle animate-on-scroll">Todo lo que necesitas saber sobre OCAi Health</p>
+            <div class="faq-container">
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question">
+                        <span>¿Cuánto tiempo toma la implementación?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>La implementación completa toma entre 48-72 horas. Esto incluye la configuración del agente, integración con tu agenda, capacitación de tu equipo y pruebas iniciales. Después de eso, estarás listo para automatizar.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item animate-on-scroll" style="transition-delay: 0.1s;">
+                    <button class="faq-question">
+                        <span>¿Se integra con mi sistema actual?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sí, OCAi se integra con Google Calendar, sistemas de gestión médica populares, y prácticamente cualquier herramienta que tenga API o webhook. Si usas un sistema específico, contáctanos para confirmar la compatibilidad.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item animate-on-scroll" style="transition-delay: 0.2s;">
+                    <button class="faq-question">
+                        <span>¿Qué pasa si el paciente quiere hablar con un humano?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Nuestro sistema detecta automáticamente cuando un paciente solicita hablar con un humano y envía una alerta inmediata a tu equipo. Además, puedes intervenir manualmente en cualquier momento desde el dashboard.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item animate-on-scroll" style="transition-delay: 0.3s;">
+                    <button class="faq-question">
+                        <span>¿Es seguro? ¿Cómo manejan los datos de pacientes?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>La seguridad es nuestra prioridad #1. Cumplimos con regulaciones de protección de datos médicos, usamos encriptación end-to-end, y todos los datos se almacenan en servidores certificados. Jamás compartimos información de pacientes con terceros.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item animate-on-scroll" style="transition-delay: 0.4s;">
+                    <button class="faq-question">
+                        <span>¿Cuánto cuesta OCAi?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ofrecemos planes personalizados según el tamaño de tu clínica, volumen mensual de pacientes y funcionalidades que necesites. En la demo de 30 minutos analizamos tu caso específico, calculamos el ROI para tu clínica y te presentamos opciones que se ajusten a tu presupuesto. Como Cliente Fundador, obtienes condiciones preferenciales que no estarán disponibles después del lanzamiento.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-section">
+        <div class="container cta-content animate-on-scroll">
+            <!-- Urgencia -->
+            <div class="cta-urgency">
+                <svg class="cta-urgency-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Solo 5 demos disponibles esta semana</span>
+            </div>
+            
+            <h2>¿Listo para ser uno de nuestros clientes fundadores?</h2>
+            <p>Agenda una demo de 30 minutos y descubre cómo OCAi puede transformar tu clínica. Los primeros 10 clientes obtienen beneficios exclusivos de fundador.</p>
+            <a class="cta-button" href="https://calendar.app.google.com/SKemZU9BtH467k2s6" target="_blank" rel="noopener">
+                📅 Agendar Demo Gratuita →
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <a href="#inicio" class="logo-container">
+                    <img src="https://ocaihealth.com/wp-content/uploads/2025/10/OCAi_Logo.png" alt="Logo de OCAi Health" class="logo-svg" style="width: 50px; height: 50px;" loading="lazy">
+                    <span class="logo-text" style="font-size:1.8rem;">OCAi <span>Health</span></span>
+                </a>
+                <p style="margin-top: 1rem;">Revolucionando la experiencia del paciente con Inteligencia Artificial.</p>
+                
+                <!-- ACTUALIZADO: Link de LinkedIn de OCAi -->
+                <div class="footer-social">
+                    <a href="https://www.linkedin.com/company/ocai-ai/" target="_blank" rel="noopener" aria-label="LinkedIn de OCAi Health" title="Síguenos en LinkedIn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener" aria-label="Twitter" title="Síguenos en Twitter">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="#" target="_blank" rel="noopener" aria-label="Instagram" title="Síguenos en Instagram">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Navegación</h3>
+                <a href="#servicios">Servicios</a>
+                <a href="#tecnologia">Tecnología</a>
+                <a href="#equipo">Equipo</a>
+                <a href="#testimonios">Testimonios</a>
+                <a href="#faq">FAQ</a>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <a href="#">Política de Privacidad</a>
+                <a href="#">Términos de Servicio</a>
+                <a href="#">Cumplimiento HIPAA</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <a href="https://calendar.app.google/EFAdNjqsdibXRdYd9" target="_blank" rel="noopener">Agendar una llamada</a>
+                <a href="mailto:operation@ocaihealth.com">operation@ocaihealth.com</a>
+                <a href="tel:+573166379380">+57 (316) 637-9380</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 OCAI Health. Construido con ❤️ e IA para el futuro de la salud.</p>
+        </div>
+    </footer>
+
+    <!-- Floating CTA Button -->
+    <div class="floating-cta" id="floatingCta">
+        <a href="https://calendar.app.google/EFAdNjqsdibXRdYd9" target="_blank" rel="noopener" class="floating-cta-button">
+            <span>📅</span>
+            <span>Agendar Demo</span>
+        </a>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenuMobile = document.getElementById('navMenuMobile');
+        
+        menuToggle.addEventListener('click', () => {
+            navMenuMobile.classList.toggle('active');
+            menuToggle.textContent = navMenuMobile.classList.contains('active') ? '✕' : '☰';
+        });
+        
+        document.querySelectorAll('#navMenuMobile a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenuMobile.classList.remove('active');
+                menuToggle.textContent = '☰';
+            });
+        });
+        
+        // Intersection Observer
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { 
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        animatedElements.forEach(el => observer.observe(el));
+        
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+        
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#\${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Scroll progress bar
+        const scrollProgress = document.getElementById('scrollProgress');
+        
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+        
+        // Floating CTA visibility
+        const floatingCta = document.getElementById('floatingCta');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 800) {
+                floatingCta.classList.add('visible');
+            } else {
+                floatingCta.classList.remove('visible');
+            }
+        });
+        
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all FAQ items
+                faqItems.forEach(faq => faq.classList.remove('active'));
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Track CTA clicks
+        document.querySelectorAll('.cta-button, .nav-cta a, .floating-cta-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'cta_click', {
+                        'event_category': 'engagement',
+                        'event_label': btn.textContent.trim()
+                    });
+                }
+                console.log('CTA clicked:', btn.textContent.trim());
+            });
+        });
+        
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            const loadTime = window.performance.timing.domContentLoadedEventEnd - 
+                           window.performance.timing.navigationStart;
+            console.log('Page load time:', loadTime + 'ms');
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'timing_complete', {
+                    'name': 'load',
+                    'value': loadTime,
+                    'event_category': 'performance'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

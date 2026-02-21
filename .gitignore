@@ -41,6 +41,32 @@ Thumbs.db
 *.swo
 .claude
 
+# Node.js / Frontend
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.cache/
+.vite/
+.turbo/
+
+# Large media files (videos for demos - store on server, not git)
+*.mp4
+*.mov
+*.avi
+*.webm
+demo/demo/
+
 # Terraform
 terraform/.terraform/
 terraform/.terraform.lock.hcl
